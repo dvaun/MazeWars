@@ -1,3 +1,4 @@
+//test
 class Weapon{
     int max_ammo;
     int current_ammo;
