@@ -2,12 +2,13 @@ CFLAGS = -I ./include
 ##LIB    = ./libggfonts.so
 LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 
-all: asteroids
+all: clean mazewars
 
-asteroids: asteroids.cpp ppm.c log.c
-	g++ $(CFLAGS) asteroids.cpp log.c libggfonts.a -Wall -Wextra $(LFLAGS) -o asteroids
+mazewars: mazewars.cpp ppm.c log.c
+	g++ $(CFLAGS) mazewars.cpp log.c libggfonts.a -Wall -Wextra $(LFLAGS) -o MazeWars
 
 clean:
-	rm -f asteroids
+	rm -f MazeWars
 	rm -f *.o
+
 
