@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <cstdlib>
 #include <cstring>
 #include <unistd.h>
@@ -12,11 +13,15 @@
 extern "C" {
 	#include "fonts.h"
 }
+
 using namespace std;
+
 //defined types
 typedef float Flt;
 typedef float Vec[3];
 typedef Flt	Matrix[4][4];
+typedef int Weapon;
+typedef int Explosive;
 
 //macros
 #define rnd() (((double)rand())/(double)RAND_MAX)
@@ -39,7 +44,6 @@ Display *dpy;
 Window win;
 GLXContext glc;
 
-
 //-----------------------------------------------------------------------------
 //Setup timers
 const double physicsRate = 1.0 / 60.0;
@@ -60,13 +64,36 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 int xres=1250, yres=900;
 
-struct Ship {
+struct PowerUp {
+	//type is going to be an int ie(1:"Shield Bubble" 2:"Unlimited Ammo" 3:"Walk Through Walls" etc...)
+	int type;
+	int lifeSpan;
+	//position[0] = X; position[1] = Y;
+	int position[2];
+	string name;
+	string sprite_location;
+
+	void operator=(int input){
+		type = input;
+		switch(input){
+			//fill in info about lifespan, name, sprite, and other info here upon initialization
+		}
+	}
+};
+
+struct Player {
 	Vec dir;
 	Vec pos;
 	Vec vel;
 	float angle;
 	float color[3];
-	Ship() {
+	PowerUp P_UP[3];
+	int Max_Health;
+	int Current_Health;
+	Weapon P_Primary;
+	Explosive P_Secondary;
+
+	Player() {
 		VecZero(dir);
 		pos[0] = (Flt)(40);
 		pos[1] = (Flt)(40);
@@ -76,6 +103,10 @@ struct Ship {
 		color[0] = 1.0;
 		color[1] = 1.0;
 		color[2] = 1.0;
+		//PowerUp type=0 is the default no powerup option
+		P_UP[0] = 0;
+		P_UP[1] = 0;
+		P_UP[2] = 0;
 	}
 };
 
@@ -105,7 +136,7 @@ struct Bullet {
 const int MAX_BULLETS = 4;
  
 struct Game {
-	Ship ship;
+	Player Player_1;
 	Bullet *barr;
 	int nbullets;
     int score = 0;
@@ -124,7 +155,7 @@ void init_opengl(void);
 void cleanupXWindows(void);
 void check_resize(XEvent *e);
 void check_mouse(XEvent *e, Game *game);
-void pointPlayer(XEvent *e, Game *g, int savex, int savey);
+void pointPlayer(Game *g, int savex, int savey);
 int check_keys(XEvent *e);
 void init(Game *g);
 void init_sounds(void);
@@ -303,31 +334,31 @@ void check_mouse(XEvent *e, Game *g)
 		savey = e->xbutton.y;
         
         //point player at mouse
-        pointPlayer(e, g, savex, savey);
+        pointPlayer(g, savex, savey);
 	}
 }
-void pointPlayer(XEvent *e, Game *g, int savex, int savey){
+void pointPlayer(Game *g, int savex, int savey){
         //Make the player point at the cursor
-        float shipx = g->ship.pos[0];
-        float shipy = g->ship.pos[1];
+        float playerx = g->Player_1.pos[0];
+        float playery = g->Player_1.pos[1];
 
-        float nDeg = atan(((900-savey)-(shipy))/((savex)-(shipx))) * 180 / PI;
+        float nDeg = atan(((yres-savey)-(playery))/((savex)-(playerx))) * 180 / PI;
 
-        if(savex > shipx && (900 - savey) > shipy){
+        if(savex > playerx && (yres - savey) > playery){
             nDeg += 180;
         }
-        if(savex > shipx && (900 - savey) < shipy){
+        if(savex > playerx && (yres - savey) < playery){
             nDeg -= 180;
         }
-        if(g->ship.angle > 360.f)
-            g->ship.angle = 360.0f;
-        if (g->ship.angle <= 360.0f){
+        if(g->Player_1.angle > 360.f)
+            g->Player_1.angle = 360.0f;
+        if (g->Player_1.angle <= 360.0f){
             if(nDeg > 270)
                 nDeg -= 360;
-            g->ship.angle = nDeg + 90;
+            g->Player_1.angle = nDeg + 90;
         }
-        if (g->ship.angle < 0.0f)
-            g->ship.angle += 360.0f;
+        if (g->Player_1.angle < 0.0f)
+            g->Player_1.angle += 360.0f;
 }
 
 int check_keys(XEvent *e)
@@ -372,22 +403,21 @@ int check_keys(XEvent *e)
 
 void physics(Game *g)
 {
-	Flt d0,d1,dist;
-	//Update ship position
-	g->ship.pos[0] += g->ship.vel[0];
-	g->ship.pos[1] += g->ship.vel[1];
+	//Update Player_1 position
+	g->Player_1.pos[0] += g->Player_1.vel[0];
+	g->Player_1.pos[1] += g->Player_1.vel[1];
 	//Check for collision with window edges
-	if (g->ship.pos[0] < 0.0f) {
-		g->ship.pos[0] += (float)xres;
+	if (g->Player_1.pos[0] < 0.0f) {
+		g->Player_1.pos[0] += (float)xres;
 	}
-	else if (g->ship.pos[0] > (float)xres) {
-		g->ship.pos[0] -= (float)xres;
+	else if (g->Player_1.pos[0] > (float)xres) {
+		g->Player_1.pos[0] -= (float)xres;
 	}
-	else if (g->ship.pos[1] < 0.0f) {
-		g->ship.pos[1] += (float)yres;
+	else if (g->Player_1.pos[1] < 0.0f) {
+		g->Player_1.pos[1] += (float)yres;
 	}
-	else if (g->ship.pos[1] > (float)yres) {
-		g->ship.pos[1] -= (float)yres;
+	else if (g->Player_1.pos[1] > (float)yres) {
+		g->Player_1.pos[1] -= (float)yres;
 	}
 	//
 	//
@@ -426,36 +456,36 @@ void physics(Game *g)
 	}
 	//---------------------------------------------------
 	//check keys pressed now
-	if (keys[XK_Left]) {
-		g->ship.angle += 4.0f;
-		if (g->ship.angle >= 360.0f)
-			g->ship.angle -= 360.0f;
+	if (keys[XK_a]) {
+		g->Player_1.angle += 4.0f;
+		if (g->Player_1.angle >= 360.0f)
+			g->Player_1.angle -= 360.0f;
 	}
-	if (keys[XK_Right]) {
-		g->ship.angle -= 4.0f;
-		if (g->ship.angle < 0.0f)
-			g->ship.angle += 360.0f;
+	if (keys[XK_d]) {
+		g->Player_1.angle -= 4.0f;
+		if (g->Player_1.angle < 0.0f)
+			g->Player_1.angle += 360.0f;
 	}
-	if (keys[XK_Up]) {
-		//convert ship angle to radians
-		Flt rad = ((g->ship.angle+90.0f) / 360.0f) * PI * 2.0f;
+	if (keys[XK_w]) {
+		//convert Player_1 angle to radians
+		Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
 		Flt xdir = cos(rad);
 		Flt ydir = sin(rad);
-		g->ship.vel[0] = xdir;
-		g->ship.vel[1] = ydir;
+		g->Player_1.vel[0] = xdir;
+		g->Player_1.vel[1] = ydir;
 	}else{
-        g->ship.vel[0] = 0;
-        g->ship.vel[1] = 0;
+        g->Player_1.vel[0] = 0;
+        g->Player_1.vel[1] = 0;
     }
-    if (keys[XK_Down]) {
-        //convert ship angle to radians
-        Flt rad = ((g->ship.angle+90.0f) / 360.0f) * PI * 2.0f;
+    if (keys[XK_s]) {
+        //convert Player_1 angle to radians
+        Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
         //convert angle to a vector
         Flt xdir = cos(rad);
         Flt ydir = sin(rad);
-        g->ship.vel[0] = -1 * xdir;
-        g->ship.vel[1] = -1 * ydir;
+        g->Player_1.vel[0] = -1 * xdir;
+        g->Player_1.vel[1] = -1 * ydir;
     }
 	if (keys[XK_space]) {
 		//a little time between each bullet
@@ -467,12 +497,12 @@ void physics(Game *g)
 			//shoot a bullet...
 			Bullet *b = &g->barr[g->nbullets];
 			timeCopy(&b->time, &bt);
-			b->pos[0] = g->ship.pos[0];
-			b->pos[1] = g->ship.pos[1];
-			b->vel[0] = g->ship.vel[0];
-			b->vel[1] = g->ship.vel[1];
-			//convert ship angle to radians
-			Flt rad = ((g->ship.angle+90.0f) / 360.0f) * PI * 2.0f;
+			b->pos[0] = g->Player_1.pos[0];
+			b->pos[1] = g->Player_1.pos[1];
+			b->vel[0] = g->Player_1.vel[0];
+			b->vel[1] = g->Player_1.vel[1];
+			//convert Player_1 angle to radians
+			Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
 			//convert angle to a vector
 			Flt xdir = cos(rad);
 			Flt ydir = sin(rad);
@@ -490,22 +520,14 @@ void physics(Game *g)
 
 void render(Game *g)
 {
-	//float wid;
-	Rect r;
 	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	r.bot = yres - 20;
-	r.left = 10;
-	r.center = 0;
-	ggprint8b(&r, 16, 0x00ffff00, "n bullets: %i", g->nbullets);
-    ggprint8b(&r, 16, 0X00ffff00, "Score: ", g->score);
 	//-------------------------------------------------------------------------
-	//Draw the ship
-	glColor3fv(g->ship.color);
+	//Draw the Player_1
+	glColor3fv(g->Player_1.color);
 	glPushMatrix();
-	glTranslatef(g->ship.pos[0], g->ship.pos[1], g->ship.pos[2]);
-	//float angle = atan2(ship.dir[1], ship.dir[0]);
-	glRotatef(g->ship.angle, 0.0f, 0.0f, 1.0f);
+	glTranslatef(g->Player_1.pos[0], g->Player_1.pos[1], g->Player_1.pos[2]);
+	//float angle = atan2(Player_1.dir[1], Player_1.dir[0]);
+	glRotatef(g->Player_1.angle, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_TRIANGLES);
 	//glVertex2f(-10.0f, -10.0f);
 	//glVertex2f(  0.0f, 20.0f);
@@ -544,3 +566,4 @@ void render(Game *g)
 		}
 	}
 }
+
