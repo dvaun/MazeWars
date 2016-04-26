@@ -13,6 +13,8 @@
 #include "Weapon.h"
 #include "Power_up.h"
 #include "Player.h"
+#include "joystick.hh"
+#include <unistd.h> //required for controller
 extern "C" {
 	#include "fonts.h"
 }
@@ -105,7 +107,8 @@ struct Game {
 };
 
 int keys[65536];
-
+int joy[65536];
+int axis[65536];
 //function prototypes
 void initXWindows(void);
 void init_opengl(void);
@@ -113,6 +116,7 @@ void cleanupXWindows(void);
 void check_resize(XEvent *e);
 void check_mouse(XEvent *e, Game *game);
 void pointPlayer(Game *g, int savex, int savey);
+void check_controller(JoystickEvent event);
 int check_keys(XEvent *e);
 void init(Game *g);
 void init_sounds(void);
@@ -125,6 +129,7 @@ int main(void)
 	initXWindows();
 	init_opengl();
 	Game game;
+	Joystick joystick;
 	init(&game);
 	srand(time(NULL));
 	clock_gettime(CLOCK_REALTIME, &timePause);
@@ -137,6 +142,15 @@ int main(void)
 			check_resize(&e);
 			check_mouse(&e, &game);
 			done = check_keys(&e);
+		}
+
+		//Joystick events need to be checked outside of XPending(dpy)
+		JoystickEvent event;
+		if (joystick.sample(&event)) {
+			if (event.isButton() || event.isAxis()){
+			//	std::cout << "entered at least" << std::endl;
+				check_controller(event);
+			}
 		}
 		clock_gettime(CLOCK_REALTIME, &timeCurrent);
 		timeSpan = timeDiff(&timeStart, &timeCurrent);
@@ -319,6 +333,26 @@ void pointPlayer(Game *g, int savex, int savey){
             g->gun.angle += 360.0f;
 }
 
+void check_controller(JoystickEvent event)
+{
+	int number = event.number;
+	if (event.type == 0x01) {
+		if (joy[number] == 0)
+			joy[number] = 1;
+		else
+			joy[number] = 0;
+	}
+
+	if (event.type == 0x02) {
+		float value = event.value;
+		//std::cout << value << std::endl;
+		if (fabs(value) / (float) event.MAX_AXES_VALUE < .2)
+			axis[number] = 0;
+		else
+			axis[number] = value;
+	}
+}
+
 int check_keys(XEvent *e)
 {
 	//keyboard input?
@@ -358,6 +392,17 @@ int check_keys(XEvent *e)
 	}
 	return 0;
 }
+
+void movement(Game *g) {
+	Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
+	
+	Flt xdir = cos(rad);
+	Flt ydir = sin(rad);
+
+	g->Player_1.vel[0] = xdir*2.0f;
+	g->Player_1.vel[1] = ydir*2.0f;
+}
+	
 
 void physics(Game *g)
 {
@@ -435,6 +480,74 @@ void physics(Game *g)
         g->Player_1.vel[0] = 0;
         g->Player_1.vel[1] = 0;
     }
+
+	//Check Controller 
+
+	//calculated myself instead of using Vec + normalize
+	//Vec + normalize didn't work as intended
+	float x = axis[0]/32767.0;	
+	float y = -axis[1]/32767.0;
+	
+	//	std::cout << "x: " << x << std::endl;
+	//	std::cout << "y: " << y << std::endl;
+	float twoPos = sqrt(2 + sqrt(2))/2.0; //.9238
+	float twoNeg = sqrt(2 - sqrt(2))/2.0; //.3827
+	//std::cout << "twoPos: " << twoPos << std::endl;
+	//std::cout << "twoNeg: " << twoNeg << std::endl;
+
+	//Up and Left
+	if (x >= -twoPos+.08 && x <= -twoNeg+.08 && 
+		y >= twoNeg-.08 && y <= twoPos+.08) {
+		g->Player_1.angle = 45.0f;
+		movement(g);
+	}
+	//Up and Right
+	else if (x >= twoNeg+.08 && x <= twoPos+.08 && 
+			y <= twoPos+.08 && y >= twoNeg-.08) { 
+		g->Player_1.angle = -45.0f;
+		movement(g);
+	}
+	//Left and Down	
+	else if (x >= -twoPos+.08 && x <= -twoNeg-.08 && 
+			y <= -twoNeg-.08 && y >= -twoPos+.08) {
+		g->Player_1.angle = 135.0f;
+		movement(g);
+	}
+	//Down and Right
+	else if (x >= twoNeg-.08 && x <= twoPos+.08 && 
+			y >= -twoPos+.08 && y <= -twoNeg-.08) {
+		g->Player_1.angle = 225.0f;
+		movement(g);
+	}
+	//Up
+	else if (x <= twoNeg+.08 && x >= -twoNeg-.08 && y >= twoPos-.08 ) {  
+		g->Player_1.angle = 0.0f;
+		movement(g);
+	}
+
+	//Left
+	else if (x <= -twoPos+.08 && y <= twoNeg+.08 && y >= -twoNeg+.08) {
+		g->Player_1.angle = 90.0f;
+		movement(g);
+	}
+
+	//Down
+	else if(fabs(x) <= twoNeg+.08 && -fabs(y) <= -twoPos+.08) {
+		g->Player_1.angle = 180.0f;
+		movement(g);
+	}
+
+	//Right
+	else if ( x >= twoPos-.08 && y <= twoNeg+.08 && y >= -twoNeg+.08) {
+			g->Player_1.angle = 270.0f;
+			movement(g);
+	}
+	else {
+        g->Player_1.vel[0] = 0;
+        g->Player_1.vel[1] = 0;
+    }
+
+
     if (keys[XK_s]) {
         //convert Player_1 angle to radians
         Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
@@ -444,7 +557,7 @@ void physics(Game *g)
         g->Player_1.vel[0] = -1 * xdir;
         g->Player_1.vel[1] = -1 * ydir;
     }
-	if (keys[XK_space]) {
+	if (keys[XK_space] || joy[0]) {
 		//a little time between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
