@@ -332,10 +332,9 @@ void check_mouse(XEvent *e, Game *g)
 		//Mouse moved
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
-        
-        //point player at mouse
-        pointPlayer(g, savex, savey);
 	}
+	//point player at mouse
+	pointPlayer(g, savex, savey);
 }
 void pointPlayer(Game *g, int savex, int savey){
         //Make the player point at the cursor
@@ -431,11 +430,9 @@ void physics(Game *g)
 		if (ts > 0.5f) {
 			//Delete bullet here.
 			for(int k = i; k < g->nbullets-1; k++){
-                                    g->barr[k] = g->barr[k+1];
-                                }
-                                //b = &g->barr[g->nbullets-1];
-                                g->nbullets--;
-
+				g->barr[k] = g->barr[k+1];
+			}
+			g->nbullets--;
 		}
 		//move the bullet
 		b->pos[0] += b->vel[0];
@@ -526,12 +523,8 @@ void render(Game *g)
 	glColor3fv(g->Player_1.color);
 	glPushMatrix();
 	glTranslatef(g->Player_1.pos[0], g->Player_1.pos[1], g->Player_1.pos[2]);
-	//float angle = atan2(Player_1.dir[1], Player_1.dir[0]);
 	glRotatef(g->Player_1.angle, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_TRIANGLES);
-	//glVertex2f(-10.0f, -10.0f);
-	//glVertex2f(  0.0f, 20.0f);
-	//glVertex2f( 10.0f, -10.0f);
 	glVertex2f(-12.0f, -10.0f);
 	glVertex2f(  0.0f,  20.0f);
 	glVertex2f(  0.0f,  -6.0f);
@@ -546,24 +539,21 @@ void render(Game *g)
 	glPopMatrix();
 	//-------------------------------------------------------------------------
 	//Draw the bullets
-	{
-		for (int i=0; i<g->nbullets; i++) {
-			Bullet *b = &g->barr[i];
-			//Log("draw bullet...\n");
-			glColor3f(1.0f, 1.0f, 1.0f);
-			glBegin(GL_POINTS);
-			glVertex2f(b->pos[0],      b->pos[1]);
-			glVertex2f(b->pos[0]-1.0f, b->pos[1]);
-			glVertex2f(b->pos[0]+1.0f, b->pos[1]);
-			glVertex2f(b->pos[0],      b->pos[1]-1.0f);
-			glVertex2f(b->pos[0],      b->pos[1]+1.0f);
-			glColor3f(0.8f, 0.8f, 0.8f);
-			glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
-			glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
-			glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
-			glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
-			glEnd();
-		}
+	for (int i=0; i<g->nbullets; i++) {
+		Bullet *b = &g->barr[i];
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glBegin(GL_POINTS);
+		glVertex2f(b->pos[0],      b->pos[1]);
+		glVertex2f(b->pos[0]-1.0f, b->pos[1]);
+		glVertex2f(b->pos[0]+1.0f, b->pos[1]);
+		glVertex2f(b->pos[0],      b->pos[1]-1.0f);
+		glVertex2f(b->pos[0],      b->pos[1]+1.0f);
+		glColor3f(0.8f, 0.8f, 0.8f);
+		glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
+		glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
+		glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
+		glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
+		glEnd();
 	}
 }
 
