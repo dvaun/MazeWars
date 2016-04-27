@@ -10,6 +10,8 @@
 #include <GL/glx.h>
 #include "ppm.h"
 #include "log.h"
+#include "Weapon.h"
+#include "Player.h"
 extern "C" {
 	#include "fonts.h"
 }
