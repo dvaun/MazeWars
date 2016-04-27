@@ -11,6 +11,7 @@
 #include "ppm.h"
 #include "log.h"
 #include "Weapon.h"
+#include "Power_up.h"
 #include "Player.h"
 extern "C" {
 	#include "fonts.h"
@@ -65,22 +66,6 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 int xres=1250, yres=900;
 
-struct PowerUp {
-	//type is going to be an int ie(1:"Shield Bubble" 2:"Unlimited Ammo" 3:"Walk Through Walls" etc...)
-	int type;
-	int lifeSpan;
-	//position[0] = X; position[1] = Y;
-	int position[2];
-	string name;
-	string sprite_location;
-
-	void operator=(int input){
-		type = input;
-		switch(input){
-			//fill in info about lifespan, name, sprite, and other info here upon initialization
-		}
-	}
-};
 struct Bullet {
 	Vec pos;
 	Vec vel;
