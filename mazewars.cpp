@@ -121,7 +121,7 @@ void cleanupXWindows(void);
 void check_resize(XEvent *e);
 void check_mouse(XEvent *e, Game *game);
 void pointPlayer(Game *g, int savex, int savey);
-void check_controller(JoystickEvent event);
+void getJoystickEvent(JoystickEvent event);
 int check_keys(XEvent *e);
 void init(Game *g);
 void init_sounds(void);
@@ -153,8 +153,7 @@ int main(void)
 		JoystickEvent event;
 		if (joystick.sample(&event)) {
 			if (event.isButton() || event.isAxis()){
-			//	std::cout << "entered at least" << std::endl;
-				check_controller(event);
+				getJoystickEvent(event);
 			}
 		}
 		clock_gettime(CLOCK_REALTIME, &timeCurrent);
@@ -312,33 +311,33 @@ void check_mouse(XEvent *e, Game *g)
 	//point player at mouse
 	pointPlayer(g, savex, savey);
 }
-void pointPlayer(Game *g, int savex, int savey){
-        //Make the player point at the cursor
+void pointPlayer(Game *g, int savex, int savey)
+{
+    //Make the player point at the cursor
 	g->gun.pos[0] = g->Player_1.pos[0];
 	g->gun.pos[1] = g->Player_1.pos[1];
-        float weaponx = g->gun.pos[0];
-        float weapony = g->gun.pos[1];
+	float weaponx = g->gun.pos[0];
+	float weapony = g->gun.pos[1];
 
-        float nDeg = atan(((yres-savey)-(weapony))/((savex)-(weaponx))) * 180 / PI;
+	float nDeg = atan(((yres-savey)-(weapony))/((savex)-(weaponx))) * 180 / PI;
 
-        if(savex > weaponx && (yres - savey) > weapony){
-            nDeg += 180;
-        }
-        if(savex > weaponx && (yres - savey) < weapony){
-            nDeg -= 180;
-        }
-        if(g->gun.angle > 360.f)
-            g->gun.angle = 360.0f;
-        if (g->gun.angle <= 360.0f){
-            if(nDeg > 270)
-                nDeg -= 360;
-            g->gun.angle = nDeg + 90;
-        }
-        if (g->gun.angle < 0.0f)
-            g->gun.angle += 360.0f;
+    if (savex > weaponx && (yres - savey) > weapony)
+		nDeg += 180;
+    if (savex > weaponx && (yres - savey) < weapony)
+    	nDeg -= 180;
+        
+	if (g->gun.angle > 360.f)
+		g->gun.angle = 360.0f;
+	if (g->gun.angle <= 360.0f){
+    	if (nDeg > 270)
+        	nDeg -= 360;
+		g->gun.angle = nDeg + 90;
+	}
+	if (g->gun.angle < 0.0f)
+		g->gun.angle += 360.0f;
 }
 
-void check_controller(JoystickEvent event)
+void getJoystickEvent(JoystickEvent event)
 {
 	int number = event.number;
 	if (event.type == 0x01) {
@@ -414,6 +413,8 @@ void physics(Game *g)
 	//Update Player_1 position
 	g->Player_1.pos[0] += g->Player_1.vel[0];
 	g->Player_1.pos[1] += g->Player_1.vel[1];
+	g->gun.pos[0] += g->gun.vel[0];
+	g->gun.pos[1] += g->gun.vel[1];
 	//Check for collision with window edges
 	if (g->Player_1.pos[0] < 0.0f) {
 		g->Player_1.pos[0] += (float)xres;
@@ -471,7 +472,6 @@ void physics(Game *g)
 		g->Player_1.angle -= 4.0f;
 		if (g->Player_1.angle < 0.0f)
 			g->Player_1.angle += 360.0f;
-
 	}
 	if (keys[XK_w]) {
 		//convert Player_1 angle to radians
@@ -481,80 +481,12 @@ void physics(Game *g)
 		Flt ydir = sin(rad);
 		g->Player_1.vel[0] = xdir;
 		g->Player_1.vel[1] = ydir;
-	}else{
+	//	g->gun.pos[0] = xdir;
+	//	g->gun.pos[1] = ydir;
+	} else {
         g->Player_1.vel[0] = 0;
         g->Player_1.vel[1] = 0;
-    }
-
-	checkController(axis, g);
-
-	/*//Check Controller 
-
-	//calculated myself instead of using Vec + normalize
-	//Vec + normalize didn't work as intended
-	float x = axis[0]/32767.0;	
-	float y = -axis[1]/32767.0;
-	
-	//	std::cout << "x: " << x << std::endl;
-	//	std::cout << "y: " << y << std::endl;
-	float twoPos = sqrt(2 + sqrt(2))/2.0; //.9238
-	float twoNeg = sqrt(2 - sqrt(2))/2.0; //.3827
-	//std::cout << "twoPos: " << twoPos << std::endl;
-	//std::cout << "twoNeg: " << twoNeg << std::endl;
-
-	//Up and Left
-	if (x >= -twoPos+.08 && x <= -twoNeg+.08 && 
-		y >= twoNeg-.08 && y <= twoPos+.08) {
-		g->Player_1.angle = 45.0f;
-		movement(g);
 	}
-	//Up and Right
-	else if (x >= twoNeg+.08 && x <= twoPos+.08 && 
-			y <= twoPos+.08 && y >= twoNeg-.08) { 
-		g->Player_1.angle = -45.0f;
-		movement(g);
-	}
-	//Left and Down	
-	else if (x >= -twoPos+.08 && x <= -twoNeg-.08 && 
-			y <= -twoNeg-.08 && y >= -twoPos+.08) {
-		g->Player_1.angle = 135.0f;
-		movement(g);
-	}
-	//Down and Right
-	else if (x >= twoNeg-.08 && x <= twoPos+.08 && 
-			y >= -twoPos+.08 && y <= -twoNeg-.08) {
-		g->Player_1.angle = 225.0f;
-		movement(g);
-	}
-	//Up
-	else if (x <= twoNeg+.08 && x >= -twoNeg-.08 && y >= twoPos-.08 ) {  
-		g->Player_1.angle = 0.0f;
-		movement(g);
-	}
-
-	//Left
-	else if (x <= -twoPos+.08 && y <= twoNeg+.08 && y >= -twoNeg+.08) {
-		g->Player_1.angle = 90.0f;
-		movement(g);
-	}
-
-	//Down
-	else if(fabs(x) <= twoNeg+.08 && -fabs(y) <= -twoPos+.08) {
-		g->Player_1.angle = 180.0f;
-		movement(g);
-	}
-
-	//Right
-	else if ( x >= twoPos-.08 && y <= twoNeg+.08 && y >= -twoNeg+.08) {
-			g->Player_1.angle = 270.0f;
-			movement(g);
-	}
-	else {
-        g->Player_1.vel[0] = 0;
-        g->Player_1.vel[1] = 0;
-    }
-	*/
-
     if (keys[XK_s]) {
         //convert Player_1 angle to radians
         Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
@@ -563,7 +495,11 @@ void physics(Game *g)
         Flt ydir = sin(rad);
         g->Player_1.vel[0] = -1 * xdir;
         g->Player_1.vel[1] = -1 * ydir;
-    }
+	}
+	if(axis[0] || axis[1] ||  axis[4] || axis[5]) {	
+		checkController(axis, g);
+	}
+
 	if (keys[XK_space] || joy[0]) {
 		//a little time between each bullet
 		struct timespec bt;
