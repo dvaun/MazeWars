@@ -1,22 +1,14 @@
-//test
-class Weapon{
-    int max_ammo;
-    int current_ammo;
-    int range;
-    int reload_speed;
-    int bullet_speed;
-    int base_dmg;    
-    string name;
-    
-    public:
-
-    bool is_empty(){
-        return(current_ammo);
-    }
-};
-
-class Sniper : Weapon{
-    Sniper(){
-        range *= 2;
+struct Weapon{
+    Vec dir;
+    Vec pos;
+    Vec vel;
+    float angle;
+    Weapon(){
+	VecZero(dir);
+        pos[0] = (Flt)(40);
+        pos[1] = (Flt)(40);
+        pos[2] = 0.0f;
+        VecZero(vel);
+        angle = 0.0;
     }
 };
