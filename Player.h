@@ -1,34 +1,27 @@
-class Player_Character{
-    
-    int pos_x;
-    int pos_y;
-    int max_health;
-    int current_health;
-    Powerup P_UP[3]; //array of powerups the player is/can use
-    int NumP = 0; //Number of current Powerup to be replaced; if(none) put new one at index
-    Weapon Player_Gun;
+struct Player {
+	Vec dir;
+	Vec pos;
+	Vec vel;
+	float angle;
+	float color[3];
+	PowerUp P_UP[3];
+	int Max_Health;
+	int Current_Health;
+	Explosive P_Secondary;
 
-Public:
-    
-    void move(int x, int y){
-        pos_x = x;
-        pos_y = y;
-    }
-    void modifyHealth(int mod){
-        health += mod;
-        if(health <= 0)
-            health = 0;
-    }
-    bool is_Dead(){
-        return health;
-    }
-    void add_Powerup(Powerup PowNew){
-        //make an assignment operator in the "Powerup" object
-        P_UP[NumP] = PowNew;
-        NumP = (NumP + 1) % 3;
-    }
-    void Change_Weapon(Weapon GunNew){
-        //make an assignment operator in the "Weapon" object
-        Player_Gun = GunNew;
-    }
-}Player_1;
+	Player() {
+		VecZero(dir);
+		pos[0] = (Flt)(40);
+		pos[1] = (Flt)(40);
+		pos[2] = 0.0f;
+		VecZero(vel);
+		angle = 0.0;
+		color[0] = 1.0;
+		color[1] = 1.0;
+		color[2] = 1.0;
+		//PowerUp type=0 is the default no powerup option
+		P_UP[0] = 0;
+		P_UP[1] = 0;
+		P_UP[2] = 0;
+	}
+};
