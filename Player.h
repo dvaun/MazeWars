@@ -1,3 +1,10 @@
+#include "Power_up.h"
+typedef float Flt;
+typedef float Vec[3];
+typedef int Explosive;
+
+#define VecZero(v) (v)[0]=0.0,(v)[1]=0.0,(v)[2]=0.0
+
 struct Player {
 	Vec dir;
 	Vec pos;

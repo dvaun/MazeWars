@@ -10,11 +10,14 @@
 #include <GL/glx.h>
 #include "ppm.h"
 #include "log.h"
-#include "Weapon.h"
-#include "Power_up.h"
-#include "Player.h"
+//#include "Weapon.h"
+//#include "Power_up.h"
+//#include "Player.h"
 #include "joystick.hh"
+#include "game.h"
+#include "matthewG.h"
 #include <unistd.h> //required for controller
+
 extern "C" {
 	#include "fonts.h"
 }
@@ -68,7 +71,7 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 int xres=1250, yres=900;
 
-struct Bullet {
+/*struct Bullet {
 	Vec pos;
 	Vec vel;
 	float color[3];
@@ -105,7 +108,7 @@ struct Game {
 		nbullets = 0;
 	}
 };
-
+*/
 int keys[65536];
 int joy[65536];
 int axis[65536];
@@ -393,7 +396,7 @@ int check_keys(XEvent *e)
 	return 0;
 }
 
-void movement(Game *g) {
+/*void movement(Game *g) {
 	Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
 	
 	Flt xdir = cos(rad);
@@ -401,7 +404,7 @@ void movement(Game *g) {
 
 	g->Player_1.vel[0] = xdir*2.0f;
 	g->Player_1.vel[1] = ydir*2.0f;
-}
+} */
 	
 
 void physics(Game *g)
@@ -481,7 +484,9 @@ void physics(Game *g)
         g->Player_1.vel[1] = 0;
     }
 
-	//Check Controller 
+	checkController(axis, g);
+
+	/*//Check Controller 
 
 	//calculated myself instead of using Vec + normalize
 	//Vec + normalize didn't work as intended
@@ -546,7 +551,7 @@ void physics(Game *g)
         g->Player_1.vel[0] = 0;
         g->Player_1.vel[1] = 0;
     }
-
+	*/
 
     if (keys[XK_s]) {
         //convert Player_1 angle to radians
