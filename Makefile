@@ -9,6 +9,6 @@ mazewars: mazewars.cpp ppm.c log.c
 
 clean:
 	rm -f MazeWars
-	rm -f *.o
+	rm -f x.x
 
 
