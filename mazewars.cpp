@@ -16,6 +16,7 @@
 #include "joystick.hh"
 #include "game.h"
 #include "matthewG.h"
+#include "roseP.h"
 #include <unistd.h> //required for controller
 #include "davidV.h"
 
