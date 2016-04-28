@@ -21,7 +21,7 @@ int npeople = 0;
 void job_opengl(void)
 {
 	//Loading images -- commented out while looking for sprite
-	personImage = ppm6GetImage("./sprite.ppm");
+	personImage = ppm6GetImage((char*)"./sprite.ppm");
 	
 	//create opengl texture elements
 	glGenTextures(1, &personTexture);
