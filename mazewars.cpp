@@ -17,6 +17,7 @@
 #include "game.h"
 #include "matthewG.h"
 #include <unistd.h> //required for controller
+#include "davidV.h"
 
 extern "C" {
 	#include "fonts.h"
@@ -596,42 +597,14 @@ void physics(Game *g)
 void render(Game *g)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	//-------------------------------------------------------------------------
+	
 	//Draw the Player_1
-	glColor3fv(g->Player_1.color);
-	glPushMatrix();
-	glTranslatef(g->Player_1.pos[0], g->Player_1.pos[1], g->Player_1.pos[2]);
-	glRotatef(g->Player_1.angle, 0.0f, 0.0f, 1.0f);
-	glBegin(GL_TRIANGLES);
-	glVertex2f(-12.0f, -10.0f);
-	glVertex2f(  0.0f,  20.0f);
-	glVertex2f(  0.0f,  -6.0f);
-	glVertex2f(  0.0f,  -6.0f);
-	glVertex2f(  0.0f,  20.0f);
-	glVertex2f( 12.0f, -10.0f);
-	glEnd();
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glBegin(GL_POINTS);
-	glVertex2f(0.0f, 0.0f);
-	glEnd();
-	glPopMatrix();
-	//-------------------------------------------------------------------------
+	drawPlayer(g->Player_1);
+	
 	//Draw the bullets
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glBegin(GL_POINTS);
-		glVertex2f(b->pos[0],      b->pos[1]);
-		glVertex2f(b->pos[0]-1.0f, b->pos[1]);
-		glVertex2f(b->pos[0]+1.0f, b->pos[1]);
-		glVertex2f(b->pos[0],      b->pos[1]-1.0f);
-		glVertex2f(b->pos[0],      b->pos[1]+1.0f);
-		glColor3f(0.8f, 0.8f, 0.8f);
-		glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
-		glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
-		glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
-		glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
-		glEnd();
+		drawBullet(b, 1.0, 1.0, 1.0);
 	}
 }
 

@@ -1,3 +1,6 @@
+#ifndef GAME_H
+#define GAME_H
+
 #include "Player.h"
 #include "Weapon.h"
 
@@ -16,3 +19,20 @@ struct Game {
 		nbullets = 0;
 	}
 };
+
+struct Object {
+	float width, height;
+	float radius;
+	Vec center;
+	Vec vel;
+	Vec pos;
+};
+
+struct Particle {
+	Object s;
+	Vec vel;
+	Vec pos;
+	float gravity;
+};
+
+#endif

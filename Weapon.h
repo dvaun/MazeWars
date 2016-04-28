@@ -1,3 +1,6 @@
+#ifndef WEAPONS_H
+#define WEAPONS_H
+
 #include <ctime>
 typedef float Flt;
 typedef float Vec[3];
@@ -41,3 +44,5 @@ struct Bullet {
 		time = x.time;
 	}
 };
+
+#endif
