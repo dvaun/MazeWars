@@ -1,3 +1,7 @@
+// Lab 5
+// David Vaughan
+// 04/28/2016
+
 #ifndef DRAW_F
 #define DRAW_F
 
