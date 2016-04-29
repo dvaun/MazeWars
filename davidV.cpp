@@ -5,7 +5,6 @@
 #ifndef DRAW_F
 #define DRAW_F
 
-#include "davidV.h"
 #include <GL/glx.h>
 #include "Weapon.h"
 #include "game.h"

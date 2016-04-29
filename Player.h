@@ -1,9 +1,11 @@
+#ifndef _PLAYER_H_
+#define _PLAYER_H_
+
 #include "Power_up.h"
-typedef float Flt;
-typedef float Vec[3];
+#include "defs.h"
+
 typedef int Explosive;
 
-#define VecZero(v) (v)[0]=0.0,(v)[1]=0.0,(v)[2]=0.0
 
 struct Player {
 	Vec dir;
@@ -32,3 +34,5 @@ struct Player {
 		P_UP[2] = 0;
 	}
 };
+
+#endif

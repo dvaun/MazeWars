@@ -3,7 +3,7 @@
 
 #include "Player.h"
 #include "Weapon.h"
-
+#include "defs.h"
 
 const int MAX_BULLETS = 4;
 

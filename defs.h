@@ -5,6 +5,7 @@ typedef double Flt;
 typedef double Vec[3];
 typedef Flt	Matrix[4][4];
 
+#define rnd() (((double)rand())/(double)RAND_MAX)
 #define MakeVector(x, y, z, v) (v)[0]=(x),(v)[1]=(y),(v)[2]=(z)
 #define VecNegate(a)	(a)[0]=(-(a)[0]); (a)[1]=(-(a)[1]); (a)[2]=(-(a)[2]);
 #define VecDot(a,b)	((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
@@ -21,6 +22,7 @@ typedef Flt	Matrix[4][4];
 #define SGN(a) (((a)<0)?(-1):(1))
 #define SGND(a) (((a)<0.0)?(-1.0):(1.0))
 
+
 typedef struct t_rect {
 	int left;
 	int top;
@@ -33,12 +35,14 @@ typedef struct t_rect {
 	int centery;
 } Rect;
 
+
 typedef struct t_mouse {
 	int x,y;
 	int lastx,lasty;
 	int lbuttondown;
 } Mouse;
 
+/*
 typedef struct t_screen {
 	int x_res, y_res;
 	int screen_x_res, screen_y_res;
@@ -46,7 +50,7 @@ typedef struct t_screen {
 	Flt xcenter, ycenter;
 	Flt fy_res, fx_res;
 } Screen;
-
+*/
 typedef struct t_keys {
 	int autorepeatstate, shiftstate, ctrlstate, shiftlockstate;
 } Keys;

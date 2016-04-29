@@ -1,20 +1,28 @@
+#ifndef _JOBG_H_
+#define _JOBG_H_
+
 //Job Gomez
-int xres = 1250;
-int yres = 800;
-int done = 0;
+#include "ppm.h"
+#include "defs.h"
+#include <GL/glx.h>
+/*
 typedef float Flt;
 typedef float Vec[3];
 typedef Flt     Matrix[4][4];
+*/
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-struct Ship {
+struct Person {
+	int xres = 1250;
+	int yres = 800;
         Vec dir;
         Vec pos;
+	Vec lastpos;
         Vec vel;
         float angle;
         float color[3];
-        Ship() {
+        Person() {
                 VecZero(dir);
                 pos[0] = (Flt)(xres/2);
                 pos[1] = (Flt)(yres/2);
@@ -25,13 +33,20 @@ struct Ship {
                 color[1] = 1.0;
                 color[2] = 1.0;
         }
-}p;
+};
 
-int keys[65536];
-p person;
+/*
+Person person;
 Ppmimage *personImage = NULL;
 GLuint personTexture;
-int person = 0;
+int npeople = 0;
 
-void init_opengl(void);
-void check_keys(XEvent *e);
+void job_opengl(void);
+int job_keys(int);
+*/
+void job_opengl(void);
+void job_keys(int, int*);
+
+
+#endif
+
