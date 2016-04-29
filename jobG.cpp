@@ -1,3 +1,5 @@
+//Job Gomez
+//Lab 5
 #include "game.h"
 #include "jobG.h"
 //defined types
@@ -80,3 +82,4 @@ int check_keys(XEvent *e)
                         person.pos[1] -= 10.0;
                         break;
 	}
+}

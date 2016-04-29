@@ -1,6 +1,8 @@
-
-			brea
-at Flt;
+//Job Gomez
+int xres = 1250;
+int yres = 800;
+int done = 0;
+typedef float Flt;
 typedef float Vec[3];
 typedef Flt     Matrix[4][4];
 
@@ -31,3 +33,5 @@ Ppmimage *personImage = NULL;
 GLuint personTexture;
 int person = 0;
 
+void init_opengl(void);
+void check_keys(XEvent *e);

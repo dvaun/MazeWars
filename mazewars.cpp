@@ -17,6 +17,7 @@
 #include "game.h"
 #include "matthewG.h"
 #include "roseP.h"
+#include "job
 #include <unistd.h> //required for controller
 #include "davidV.h"
 
