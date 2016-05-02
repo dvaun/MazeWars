@@ -5,20 +5,11 @@
 #include "ppm.h"
 #include "defs.h"
 #include <GL/glx.h>
-/*
-typedef float Flt;
-typedef float Vec[3];
-typedef Flt     Matrix[4][4];
-*/
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-struct Person {
-	int xres = 1250;
-	int yres = 800;
+#include "person.h"
+/*struct Person {
         Vec dir;
         Vec pos;
-	Vec lastpos;
+		Vec lastpos;
         Vec vel;
         float angle;
         float color[3];
@@ -33,19 +24,10 @@ struct Person {
                 color[1] = 1.0;
                 color[2] = 1.0;
         }
-};
+};*/
 
-/*
-Person person;
-Ppmimage *personImage = NULL;
-GLuint personTexture;
-int npeople = 0;
-
-void job_opengl(void);
-int job_keys(int);
-*/
-void job_opengl(void);
-void job_keys(int, int*);
+void job_opengl(Ppmimage *personImage, GLuint personTexture);
+void job_keys(int, int &quit, Person person, int &people);
 
 
 #endif

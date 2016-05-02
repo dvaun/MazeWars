@@ -21,7 +21,7 @@
 #include <unistd.h> //required for controller
 #include "davidV.h"
 #include "defs.h"
-
+#include "person.h"
 extern "C" {
 	#include "fonts.h"
 }
@@ -118,9 +118,35 @@ struct Game {
 	}
 };
 */
+
+/*struct Person {
+        Vec dir;
+        Vec pos;
+		Vec lastpos;
+        Vec vel;
+        float angle;
+        float color[3];
+        Person() {
+                VecZero(dir);
+                pos[0] = (Flt)(xres/2);
+                pos[1] = (Flt)(yres/2);
+                pos[2] = 0.0f;
+                VecZero(vel);
+                angle = 0.0;
+                color[0] = 1.0;
+                color[1] = 1.0;
+                color[2] = 1.0;
+        }
+};*/
+
 int keys[65536];
 int joy[65536];
 int axis[65536];
+int people = 0;
+Ppmimage *personImage = NULL;
+GLuint personTexture;
+Person person;
+
 //function prototypes
 void initXWindows(void);
 void init_opengl(void);
@@ -260,7 +286,7 @@ void init_opengl(void)
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
-	job_opengl();
+	job_opengl(personImage, personTexture);
 }
 
 void check_resize(XEvent *e)
@@ -369,7 +395,7 @@ int check_keys(XEvent *e)
 {
 	//keyboard input?
 	int quit;
-    	static int shift=0;
+  	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
 	//
 	//This code maintains an array of key status values.
@@ -389,8 +415,11 @@ int check_keys(XEvent *e)
 		return 0;
 	}
 	if (shift){}
-	job_keys(key, &quit);
-	return 0;
+	job_keys(key, quit, person, people);
+	if(quit == 1) 
+		return 1;
+	else
+		return 0;
 }
 
 /*void movement(Game *g) {
@@ -539,5 +568,24 @@ void render(Game *g)
 		Bullet *b = &g->barr[i];
 		drawBullet(b, 1.0, 1.0, 1.0);
 	}
+	if (people) {
+		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+		glPushMatrix();
+		glTranslatef(person.pos[0], person.pos[1], person.pos[2]);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, personTexture);
+		glBegin(GL_QUADS);
+			float w = 325;
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(1.0f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(1.0f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_ALPHA_TEST);
+		glPopMatrix();
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
