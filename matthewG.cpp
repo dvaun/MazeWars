@@ -1,3 +1,13 @@
+/* Name: Matthew Gaitan
+ * Date: April 27, 2016
+ * Last Modified: May 3, 2016
+ * Description: My code handles all of the character movement if a controller 
+ * is being used. In the main mazewars.cpp file, the current values for the
+ * buttons as well as joysticks are added to an array and those values are
+ * later passed to my checkController function. My checkController function
+ * does whatever action that relates to the button or joystick being updated.
+ */
+
 #include "game.h"
 #include <cmath>
 
