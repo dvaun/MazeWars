@@ -2,7 +2,21 @@
 #define _JOBG_CPP_
 
 //Job Gomez
-//Lab 5
+//hw3
+
+/* buildAlphaData function 
+	sets values to an image's height and width
+   job opengl 
+	initiate the values of the image and the
+	texture of the image
+   job check keys 
+	checks whether the player moved left or right
+	(up and down as well)
+	depending on what key is pressed, it will use
+	a different image to simulate the character's
+	movement.
+*/
+
 #include "game.h"
 #include "jobG.h"
 #include <X11/Xlib.h>
@@ -58,14 +72,15 @@ void job_opengl(Ppmimage *personImage, GLuint personTexture)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	unsigned char *silhouetteData = buildAlphaData(personImage);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, 
-							GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);//personImage->data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, silhouetteData);//personImage->data);
 	free(silhouetteData);
 
 }
 
 
-void job_keys(int key, int &done, Person person, int &people){
+void job_keys (int key, int &done, Person person, int &people) 
+{
 	switch(key) {
 		case XK_Escape:
 			done = 1;
@@ -77,21 +92,21 @@ void job_keys(int key, int &done, Person person, int &people){
 			break;
 		case XK_Left:
 			VecCopy(person.pos, person.lastpos);
-            person.pos[0] -= 10.0;
-            std::cout << "Going left from switch statement\n";
-            break;
-        case XK_Right:
-            VecCopy(person.pos, person.lastpos);
-            person.pos[0] += 10.0;
-            break;
-        case XK_Up:
-            VecCopy(person.pos, person.lastpos);
-            person.pos[1] += 10.0;
-            break;
-        case XK_Down:
-            VecCopy(person.pos, person.lastpos);
-            person.pos[1] -= 10.0;
-            break;
+            		person.pos[0] -= 10.0;
+            		std::cout << "Going left from switch statement\n";
+            		break;
+        	case XK_Right:
+            		VecCopy(person.pos, person.lastpos);
+            		person.pos[0] += 10.0;
+            		break;
+        	case XK_Up:
+            		VecCopy(person.pos, person.lastpos);
+            		person.pos[1] += 10.0;
+            		break;
+        	case XK_Down:
+            		VecCopy(person.pos, person.lastpos);
+            	person.pos[1] -= 10.0;
+            		break;
 	}
 }
 

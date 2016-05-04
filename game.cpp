@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "Weapon.h"
 
-
 const int MAX_BULLETS = 4;
 
 struct Game {

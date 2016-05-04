@@ -1,7 +1,8 @@
 #include "game.h"
 #include <cmath>
 
-void movement(Game *g) {
+void movement(Game *g) 
+{
 	Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * M_PI * 2.0f;
 	
 	Flt xdir = cos(rad);
@@ -11,7 +12,8 @@ void movement(Game *g) {
 	g->Player_1.vel[1] = ydir*2.0f;
 }
 
-void checkController(int axis[], Game *g){	
+void checkController(int axis[], Game *g)
+{	
 	//Check Controller 
 
 	//calculated myself instead of using Vec + normalize

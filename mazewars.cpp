@@ -69,11 +69,13 @@ struct timespec timePause;
 double physicsCountdown=0.0;
 double timeSpan=0.0;
 //unsigned int upause=0;
-double timeDiff(struct timespec *start, struct timespec *end) {
+double timeDiff(struct timespec *start, struct timespec *end) 
+{
 	return (double)(end->tv_sec - start->tv_sec ) +
 			(double)(end->tv_nsec - start->tv_nsec) * oobillion;
 }
-void timeCopy(struct timespec *dest, struct timespec *source) {
+void timeCopy(struct timespec *dest, struct timespec *source) 
+{
 	memcpy(dest, source, sizeof(struct timespec));
 }
 //-----------------------------------------------------------------------------
@@ -92,14 +94,14 @@ int xres=1250, yres=900;
 		next = NULL;
 	}
 	void operator=(Bullet x){
-	    pos[0] = x.pos[0];
-	    pos[1] = x.pos[1];
-	    vel[0] = x.vel[0];
-	    vel[1] = x.vel[1];
-	    color[0] = x.color[0];
-	    color[1] = x.color[1];
-	    color[2] = x.color[2];
-	    time = x.time;
+		pos[0] = x.pos[0];
+		pos[1] = x.pos[1];
+		vel[0] = x.vel[0];
+		vel[1] = x.vel[1];
+		color[0] = x.color[0];
+		color[1] = x.color[1];
+		color[2] = x.color[2];
+		time = x.time;
 	}
 };
 
@@ -302,12 +304,14 @@ void check_resize(XEvent *e)
 	}
 }
 
-void init(Game *g) {
+void init(Game *g) 
+{
 	clock_gettime(CLOCK_REALTIME, &g->bulletTimer);
 	memset(keys, 0, 65536);
 }
 
-void normalize(Vec v) {
+void normalize(Vec v) 
+{
 	Flt len = v[0]*v[0] + v[1]*v[1];
 	if (len == 0.0f) {
 		v[0] = 1.0f;
@@ -358,13 +362,13 @@ void pointPlayer(Game *g, int savex, int savey)
     if (savex > weaponx && (yres - savey) > weapony)
 		nDeg += 180;
     if (savex > weaponx && (yres - savey) < weapony)
-    	nDeg -= 180;
+		nDeg -= 180;
         
 	if (g->gun.angle > 360.f)
 		g->gun.angle = 360.0f;
-	if (g->gun.angle <= 360.0f){
-    	if (nDeg > 270)
-        	nDeg -= 360;
+	if (g->gun.angle <= 360.0f) {
+    		if (nDeg > 270)
+        		nDeg -= 360;
 		g->gun.angle = nDeg + 90;
 	}
 	if (g->gun.angle < 0.0f)
@@ -395,7 +399,7 @@ int check_keys(XEvent *e)
 {
 	//keyboard input?
 	int quit;
-  	static int shift=0;
+	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
 	//
 	//This code maintains an array of key status values.
@@ -521,7 +525,7 @@ void physics(Game *g)
         g->Player_1.vel[0] = -1 * xdir;
         g->Player_1.vel[1] = -1 * ydir;
 	}
-	if(axis[0] || axis[1] ||  axis[4] || axis[5]) {	
+	if (axis[0] || axis[1] ||  axis[4] || axis[5]) {	
 		checkController(axis, g);
 	}
 
