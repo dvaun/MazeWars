@@ -1,4 +1,13 @@
-void pointPlayer(Game *g)
+/* Name: Cameron Morrow
+ * Date: May 04, 2016
+ * Last Modified: May 04, 2016
+ * Description: My code handles all of the weapon movement if a controller 
+ * is not being used.
+ * In the mazewars.cpp I modified all of the original asteroids code to remove
+ * the engine from the ship and the asteroid field, also changed the window title
+ * 
+ */
+ void pointPlayer(Game *g)
 {
 	//Make the player point at the cursor
 	g->gun.pos[0] = g->Player_1.pos[0];
