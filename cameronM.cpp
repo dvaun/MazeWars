@@ -45,12 +45,13 @@ void MouseCrosshairs()
 	}
 }
 */
+using namespace std;
 void drawHealth(Player x)
 {
     //Background of health bar
 	glColor3ub(255, 0, 0);
 	glPushMatrix();
-	glTranslatef(900, 50, 0);
+	glTranslatef(1100, 50, 0);
 	glBegin(GL_QUADS);
 		glVertex2i(-100, -15);
 		glVertex2i(-100, 15);
@@ -63,7 +64,7 @@ void drawHealth(Player x)
 	int remaining = 100 - x.Current_Health;
 	glColor3ub(0, 255, 0);
         glPushMatrix();
-        glTranslatef(900-remaining, 50, 0);
+        glTranslatef(1100-remaining, 50, 0);
         glBegin(GL_QUADS);
                 glVertex2i(-(100 - remaining), -15);
                 glVertex2i(-(100 - remaining), 15);
@@ -72,5 +73,45 @@ void drawHealth(Player x)
         glEnd();
         glPopMatrix();
 
+	Rect r;
+	//
+	r.bot = 20;
+	r.left =1100;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00ffffff, "Total: %i", x.Max_Health);
+	ggprint8b(&r, 16, 0x00ffffff, "Remaining: %i", x.Current_Health);
+}
+void drawAmmo(Player x){
+    //Background of ammo bar
+        glColor3ub(255, 0, 0);
+        glPushMatrix();
+        glTranslatef(1100, 150, 0);
+        glBegin(GL_QUADS);
+                glVertex2i(-100, -15);
+                glVertex2i(-100, 15);
+                glVertex2i(100, 15);
+                glVertex2i(100, -15);
+        glEnd();
+        glPopMatrix();
 
+        //remaining health
+        int remaining = 100 - x.Current_Ammo;
+        glColor3ub(0, 0, 255);
+        glPushMatrix();
+        glTranslatef(1100-remaining, 150, 0);
+        glBegin(GL_QUADS);
+                glVertex2i(-(100 - remaining), -15);
+                glVertex2i(-(100 - remaining), 15);
+                glVertex2i((100 - remaining), 15);
+                glVertex2i((100 - remaining), -15);
+        glEnd();
+        glPopMatrix();
+
+        Rect r;
+        //
+        r.bot = 120;
+        r.left =1100;
+        r.center = 0;
+        ggprint8b(&r, 16, 0x00ffffff, "Total: %i", x.Max_Ammo);
+        ggprint8b(&r, 16, 0x00ffffff, "Remaining: %i", x.Current_Ammo);
 }
