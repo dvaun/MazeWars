@@ -16,6 +16,8 @@ struct Player {
 	PowerUp P_UP[3];
 	int Max_Health;
 	int Current_Health;
+	int Current_Ammo = 100;
+	int Max_Ammo = 100;
 	Explosive P_Secondary;
 
 	Player() {
@@ -25,6 +27,7 @@ struct Player {
 		pos[2] = 0.0f;
 		VecZero(vel);
 		Current_Health = 100;
+		Max_Health = 100;
 		angle = 0.0;
 		color[0] = 1.0;
 		color[1] = 1.0;
