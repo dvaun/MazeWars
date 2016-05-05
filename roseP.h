@@ -1,3 +1,3 @@
 // Name: Rose Phannavong
 
-void init_sounds(void);
+void init_sounds();
