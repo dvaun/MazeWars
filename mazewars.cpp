@@ -25,6 +25,7 @@
 extern "C" {
 	#include "fonts.h"
 }
+#include "cameronM.h"
 #include "cameronM.cpp"
 using namespace std;
 
@@ -140,7 +141,7 @@ struct Game {
                 color[2] = 1.0;
         }
 };*/
-
+HealthPack HP1, HP2;
 int keys[65536];
 int joy[65536];
 int axis[65536];
@@ -169,6 +170,12 @@ int main(void)
 	initXWindows();
 	init_opengl();
 	Game game;
+	HP1.pos[0] = 500;
+	HP1.pos[1] = 500;
+	HP1.size = 30;
+	HP2.pos[0] = 200;
+	HP2.pos[1] = 700;
+	HP2.size = 100;
 	Joystick joystick;
 	init(&game);
 	srand(time(NULL));
@@ -225,6 +232,7 @@ void setup_screen_res(const int w, const int h)
 {
 	xres = w;
 	yres = h;
+	getScreenRes(w , h);
 }
 
 void initXWindows(void)
@@ -564,10 +572,7 @@ void physics(Game *g)
 	    	g->Player_1.Current_Health -= 5;
 	}
 	if(keys[XK_F6]){
-	    g->Player_1.Current_Health = 100;
-	    g->Player_1.Current_Ammo = 100;
-	    g->Player_1.pos[0] = 40;
-	    g->Player_1.pos[1] = 40;
+	    Restart(&g->Player_1);
 	}
 }
 
@@ -588,6 +593,8 @@ void render(Game *g)
 	drawAmmo(g->Player_1);
 	if(g->Player_1.Current_Health == 0)
 	    GameOver();
+	drawHealthPack(HP1);
+	drawHealthPack(HP2);
 	if (people) {
 		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 		glPushMatrix();
