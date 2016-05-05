@@ -474,10 +474,10 @@ void physics(Game *g)
 			g->nbullets--;
 		}
 		//move the bullet
-		b->pos[0] += b->vel[0];
-		b->pos[1] += b->vel[1];
+		b->pos[0] += 6*b->vel[0];
+		b->pos[1] += 6*b->vel[1];
 		//Check for collision with window edges
-		if (b->pos[0] < 0.0f) {
+		/*if (b->pos[0] < 0.0f) {
 			b->pos[0] += (float)xres;
 		}
 		else if (b->pos[0] > (float)xres) {
@@ -488,21 +488,21 @@ void physics(Game *g)
 		}
 		else if (b->pos[1] > (float)yres) {
 			b->pos[1] -= (float)yres;
-		}
+		}*/
 	}
 	//---------------------------------------------------
 	//check keys pressed now
-	if (keys[XK_a]) {
+	if (keys[XK_a] && (g->Player_1.Current_Health > 0)) {
 		g->Player_1.angle += 4.0f;
 		if (g->Player_1.angle >= 360.0f)
 			g->Player_1.angle -= 360.0f;
 	}
-	if (keys[XK_d]) {
+	if (keys[XK_d] && (g->Player_1.Current_Health > 0)) {
 		g->Player_1.angle -= 4.0f;
 		if (g->Player_1.angle < 0.0f)
 			g->Player_1.angle += 360.0f;
 	}
-	if (keys[XK_w]) {
+	if (keys[XK_w] && (g->Player_1.Current_Health > 0)) {
 		//convert Player_1 angle to radians
 		Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
@@ -516,7 +516,7 @@ void physics(Game *g)
         g->Player_1.vel[0] = 0;
         g->Player_1.vel[1] = 0;
 	}
-    if (keys[XK_s]) {
+    if (keys[XK_s] && (g->Player_1.Current_Health > 0)) {
         //convert Player_1 angle to radians
         Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
         //convert angle to a vector
@@ -529,7 +529,7 @@ void physics(Game *g)
 		checkController(axis, g);
 	}
 
-	if ((keys[XK_space] || joy[0]) && (g->Player_1.Current_Ammo > 0)) {
+	if ((keys[XK_space] || joy[0]) && (g->Player_1.Current_Ammo > 0) && (g->Player_1.Current_Health > 0)) {
 		//a little time between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
@@ -566,6 +566,8 @@ void physics(Game *g)
 	if(keys[XK_F6]){
 	    g->Player_1.Current_Health = 100;
 	    g->Player_1.Current_Ammo = 100;
+	    g->Player_1.pos[0] = 40;
+	    g->Player_1.pos[1] = 40;
 	}
 }
 
@@ -574,7 +576,8 @@ void render(Game *g)
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	//Draw the Player_1
-	drawPlayer(g->Player_1);
+	if(g->Player_1.Current_Health > 0)
+		drawPlayer(g->Player_1);
 	
 	//Draw the bullets
 	for (int i=0; i<g->nbullets; i++) {
@@ -583,6 +586,8 @@ void render(Game *g)
 	}
 	drawHealth(g->Player_1);
 	drawAmmo(g->Player_1);
+	if(g->Player_1.Current_Health == 0)
+	    GameOver();
 	if (people) {
 		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 		glPushMatrix();
