@@ -7,7 +7,7 @@
  * the engine from the ship and the asteroid field, also changed the window title
  * 
  
- void pointPlayer(Game *g)
+void pointPlayer(Game *g)
 {
 	//Make the player point at the cursor
 	g->gun.pos[0] = g->Player_1.pos[0];
@@ -45,7 +45,6 @@ void MouseCrosshairs()
 	}
 }
 */
-using namespace std;
 void drawHealth(Player x)
 {
     //Background of health bar
@@ -78,8 +77,12 @@ void drawHealth(Player x)
 	r.bot = 20;
 	r.left =1100;
 	r.center = 0;
-	ggprint8b(&r, 16, 0x00ffffff, "Total: %i", x.Max_Health);
-	ggprint8b(&r, 16, 0x00ffffff, "Remaining: %i", x.Current_Health);
+	ggprint8b(&r, 16, 0x00ffffff, "Total Health: %i", x.Max_Health);
+	if(x.Current_Health <= 50){
+            ggprint8b(&r, 16, 0x00ff0000, "Remaining Health: %i", x.Current_Health);
+        }else{
+            ggprint8b(&r, 16, 0x0000ff00, "Remaining Health: %i", x.Current_Health);
+        }
 }
 void drawAmmo(Player x){
     //Background of ammo bar
@@ -106,12 +109,23 @@ void drawAmmo(Player x){
                 glVertex2i((100 - remaining), -15);
         glEnd();
         glPopMatrix();
-
+	
         Rect r;
         //
         r.bot = 120;
         r.left =1100;
         r.center = 0;
-        ggprint8b(&r, 16, 0x00ffffff, "Total: %i", x.Max_Ammo);
-        ggprint8b(&r, 16, 0x00ffffff, "Remaining: %i", x.Current_Ammo);
+        ggprint8b(&r, 16, 0x00ffffff, "Total Ammo: %i", x.Max_Ammo);
+        if(x.Current_Ammo <= 50){
+	    ggprint8b(&r, 16, 0x00ff0000, "Remaining Ammo: %i", x.Current_Ammo);
+	}else{
+	    ggprint8b(&r, 16, 0x0000ff00, "Remaining Ammor: %i", x.Current_Ammo);
+	}
+}
+void GameOver(){
+    	Rect r;
+	r.bot = 500;
+	r.left = 600;
+	r.center = 0;
+	ggprint8b(&r, 160, 0x00ff0000, "GAME OVER \n F6 TO RESTART");
 }
