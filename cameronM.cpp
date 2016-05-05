@@ -45,12 +45,20 @@ void MouseCrosshairs()
 	}
 }
 */
+int *res;
+
+void getScreenRes(int x, int y)
+{
+	res = new int[2];
+	res[0] = x;
+	res[1] = y;
+}
 void drawHealth(Player x)
 {
     //Background of health bar
 	glColor3ub(255, 0, 0);
 	glPushMatrix();
-	glTranslatef(1100, 50, 0);
+	glTranslatef(res[0]-150, 50, 0);
 	glBegin(GL_QUADS);
 		glVertex2i(-100, -15);
 		glVertex2i(-100, 15);
@@ -63,7 +71,7 @@ void drawHealth(Player x)
 	int remaining = 100 - x.Current_Health;
 	glColor3ub(0, 255, 0);
         glPushMatrix();
-        glTranslatef(1100-remaining, 50, 0);
+        glTranslatef((res[0]-150)-remaining, 50, 0);
         glBegin(GL_QUADS);
                 glVertex2i(-(100 - remaining), -15);
                 glVertex2i(-(100 - remaining), 15);
@@ -75,7 +83,7 @@ void drawHealth(Player x)
 	Rect r;
 	//
 	r.bot = 20;
-	r.left =1100;
+	r.left = res[0] - 200;
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00ffffff, "Total Health: %i", x.Max_Health);
 	if(x.Current_Health <= 50){
@@ -88,7 +96,7 @@ void drawAmmo(Player x){
     //Background of ammo bar
         glColor3ub(255, 0, 0);
         glPushMatrix();
-        glTranslatef(1100, 150, 0);
+        glTranslatef(res[0]-150, 150, 0);
         glBegin(GL_QUADS);
                 glVertex2i(-100, -15);
                 glVertex2i(-100, 15);
@@ -101,7 +109,7 @@ void drawAmmo(Player x){
         int remaining = 100 - x.Current_Ammo;
         glColor3ub(0, 0, 255);
         glPushMatrix();
-        glTranslatef(1100-remaining, 150, 0);
+        glTranslatef((res[0]-150)-remaining, 150, 0);
         glBegin(GL_QUADS);
                 glVertex2i(-(100 - remaining), -15);
                 glVertex2i(-(100 - remaining), 15);
@@ -113,7 +121,7 @@ void drawAmmo(Player x){
         Rect r;
         //
         r.bot = 120;
-        r.left =1100;
+        r.left = res[0] - 200;
         r.center = 0;
         ggprint8b(&r, 16, 0x00ffffff, "Total Ammo: %i", x.Max_Ammo);
         if(x.Current_Ammo <= 50){
@@ -128,4 +136,32 @@ void GameOver(){
 	r.left = 600;
 	r.center = 0;
 	ggprint8b(&r, 160, 0x00ff0000, "GAME OVER \n F6 TO RESTART");
+}
+void Restart(Player *x)
+{
+	x->Current_Health = 100;
+	x->Current_Ammo = 100;
+	x->pos[0] = 40;
+	x->pos[1] = 40;
+	VecZero(x->vel);
+	VecZero(x->dir);
+}
+void drawHealthPack(HealthPack HP)
+{
+	glColor3ub(0, 255, 0);
+        glPushMatrix();
+        glTranslatef(HP.pos[0], HP.pos[1], HP.pos[1]);
+        glBegin(GL_QUADS);
+                glVertex2i(-20, -8);
+                glVertex2i(-20, 8);
+                glVertex2i(20, 8);
+                glVertex2i(20, -8);
+        glEnd();
+        glPopMatrix();
+	Rect r;
+        //
+        r.bot = HP.pos[1]-5;
+        r.left = HP.pos[0]-17;
+        r.center = 0;
+        ggprint8b(&r, 16, 0x00000000, "Health");
 }
