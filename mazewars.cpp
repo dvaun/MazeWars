@@ -22,11 +22,10 @@
 #include "davidV.h"
 #include "defs.h"
 #include "person.h"
-#include "cameronM.cpp"
 extern "C" {
 	#include "fonts.h"
 }
-
+#include "cameronM.cpp"
 using namespace std;
 
 //defined types
@@ -530,7 +529,7 @@ void physics(Game *g)
 		checkController(axis, g);
 	}
 
-	if (keys[XK_space] || joy[0]) {
+	if ((keys[XK_space] || joy[0]) && (g->Player_1.Current_Ammo > 0)) {
 		//a little time between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
@@ -557,10 +556,16 @@ void physics(Game *g)
 			b->color[1] = 1.0f;
 			b->color[2] = 1.0f;
 			g->nbullets++;
+			g->Player_1.Current_Ammo--;
 		}
 	}
-	if(keys[XK_t]){
-	    g->Player_1.Current_Health -= 5;
+	if(keys[XK_F7]){
+	    if(g->Player_1.Current_Health > 0)
+	    	g->Player_1.Current_Health -= 5;
+	}
+	if(keys[XK_F6]){
+	    g->Player_1.Current_Health = 100;
+	    g->Player_1.Current_Ammo = 100;
 	}
 }
 
@@ -577,6 +582,7 @@ void render(Game *g)
 		drawBullet(b, 1.0, 1.0, 1.0);
 	}
 	drawHealth(g->Player_1);
+	drawAmmo(g->Player_1);
 	if (people) {
 		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 		glPushMatrix();
@@ -597,4 +603,3 @@ void render(Game *g)
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
-
