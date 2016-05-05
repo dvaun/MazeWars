@@ -6,7 +6,7 @@
  * In the mazewars.cpp I modified all of the original asteroids code to remove
  * the engine from the ship and the asteroid field, also changed the window title
  * 
- */
+ 
  void pointPlayer(Game *g)
 {
 	//Make the player point at the cursor
@@ -43,4 +43,34 @@ void MouseCrosshairs()
 		}
 		crosshair.angle = ndeg2;
 	}
+}
+*/
+void drawHealth(Player x)
+{
+    //Background of health bar
+	glColor3ub(255, 0, 0);
+	glPushMatrix();
+	glTranslatef(900, 50, 0);
+	glBegin(GL_QUADS);
+		glVertex2i(-100, -15);
+		glVertex2i(-100, 15);
+		glVertex2i(100, 15);
+		glVertex2i(100, -15);
+	glEnd();
+	glPopMatrix();
+
+	//remaining health
+	int remaining = 100 - x.Current_Health;
+	glColor3ub(0, 255, 0);
+        glPushMatrix();
+        glTranslatef(900-remaining, 50, 0);
+        glBegin(GL_QUADS);
+                glVertex2i(-(100 - remaining), -15);
+                glVertex2i(-(100 - remaining), 15);
+                glVertex2i((100 - remaining), 15);
+                glVertex2i((100 - remaining), -15);
+        glEnd();
+        glPopMatrix();
+
+
 }

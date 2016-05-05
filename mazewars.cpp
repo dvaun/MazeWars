@@ -22,6 +22,7 @@
 #include "davidV.h"
 #include "defs.h"
 #include "person.h"
+#include "cameronM.cpp"
 extern "C" {
 	#include "fonts.h"
 }
@@ -558,6 +559,9 @@ void physics(Game *g)
 			g->nbullets++;
 		}
 	}
+	if(keys[XK_t]){
+	    g->Player_1.Current_Health -= 5;
+	}
 }
 
 void render(Game *g)
@@ -572,6 +576,7 @@ void render(Game *g)
 		Bullet *b = &g->barr[i];
 		drawBullet(b, 1.0, 1.0, 1.0);
 	}
+	drawHealth(g->Player_1);
 	if (people) {
 		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 		glPushMatrix();

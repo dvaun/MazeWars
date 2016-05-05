@@ -24,6 +24,7 @@ struct Player {
 		pos[1] = (Flt)(40);
 		pos[2] = 0.0f;
 		VecZero(vel);
+		Current_Health = 100;
 		angle = 0.0;
 		color[0] = 1.0;
 		color[1] = 1.0;
