@@ -147,6 +147,7 @@ int axis[65536];
 int people = 0;
 Ppmimage *personImage = NULL;
 GLuint personTexture;
+GLuint silhouetteTexture;
 Person person;
 
 //function prototypes
@@ -289,7 +290,7 @@ void init_opengl(void)
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
-	job_opengl(personImage, personTexture);
+	job_opengl(personImage, personTexture, silhouetteTexture);
 }
 
 void check_resize(XEvent *e)

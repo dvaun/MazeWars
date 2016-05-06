@@ -25,6 +25,7 @@
 #include <iostream>
 #include "ppm.h"
 #include <stdlib.h>
+
 //defined types
 
 //Person person;
@@ -55,10 +56,11 @@ unsigned char *buildAlphaData(Ppmimage *img)
 	return newdata;
 }
 
-void job_opengl(Ppmimage *personImage, GLuint personTexture)
+void job_opengl(Ppmimage *personImage, GLuint personTexture, 
+GLuint silhouetteTexture)
 {
 	//Loading images -- commented out while looking for sprite
-	personImage = ppm6GetImage((char*)"./sprite.ppm");
+	personImage = ppm6GetImage((char*)"sprite.ppm");
 	
 	//create opengl texture elements
 	glGenTextures(1, &personTexture);
@@ -71,9 +73,16 @@ void job_opengl(Ppmimage *personImage, GLuint personTexture)
 	//
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, 
+			GL_UNSIGNED_BYTE, personImage->data);
+
+	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	unsigned char *silhouetteData = buildAlphaData(personImage);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
-			GL_UNSIGNED_BYTE, silhouetteData);//personImage->data);
+			GL_UNSIGNED_BYTE, silhouetteData);
+	
 	free(silhouetteData);
 
 }
