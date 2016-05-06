@@ -357,7 +357,8 @@ void pointPlayer(Game *g, int savex, int savey)
 	float weaponx = g->gun.pos[0];
 	float weapony = g->gun.pos[1];
 
-	float nDeg = atan(((yres-savey)-(weapony))/((savex)-(weaponx))) * 180 / PI;
+	float nDeg = atan(((yres-savey)-(weapony))/\
+		((savex)-(weaponx))) * 180 / PI;
 
     if (savex > weaponx && (yres - savey) > weapony)
 		nDeg += 180;
@@ -440,8 +441,8 @@ int check_keys(XEvent *e)
 void physics(Game *g)
 {
 	//Update Player_1 position
-	g->Player_1.pos[0] += g->Player_1.vel[0];
-	g->Player_1.pos[1] += g->Player_1.vel[1];
+	g->Player_1.gpos[0] += g->Player_1.vel[0];
+	g->Player_1.gpos[1] += g->Player_1.vel[1];
 	g->gun.pos[0] += g->gun.vel[0];
 	g->gun.pos[1] += g->gun.vel[1];
 	//Check for collision with window edges
@@ -470,12 +471,13 @@ void physics(Game *g)
 			//Delete bullet here.
 			for(int k = i; k < g->nbullets-1; k++){
 				g->barr[k] = g->barr[k+1];
+
 			}
 			g->nbullets--;
 		}
 		//move the bullet
-		b->gpos[0] += 6*b->vel[0];
-		b->gpos[1] += 6*b->vel[1];
+		b->stats->gpos[0] += 6*b->vel[0];
+		b->stats->gpos[1] += 6*b->vel[1];
 		//Check for collision with window edges
 		/*if (b->pos[0] < 0.0f) {
 			b->pos[0] += (float)xres;
@@ -539,8 +541,8 @@ void physics(Game *g)
 			//shoot a bullet...
 			Bullet *b = &g->barr[g->nbullets];
 			timeCopy(&b->time, &bt);
-			b->gpos[0] = g->gun.pos[0];
-			b->gpos[1] = g->gun.pos[1];
+			b->stats->gpos[0] = g->gun.pos[0];
+			b->stats->gpos[1] = g->gun.pos[1];
 			b->vel[0] = g->gun.vel[0];
 			b->vel[1] = g->gun.vel[1];
 			//convert Player_1 angle to radians
@@ -548,8 +550,8 @@ void physics(Game *g)
 			//convert angle to a vector
 			Flt xdir = cos(rad);
 			Flt ydir = sin(rad);
-			b->gpos[0] += xdir*20.0f;
-			b->gpos[1] += ydir*20.0f;
+			b->stats->gpos[0] += xdir*20.0f;
+			b->stats->gpos[1] += ydir*20.0f;
 			b->vel[0] += xdir*6.0f + rnd()*0.1f;
 			b->vel[1] += ydir*6.0f + rnd()*0.1f;
 			b->color[0] = 1.0f;
@@ -579,7 +581,7 @@ void render(Game *g)
 	//Draw the bullets
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
-		drawBullet(b, 1.0, 1.0, 1.0);
+		drawBullet(g, b, 1.0, 1.0, 1.0);
 	}
 	drawHealth(g->Player_1);
 	drawAmmo(g->Player_1);

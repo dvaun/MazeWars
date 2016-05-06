@@ -20,8 +20,8 @@ struct Weapon{
 };
 
 struct Bullet {
-    Object *obj;
-	Vec gpos;
+    Stats *stats;
+	//Vec gpos;
 	Vec vel;
 	float speed;
 	float color[3];
@@ -31,16 +31,23 @@ struct Bullet {
 	Bullet() {
 		prev = NULL;
 		next = NULL;
+		stats = new Stats;
 	}
 	void operator=(Bullet x) {
-		gpos[0] = x.gpos[0];
-		gpos[1] = x.gpos[1];
-		vel[0] = x.vel[1];
+		stats->gpos[0] = x.stats->gpos[0];
+		stats->gpos[1] = x.stats->gpos[1];
+		vel[0] = x.vel[0];
 		vel[1] = x.vel[1];
 		color[0] = x.color[0];
 		color[1] = x.color[1];
 		color[2] = x.color[2];
 		time = x.time;
+	}
+	void operator=(Weapon x) {
+		stats->gpos[0] = x.pos[0];
+		stats->gpos[1] = x.pos[1];
+		vel[0] = x.vel[0];
+		vel[1] = x.vel[1];
 	}
 };
 

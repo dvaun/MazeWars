@@ -17,29 +17,55 @@
 #include <stdio.h>
 #include <cmath>
 #include <cstring>
-void setColor(Object object)
+void setColor(Stats stats)
 {
-	glColor3f((float) object.color[0],(float) object.color[1],(float) \
-		object.color[2]);
+	glColor3f((float) stats.color[0],(float) stats.color[1],(float) \
+		stats.color[2]);
 }
 
 
 /*
-void drawSquare(Object *obj, int red, int blue, int green)
+void drawSquare(Stats *stats, int red, int blue, int green)
 {
-	setColor(*obj);
+	setColor(*stats);
 	glPushMatrix();
-	glTranslatef(obj->pos[0], obj->pos[1], obj->pos[2]);
+	glTranslatef(stats->pos[0], obj->pos[1], obj->pos[2]);
 	glBegin(GL_QUADS);
-		glVertex2i(-obj->width, -obj->height);
-		glVertex2i(-obj->width, obj->height);
-		glVertex2i(obj->width, obj->height);
-		glVertex2i(obj->width, -obj->height);
+		glVertex2i(-stats->width, -obj->height);
+		glVertex2i(-stats->width, obj->height);
+		glVertex2i(stats->width, obj->height);
+		glVertex2i(stats->width, -obj->height);
 	glEnd();
 	glPopMatrix();
 }
 */
+template <typename Object>
+void drawOType(Object object, Game *g)
+{
+	float xdist, ydist;
+	setColor(object.stats);
+	xdist = (b->stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
+	ydist = (b->stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
+}
 
+template <typename Object>
+bool checkDistanceStats(Object object, Game *g, float xcheck, float ycheck)
+{
+	Player player = g->Player_1;
+	bool indistancex = false, indistancey = false;
+	if (abs(player.gpos[0] - object.stats.gpos[0] +
+		    		object.stats.width) < xcheck) {
+		indistancex = true;
+	}
+	if (abs(player.gpos[1] - object.stats.gpos[1] +
+		    		object.stats.width) < ycheck) {
+		indistancey = true;
+	}
+	if (indistancex && indistancey) {
+		return true;
+	}
+	return false;
+}
 
 void drawTextString(float x, float y, 
 		float offsetx, float offsety, std::string printvalue)
@@ -72,35 +98,40 @@ void drawText(float x, float y, float offsetx, float offsety, float printvalue)
 /*
 void drawParticle(Particle *p, int red, int blue, int green)
 {
-	setColor(*p->obj);
+	setColor(*p->stats);
 	glPushMatrix();
-	glTranslatef(p->obj->pos[0], p->obj->pos[1], p->obj->pos[2]);
+	glTranslatef(p->stats->pos[0], p->obj->pos[1], p->obj->pos[2]);
 	glBegin(GL_QUADS);
-		glVertex2i(-p->obj->width, -p->obj->height);
-		glVertex2i(-p->obj->width, p->obj->height);
-		glVertex2i(p->obj->width, p->obj->height);
-		glVertex2i(p->obj->width, -p->obj->height);
+		glVertex2i(-p->stats->width, -p->obj->height);
+		glVertex2i(-p->stats->width, p->obj->height);
+		glVertex2i(p->stats->width, p->obj->height);
+		glVertex2i(p->stats->width, -p->obj->height);
 	glEnd();
 	glPopMatrix();
 }
 */
 
 
-void drawBullet(Bullet *b, float red, float blue, float green)
+void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 {
-	Object *bullet = b->obj;
-	setColor(*bullet);
+	//Stats *bullet = b->stats;
+	//setColor(*bullet);
+	float xdist, ydist;
+	glColor3f(1.0, 1.0, 1.0);
+	xdist = (b->stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
+	ydist = (b->stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
+	glTranslatef(0,0,b->stats->gpos[2]);
 	glBegin(GL_POINTS);
-	glVertex2f(bullet->gpos[0], bullet->gpos[1]);
-	glVertex2f(bullet->gpos[0]-1.0f, bullet->gpos[1]);
-	glVertex2f(bullet->gpos[0]+1.0f, bullet->gpos[1]);
-	glVertex2f(bullet->gpos[0], bullet->gpos[1]-1.0f);
-	glVertex2f(bullet->gpos[0], bullet->gpos[1]+1.0f);
-	glColor3f(red - 0.2f, blue - 0.2f, green - 0.2f);
-	glVertex2f(bullet->gpos[0]-1.0f, bullet->gpos[1]-1.0f);
-	glVertex2f(bullet->gpos[0]-1.0f, bullet->gpos[1]+1.0f);
-	glVertex2f(bullet->gpos[0]+1.0f, bullet->gpos[1]-1.0f);
-	glVertex2f(bullet->gpos[0]+1.0f, bullet->gpos[1]+1.0f);
+		glVertex2f(xdist, ydist);
+		glVertex2f(xdist-1.0f, ydist);
+		glVertex2f(xdist+1.0f, ydist);
+		glVertex2f(xdist, ydist-1.0f);
+		glVertex2f(xdist, ydist+1.0f);
+	glColor3f(red - .2f, blue - 0.2f, green - 0.2f);
+		glVertex2f(xdist-1.0f, ydist-1.0f);
+		glVertex2f(xdist-1.0f, ydist+1.0f);
+		glVertex2f(xdist+1.0f, ydist-1.0f);
+		glVertex2f(xdist+1.0f, ydist+1.0f);
 	glEnd();
 }
 
@@ -133,22 +164,22 @@ void drawPlayer(Player p)
 	drawText(p.pos[0],p.pos[1],10,-10,p.gpos[1]);
 }
 
-void assign_gblock(gblock &block, Object &object, int type, int row, int col)
+void assign_gblock(gblock &block, Stats &stats, int type, int row, int col)
 {
 	block.type = type;
 	block.assigned = 1;
-	object.gpos[0] = row * 50.0;
-	object.gpos[1] = col * 50.0;
-	printf("Block[%d][%d] located at x(%f) y(%f)\n",row,col,block.obj.gpos[0],block.obj.gpos[1]);
+	stats.gpos[0] = row * 50.0;
+	stats.gpos[1] = col * 50.0;
+	printf("Block[%d][%d] located at x(%f) y(%f)\n",row,col,block.stats.gpos[0],block.stats.gpos[1]);
 }
 
 gblock return_gblock(gblock block, int type, int row, int col)
 {
 	block.type = type;
 	block.assigned = 1;
-	block.obj.gpos[0] = row * 50.0;
-	block.obj.gpos[1] = col * 50.0;
-	printf("Block[%d][%d] located at x(%f) y(%f)\n",row,col,block.obj.gpos[0],block.obj.gpos[1]);
+	block.stats.gpos[0] = row * 50.0;
+	block.stats.gpos[1] = col * 50.0;
+	printf("Block[%d][%d] located at x(%f) y(%f)\n",row,col,block.stats.gpos[0],block.stats.gpos[1]);
 	return block;
 }
 
@@ -163,12 +194,12 @@ Game init_game(Game g, gblock_info gbi)
 		game.blocks[i] = new gblock[gbi.columns];
 	}
 	/*
-	assign_gblock(game.blocks[5][25],game.blocks[5][25].obj,1,5,25);
-	assign_gblock(game.blocks[15][15],game.blocks[15][15].obj,1,15,15);
-	assign_gblock(game.blocks[30][30],game.blocks[30][30].obj,1,30,30);
-	assign_gblock(game.blocks[0][0],game.blocks[0][0].obj,0,0,10);
-	assign_gblock(game.blocks[25][5],game.blocks[25][5].obj,0,25,5);
-	assign_gblock(game.blocks[7][21],game.blocks[7][21].obj,0,7,21);
+	assign_gblock(game.blocks[5][25],game.blocks[5][25].stats,1,5,25);
+	assign_gblock(game.blocks[15][15],game.blocks[15][15].stats,1,15,15);
+	assign_gblock(game.blocks[30][30],game.blocks[30][30].stats,1,30,30);
+	assign_gblock(game.blocks[0][0],game.blocks[0][0].stats,0,0,10);
+	assign_gblock(game.blocks[25][5],game.blocks[25][5].stats,0,25,5);
+	assign_gblock(game.blocks[7][21],game.blocks[7][21].stats,0,7,21);
 	*/
 	game.blocks[5][5] = return_gblock(game.blocks[5][5],1,5,5);
 	return game;
@@ -181,8 +212,8 @@ void set_gblock_gpos(double& gposition, int num, int bsize)
 
 void set_gblock_size(gblock& block, double& height, double& width, double size)
 {
-	block.obj.height = size;
-	block.obj.width = size;
+	block.stats.height = size;
+	block.stats.width = size;
 	height = size;
 	width = size;
 }
@@ -191,9 +222,10 @@ void create_gblock(gblock& block, int type, int row, int col)
 {
 	block.type = type;
 	block.assigned = 1;
-	set_gblock_gpos(block.obj.gpos[0],row,block.obj.width*2);
-	set_gblock_gpos(block.obj.gpos[1],col,block.obj.width*2);
-	printf("Block[%d][%d] located at x(%f) y(%f)\n",row,col,block.obj.gpos[0],block.obj.gpos[1]);
+	set_gblock_gpos(block.stats.gpos[0], row, block.stats.width*2);
+	set_gblock_gpos(block.stats.gpos[1], col, block.stats.width*2);
+	printf("Block[%d][%d] located at x(%f) y(%f)\n", row, col, 
+		block.stats.gpos[0], block.stats.gpos[1]);
 }
 
 void begin_game(Game& game, gblock_info& gbi)
@@ -207,8 +239,8 @@ void begin_game(Game& game, gblock_info& gbi)
 	for (int i = 0; i < gbi.rows; i++) {
 	    for (int j = 0; j < gbi.columns; j++) {
 		set_gblock_size(game.blocks[i][j],
-			game.blocks[i][j].obj.height,
-			game.blocks[i][j].obj.width, gbi.width);
+			game.blocks[i][j].stats.height,
+			game.blocks[i][j].stats.width, gbi.width);
 	    }
 	}
 	create_gblock(game.blocks[5][5],1,5,5);
@@ -232,12 +264,14 @@ bool inDrawingDistanceBlock(Game *g, gblock block)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	printf("%f ",block.obj.gpos[0] - player.gpos[0] - 25);
-	printf("%f\n",block.obj.gpos[1] - player.gpos[1] - 25);
-	if (abs(player.gpos[0] - block.obj.gpos[0] - block.obj.width*2) < 625) {
+	printf("%f ", block.stats.gpos[0] - player.gpos[0] - 25);
+	printf("%f\n", block.stats.gpos[1] - player.gpos[1] - 25);
+	if (abs(player.gpos[0] - block.stats.gpos[0] -
+		    block.stats.width*2) < 625) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - block.obj.gpos[1] - block.obj.width*2) < 450) {
+	if (abs(player.gpos[1] - block.stats.gpos[1] -
+		    block.stats.width*2) < 450) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -254,20 +288,20 @@ bool withinDistance(Player p, gblock block, int check)
 float getXYDistValue(float x, float y) {
 	return sqrt((x*x)+(y*y));
 }
-float getDistanceObjectVal(Game *g, Object obj, int coord)
+float getDistanceStatsVal(Game *g, Stats stats, int coord)
 {
 	Player player = g->Player_1;
-	float distance = player.gpos[coord] - obj.gpos[coord] 
-			+ obj.width; 
+	float distance = player.gpos[coord] - stats.gpos[coord] 
+			+ stats.width; 
 	return distance;
 }
-float getDistanceObject(Game *g, Object obj)
+float getDistanceStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
-	float distancex = player.gpos[0] - obj.gpos[0] 
-			+ obj.width;
-	float distancey = player.gpos[1] - obj.gpos[1] 
-			+ obj.width;
+	float distancex = player.gpos[0] - stats.gpos[0] 
+			+ stats.width;
+	float distancey = player.gpos[1] - stats.gpos[1] 
+			+ stats.width;
 	float distance = sqrt((distancex*distancex)+(distancey*distancey));
 	return distance;
 }
@@ -276,10 +310,12 @@ bool checkDistanceBlock(Game *g, gblock block, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - block.obj.gpos[0] + block.obj.width) < xcheck) {
+	if (abs(player.gpos[0] - block.stats.gpos[0] +
+		    block.stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - block.obj.gpos[1] + block.obj.width) < ycheck) {
+	if (abs(player.gpos[1] - block.stats.gpos[1] +
+		    block.stats.width) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -288,14 +324,16 @@ bool checkDistanceBlock(Game *g, gblock block, float xcheck, float ycheck)
 	return false;
 }
 
-bool checkDistanceObject(Game *g, Object obj, float xcheck, float ycheck)
+bool checkDistanceStats(Game *g, Stats stats, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - obj.gpos[0] + obj.width) < xcheck) {
+	if (abs(player.gpos[0] - stats.gpos[0] +
+		    stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - obj.gpos[1] + obj.width) < ycheck) {
+	if (abs(player.gpos[1] - stats.gpos[1] +
+		    stats.width) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -310,10 +348,10 @@ void getDistanceBlock(Game *g, gblock block, int xcheck, int ycheck)
 	Vec distance;
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - block.obj.gpos[0] - 50) < xcheck) {
+	if (abs(player.gpos[0] - block.stats.gpos[0] - 50) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - block.obj.gpos[1] - 50) < ycheck) {
+	if (abs(player.gpos[1] - block.stats.gpos[1] - 50) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -322,14 +360,15 @@ void getDistanceBlock(Game *g, gblock block, int xcheck, int ycheck)
 	return -1;
 }
 */
-void drawObject(Game *g, Object obj)
+void drawStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
 	float xdist, ydist;
-	xdist = 625 + (obj.gpos[0] - g->Player_1.gpos[0] - obj.width);
-	ydist = 450 + (obj.gpos[1] - g->Player_1.gpos[1] - obj.width);
-	float size = obj.width;
-	glColor3f((int)obj.color[0], (int)obj.color[1], (int)obj.color[2]);
+	xdist = 625 + (stats.gpos[0] - g->Player_1.gpos[0] - stats.width);
+	ydist = 450 + (stats.gpos[1] - g->Player_1.gpos[1] - stats.width);
+	float size = stats.width;
+	glColor3f((int)stats.color[0], (int)stats.color[1],
+		(int)stats.color[2]);
 	glPushMatrix();
 	glTranslatef(xdist, ydist, 0.0f);
 	glBegin(GL_QUADS);
@@ -346,9 +385,11 @@ void drawBlock(Game *g, gblock block)
 {
 	Player player = g->Player_1;
 	float xdist, ydist;
-	xdist = 625 + (block.obj.gpos[0] - player.gpos[0] - block.obj.width);
-	ydist = 450 + (block.obj.gpos[1] - player.gpos[1] - block.obj.width);
-	float size = block.obj.width;
+	xdist = 625 + (block.stats.gpos[0] - player.gpos[0] -
+				block.stats.width);
+	ydist = 450 + (block.stats.gpos[1] - player.gpos[1] -
+				block.stats.width);
+	float size = block.stats.width;
 	glPushMatrix();
 	glTranslatef(xdist, ydist, 0.0f);
 	glBegin(GL_QUADS);
@@ -358,14 +399,16 @@ void drawBlock(Game *g, gblock block)
 		glVertex2f(size, -size);
 	glEnd();
 	glPopMatrix();
-	drawText(block.obj.gpos[0],block.obj.gpos[1],10,10,block.obj.gpos[0]);
-	drawText(block.obj.gpos[0],block.obj.gpos[1],10,-10,block.obj.gpos[1]);
+	drawText(block.stats.gpos[0], block.stats.gpos[1], 10,
+		10,block.stats.gpos[0]);
+	drawText(block.stats.gpos[0], block.stats.gpos[1], 10,
+		-10,block.stats.gpos[1]);
 }
 
-void drawGameObject(Game *g, Object object)
+void drawGameStats(Game *g, Stats stats)
 {
-	if (checkDistanceObject(g, object, g->g_xres/2, g->g_yres/2)) {
-		drawObject(g, object);
+	if (checkDistanceStats(g, stats, g->g_xres/2, g->g_yres/2)) {
+		drawStats(g, stats);
 	}
 }
 
