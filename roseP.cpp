@@ -1,3 +1,6 @@
+#ifndef ROSEP_CPP
+#define ROSEP_CPP
+
 // Name: Rose Phannavong
 // Written: 27 April 2016
 // Modified: 28 April 2016
@@ -61,3 +64,5 @@ void init_sounds()
     alcCloseDevice(Device);
 
 }
+
+#endif

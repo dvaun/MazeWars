@@ -3,7 +3,7 @@
 
 //Job Gomez
 #include "ppm.h"
-#include "defs.h"
+#include "game_objects.h"
 #include <GL/glx.h>
 #include "person.h"
 /*struct Person {

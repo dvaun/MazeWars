@@ -1,3 +1,6 @@
+#ifndef CAMERON_CPP
+#define CAMERON_CPP
+
 /* Name: Cameron Morrow
  * Date: May 04, 2016
  * Last Modified: May 04, 2016
@@ -165,3 +168,5 @@ void drawHealthPack(int x, int y, int z)
         r.center = 0;
         ggprint8b(&r, 16, 0x00000000, "Health");
 }
+
+#endif
