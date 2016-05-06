@@ -66,5 +66,15 @@ typedef struct t_camera {
 	Matrix m;
 } Camera;
 
+//
+//
+// Font stuff
+
+typedef struct t_texmap {
+    int xres, yres;
+    unsigned char *c;
+    unsigned int *i;
+} Texmap;
+
 #endif
 
