@@ -146,11 +146,11 @@ void Restart(Player *x)
 	VecZero(x->vel);
 	VecZero(x->dir);
 }
-void drawHealthPack(HealthPack HP)
+void drawHealthPack(int x, int y, int z)
 {
 	glColor3ub(0, 255, 0);
         glPushMatrix();
-        glTranslatef(HP.pos[0], HP.pos[1], HP.pos[1]);
+        glTranslatef(x, y, z);
         glBegin(GL_QUADS);
                 glVertex2i(-20, -8);
                 glVertex2i(-20, 8);
@@ -160,8 +160,8 @@ void drawHealthPack(HealthPack HP)
         glPopMatrix();
 	Rect r;
         //
-        r.bot = HP.pos[1]-5;
-        r.left = HP.pos[0]-17;
+        r.bot = y-5;
+        r.left = x-17;
         r.center = 0;
         ggprint8b(&r, 16, 0x00000000, "Health");
 }
