@@ -10,7 +10,9 @@ typedef int Explosive;
 struct Player {
 	Vec dir;
 	Vec pos;
+	Vec gpos;
 	Vec vel;
+	float speed;
 	float angle;
 	float color[3];
 	PowerUp P_UP[3];
@@ -21,10 +23,14 @@ struct Player {
 	Explosive P_Secondary;
 
 	Player() {
+		speed = 2.0;
 		VecZero(dir);
 		pos[0] = (Flt)(40);
 		pos[1] = (Flt)(40);
 		pos[2] = 0.0f;
+		gpos[0] = 0;
+		gpos[1] = 0;
+		gpos[2] = 0;
 		VecZero(vel);
 		Current_Health = 100;
 		Max_Health = 100;

@@ -9,6 +9,7 @@
  */
 
 #include "game.h"
+#include "game_objects.h"
 #include <cmath>
 
 void movement(Game *g) 

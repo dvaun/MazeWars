@@ -1,38 +1,56 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <cstdlib>
 #include "Player.h"
-#include "Weapon.h"
 #include "defs.h"
 
 const int MAX_BULLETS = 4;
 
-struct Game {
-	Player Player_1;
-	Weapon gun;
-	Bullet *barr;
-	int nbullets;
-	int score = 0;
-	struct timespec bulletTimer;
-	Game() {
-		barr = new Bullet[MAX_BULLETS];
-		nbullets = 0;
-	}
-};
 
 struct Object {
-	float width, height;
-	float radius;
+	double width, height;
+	double radius;
+	double speed;
 	Vec center;
-	Vec vel;
-	Vec pos;
+	Vec gpos;
+	Vec color;
 };
 
 struct Particle {
-	Object s;
+	Object *obj;
+	int drawn;
 	Vec vel;
 	Vec pos;
-	float gravity;
+	Particle() {
+	    drawn = 0;
+	    obj = (Object*) malloc(sizeof(Object));
+	}
 };
+
+typedef struct game_block_def {
+    double width, height;
+    int rows, columns;
+} gblock_info;
+
+typedef struct game_block_type {
+    Object obj;
+    int type, assigned;
+    game_block_type() {
+	type = 0;
+	assigned = 0;
+    }
+    void operator=(game_block_type gb) {
+	obj.gpos[0] = gb.obj.gpos[0];
+	obj.color[0] = gb.obj.color[0];
+	obj.width = gb.obj.width;
+	obj.height = gb.obj.height;
+    }
+} gblock;
+
+typedef struct game_camera {
+    int xprimary, yprimary;
+    int xsecondary, ysecondary;
+} gcamera;
 
 #endif

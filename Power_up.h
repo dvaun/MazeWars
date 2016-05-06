@@ -1,3 +1,6 @@
+#ifndef POWERUP_CPP
+#define POWERUP_CPP
+
 struct PowerUp {
 	//type is going to be an int ie(1:"Shield Bubble" 2:"Unlimited Ammo" 3:"Walk Through Walls" etc...)
 	int type;
@@ -13,3 +16,4 @@ struct PowerUp {
 	}
 };
 
+#endif
