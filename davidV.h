@@ -151,7 +151,7 @@ void drawOType(OType otype, Game *g)
 	Player p = g->Player_1;
 	Stats stats;
 	stats = otype.stats;
-	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
+	if (checkPlayerDistanceOType(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
@@ -167,7 +167,7 @@ void drawOType(OType *otype, Game *g)
 	Player p = g->Player_1;
 	Stats stats;
 	stats = otype->stats;
-	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
+	if (checkPlayerDistanceOType(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
