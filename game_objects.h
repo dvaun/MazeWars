@@ -3,7 +3,7 @@
 
 #include <ctime>
 #include "game.h"
-#include "Player.h"
+//#include "Player.h"
 #include "davidV.cpp"
 #include <GL/glx.h>
 
