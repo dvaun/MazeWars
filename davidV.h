@@ -77,7 +77,7 @@ void drawOType(OType *otype, Game *g)
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
 		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
-		otype->draw(xdist, ydist, stats.angle);
+		*otype->draw(xdist, ydist, stats.angle);
 	}
 }
 

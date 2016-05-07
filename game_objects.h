@@ -9,7 +9,7 @@
 #include <GL/glx.h>
 #include "textrender.h"
 
-typedef int Explosive;
+//typedef int Explosive;
 
 struct Player {
 	Stats stats;
