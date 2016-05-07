@@ -1,6 +1,8 @@
 #ifndef TEXT_RENDER
 #define TEXT_RENDER
 
+#include "defs.h"
+
 void drawBlackNum(float x, float y, float offsetx, float offsety, float printvalue)
 {
 	Rect r;
