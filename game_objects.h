@@ -82,9 +82,9 @@ struct Bullet {
 	struct Bullet *prev;
 	struct Bullet *next;
 	Bullet() {
-		stats.color[0] = 0;
-		stats.color[1] = 0;
-		stats.color[2] = 0;
+		stats.color[0] = 255;
+		stats.color[1] = 255;
+		stats.color[2] = 255;
 		prev = NULL;
 		next = NULL;
 	}
