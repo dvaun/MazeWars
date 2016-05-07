@@ -73,7 +73,7 @@ GLuint silhouetteTexture)
 	//
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RBGA, 
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, personImage->data);
 //
 	//
@@ -83,7 +83,7 @@ GLuint silhouetteTexture)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	unsigned char *silhouetteData = buildAlphaData(personImage);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RBGA, 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, silhouetteData);
 	
 	free(silhouetteData);
