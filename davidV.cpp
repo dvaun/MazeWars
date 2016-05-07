@@ -296,7 +296,7 @@ float getXYDistValue(float x, float y) {
 float getDistanceStatsVal(Game *g, Stats stats, int coord)
 {
 	Player player = g->Player_1;
-	float distance = player.stats.gpos[coord] - stats.stats.gpos[coord] 
+	float distance = player.stats.gpos[coord] - stats.gpos[coord] 
 			+ stats.width; 
 	return distance;
 }
