@@ -20,6 +20,7 @@ struct Player {
 	Explosive P_Secondary;
 
 	Player() {
+		stats = new Stats;
 		speed = 2.0;
 		VecZero(dir);
 		pos[0] = 625;
