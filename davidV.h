@@ -60,39 +60,6 @@ struct is_pointer { static const bool value = false; };
 template<typename T>
 struct is_pointer<T*> { static const bool value = true; };
 
-
-// Template for objects with stats class - should apply to basically everything
-template <typename OType>
-void drawOType(OType otype, Game *g)
-{
-	Player p = g->Player_1;
-	Stats stats;
-	stats = otype.stats;
-	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
-		float xdist, ydist;
-		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
-		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
-		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
-		otype.draw(xdist, ydist, p.angle, p.pos);
-	}
-}
-
-// Specialization for pointer objects
-template <typename OType>
-void drawOType(OType *otype, Game *g)
-{
-	Player p = g->Player_1;
-	Stats stats;
-	stats = otype->stats;
-	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
-		float xdist, ydist;
-		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
-		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
-		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
-		otype->draw(xdist, ydist, p.angle, p.pos);
-	}
-}
-
 // Checks the distance for objects via their stats
 // will be used in draw function and likely physics
 template <typename OType>
@@ -177,6 +144,39 @@ bool checkBlockDistanceOType(OType *otype, gblock block, float xcheck, float ych
 	}
 	return false;
 }
+// Template for objects with stats class - should apply to basically everything
+template <typename OType>
+void drawOType(OType otype, Game *g)
+{
+	Player p = g->Player_1;
+	Stats stats;
+	stats = otype.stats;
+	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
+		float xdist, ydist;
+		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
+		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
+		otype.draw(xdist, ydist, p.angle, p.pos);
+	}
+}
+
+// Specialization for pointer objects
+template <typename OType>
+void drawOType(OType *otype, Game *g)
+{
+	Player p = g->Player_1;
+	Stats stats;
+	stats = otype->stats;
+	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
+		float xdist, ydist;
+		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
+		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
+		otype->draw(xdist, ydist, p.angle, p.pos);
+	}
+}
+
+
 //*****************************
 //*****************************
 //
