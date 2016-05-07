@@ -3,6 +3,9 @@
 
 #include "defs.h"
 #include <cstring>
+#include <cstdlib>
+#include <stdio.h>
+#include "fonts/fonts.h"
 
 void drawBlackNum(float x, float y, float offsetx, float offsety, float printvalue)
 {
