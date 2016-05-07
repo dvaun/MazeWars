@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include <cstdlib>
-#include "Player.h"
 #include "defs.h"
 
 const int MAX_BULLETS = 4;
