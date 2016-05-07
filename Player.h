@@ -4,6 +4,7 @@
 #include "Power_up.h"
 #include "defs.h"
 #include "game.h"
+#include "davidV.h"
 
 typedef int Explosive;
 
@@ -11,7 +12,6 @@ typedef int Explosive;
 struct Player {
 	Stats stats;
 	Vec dir;
-	Vec vel;
 	Vec pos;
 	float angle;
 	PowerUp P_UP[3];
@@ -20,12 +20,14 @@ struct Player {
 	int Current_Ammo = 100;
 	int Max_Ammo = 100;
 	Explosive P_Secondary;
-
 	Player() {
 		VecZero(dir);
 		pos[0] = 625;
 		pos[1] = 450;
 		pos[2] = 0.0f;
+		stats.color[0] = 130;
+		stats.color[1] = 240;
+		stats.color[2] = 30;
 		Current_Health = 100;
 		Max_Health = 100;
 		angle = 0.0;
@@ -33,6 +35,25 @@ struct Player {
 		P_UP[0] = 0;
 		P_UP[1] = 0;
 		P_UP[2] = 0;
+	}
+	void draw(float x, float y) {
+		setColor(p.stats);
+		glPushMatrix();
+		glTranslatef(x, y, 0);
+		glRotatef(p.angle, 0.0f, 0.0f, 1.0f);
+		glBegin(GL_TRIANGLES);
+			glVertex2f(-12.0f, -10.0f);
+			glVertex2f(  0.0f,  20.0f);
+			glVertex2f(  0.0f,  -6.0f);
+			glVertex2f(  0.0f,  -6.0f);
+			glVertex2f(  0.0f,  20.0f);
+			glVertex2f( 12.0f, -10.0f);
+		glEnd();
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glBegin(GL_POINTS);
+			glVertex2f(0.0f, 0.0f);
+		glEnd();
+		glPopMatrix();
 	}
 };
 

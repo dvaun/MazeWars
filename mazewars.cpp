@@ -581,7 +581,7 @@ void render(Game *g)
 //Draw the bullets
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
-		drawBullet(g, b, 1.0, 1.0, 1.0);
+		drawOType(b, g);
 	}
 	drawHealth(g->Player_1);
 	drawAmmo(g->Player_1);

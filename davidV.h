@@ -5,6 +5,11 @@
 #include "game.h"
 #include <cstring>
 
+template <typename OType>
+void drawOType(OType otype, Game *g);
+template <typename OType>
+bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck);
+
 void setColor(Stats);
 void drawSquare(Stats *, int, int, int);
 void drawParticle(Particle *, int, int, int);
