@@ -5,6 +5,7 @@
 #include "defs.h"
 #include "game.h"
 #include "davidV.h"
+#include <GL/glx.h>
 
 typedef int Explosive;
 
