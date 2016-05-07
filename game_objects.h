@@ -57,8 +57,8 @@ struct Player {
 			glVertex2f(0.0f, 0.0f);
 		glEnd();
 		glPopMatrix();
-		drawWhiteText(this.pos[0],this.pos[1],10,10,stats.gpos[0]);
-		drawWhiteText(this.pos[0],this.pos[1],10,-10,stats.gpos[1]);
+		drawWhiteNum(this.pos[0],this.pos[1],10,10,stats.gpos[0]);
+		drawWhiteNum(this.pos[0],this.pos[1],10,-10,stats.gpos[1]);
 	}
 };
 
