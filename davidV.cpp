@@ -41,6 +41,7 @@ void drawSquare(Stats *stats, int red, int blue, int green)
 }
 */
 
+/*
 template <typename OType>
 void drawOType(OType otype, Game *g)
 {
@@ -71,6 +72,7 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 	}
 	return false;
 }
+*/
 
 void drawTextString(float x, float y, 
 		float offsetx, float offsety, std::string printvalue)
