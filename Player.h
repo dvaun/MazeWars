@@ -36,11 +36,11 @@ struct Player {
 		P_UP[1] = 0;
 		P_UP[2] = 0;
 	}
-	void draw(float x, float y) {
+	void draw(float x, float y, float angle) {
 		setColor(p.stats);
 		glPushMatrix();
 		glTranslatef(x, y, 0);
-		glRotatef(p.angle, 0.0f, 0.0f, 1.0f);
+		glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		glBegin(GL_TRIANGLES);
 			glVertex2f(-12.0f, -10.0f);
 			glVertex2f(  0.0f,  20.0f);

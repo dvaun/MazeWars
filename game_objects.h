@@ -7,6 +7,7 @@
 //#include "davidV.cpp"
 #include "Power_up.h"
 #include <GL/glx.h>
+#include "textrender.h"
 
 typedef int Explosive;
 
@@ -56,6 +57,8 @@ struct Player {
 			glVertex2f(0.0f, 0.0f);
 		glEnd();
 		glPopMatrix();
+		drawWhiteText(p.pos[0],p.pos[1],10,10,p.stats.gpos[0]);
+		drawWhiteText(p.pos[0],p.pos[1],10,-10,p.stats.gpos[1]);
 	}
 };
 

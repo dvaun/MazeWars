@@ -583,7 +583,7 @@ void render(Game *g)
 	drawGBlocks(g);
 //Draw the Player_1
 	if(g->Player_1.Current_Health > 0)
-		drawPlayer(g->Player_1);
+		drawOType(g->Player_1);
 
 //Draw the bullets
 	for (int i=0; i<g->nbullets; i++) {
