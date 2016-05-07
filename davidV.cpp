@@ -44,8 +44,8 @@ void drawOType(Object object, Game *g)
 {
 	float xdist, ydist;
 	setColor(object.stats);
-	xdist = (b->stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
-	ydist = (b->stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
+	xdist = (object.stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
+	ydist = (object.stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
 }
 
 template <typename Object>

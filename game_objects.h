@@ -20,7 +20,7 @@ struct Weapon{
 };
 
 struct Bullet {
-    Stats *stats;
+    Stats stats;
 	//Vec gpos;
 	Vec vel;
 	float speed;
