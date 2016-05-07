@@ -51,11 +51,7 @@ template <typename OType>
 void drawOType(OType otype, Game *g)
 {
 	Stats stats;
-	if (is_pointer<OType*>::value) {
-		stats = otype->stats;
-	} else {
-		stats = otype.stats;
-	}
+	stats = otype.stats;
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
 		setColor(stats);
@@ -70,11 +66,7 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	Stats stats;
-	if (is_pointer<OType*>::value) {
-		stats = otype->stats;
-	} else {
-		stats = otype.stats;
-	}
+	stats = otype.stats;
 	bool indistancex = false, indistancey = false;
 	if (abs(player.stats.gpos[0] - stats.gpos[0] +
 		    		stats.width) < xcheck) {
@@ -89,7 +81,7 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 	}
 	return false;
 }
-/*
+
 template <typename OType>
 bool checkDistanceStats(OType *otype, Game *g, float xcheck, float ycheck)
 {
@@ -109,7 +101,7 @@ bool checkDistanceStats(OType *otype, Game *g, float xcheck, float ycheck)
 		return true;
 	}
 	return false;
-}*/
+}
 //
 //
 //
