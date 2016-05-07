@@ -38,7 +38,7 @@ struct Player {
 		P_UP[1] = 0;
 		P_UP[2] = 0;
 	}
-	void draw(float x, float y, float angle) {
+	void draw(float x, float y, float angle, Vec ppos) {
 		glColor3f((float) stats.color[0],(float) stats.color[1],(float) \
 			stats.color[2]);
 		glPushMatrix();
@@ -57,8 +57,8 @@ struct Player {
 			glVertex2f(0.0f, 0.0f);
 		glEnd();
 		glPopMatrix();
-		drawWhiteNum(this.pos[0],this.pos[1],10,10,stats.gpos[0]);
-		drawWhiteNum(this.pos[0],this.pos[1],10,-10,stats.gpos[1]);
+		drawWhiteNum(ppos[0],ppos[1],10,10,stats.gpos[0]);
+		drawWhiteNum(ppos[0],ppos[1],10,-10,stats.gpos[1]);
 	}
 };
 
@@ -88,6 +88,8 @@ struct Bullet {
 		stats.color[0] = 255;
 		stats.color[1] = 255;
 		stats.color[2] = 255;
+		stats.width = 1;
+		stats.height = 1;
 		prev = NULL;
 		next = NULL;
 	}
@@ -104,7 +106,7 @@ struct Bullet {
 		vel[0] = x.vel[0];
 		vel[1] = x.vel[1];
 	}
-	void draw(float x, float y, float angle) {
+	void draw(float x, float y, float angle, Vec ppos) {
 		glTranslatef(x,y,angle);
 		glBegin(GL_POINTS);
 			glVertex2f(x, y);

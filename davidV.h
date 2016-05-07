@@ -44,6 +44,14 @@ void init_blocks(Game *, gblock_info);
 // Templates section
 //
 //
+template <class T>
+class Class
+{
+	public:
+	Class(const Class &){}
+	Class & operator=(const CLass& c){return *this;}
+};
+
 template<typename T>
 struct is_pointer { static const bool value = false; };
 
@@ -55,14 +63,15 @@ struct is_pointer<T*> { static const bool value = true; };
 template <typename OType>
 void drawOType(OType otype, Game *g)
 {
+	Player p = g->Player_1;
 	Stats stats;
 	stats = otype.stats;
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
-		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
-		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
-		otype.draw(xdist, ydist);
+		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
+		otype.draw(xdist, ydist, stats.angle, p.pos);
 	}
 }
 
@@ -70,14 +79,15 @@ void drawOType(OType otype, Game *g)
 template <typename OType>
 void drawOType(OType *otype, Game *g)
 {
+	Player p = g->Player_1;
 	Stats stats;
 	stats = otype->stats;
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
-		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
-		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
-		*otype->draw(xdist, ydist, stats.angle);
+		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats->width);
+		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats->height);
+		*otype->draw(xdist, ydist, stats.angle, p.pos);
 	}
 }
 

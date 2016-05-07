@@ -581,7 +581,7 @@ void render(Game *g)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	drawGBlocks(g);
-//Draw the Player_1
+	//Draw the Player_1
 	if(g->Player_1.Current_Health > 0)
 		drawOType(g->Player_1);
 
