@@ -5,6 +5,7 @@
 #include "game.h"
 //#include "Player.h"
 //#include "davidV.cpp"
+#include "Power_up.h"
 #include <GL/glx.h>
 
 struct Player {
