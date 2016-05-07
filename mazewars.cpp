@@ -168,6 +168,12 @@ int main(void)
 	initXWindows();
 	init_opengl();
 	Game game;
+	gblock_info gbi;
+	gbi.width = 50;
+	gbi.height = 50;
+	gbi.rows = 50;
+	gbi.columns = 50;
+	begin_game(game, gbi);
 	Joystick joystick;
 	init(&game);
 	srand(time(NULL));
@@ -574,6 +580,7 @@ void render(Game *g)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	drawGBlocks(g);
 //Draw the Player_1
 	if(g->Player_1.Current_Health > 0)
 		drawPlayer(g->Player_1);

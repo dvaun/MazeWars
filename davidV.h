@@ -38,6 +38,9 @@ float getDistanceStats(Game *, Stats);
 float getXYDistValue(float, float);
 //
 //
+void init_blocks(Game *, gblock_info);
+//
+//
 // Templates section
 //
 //

@@ -19,13 +19,6 @@
 #include <cmath>
 #include <cstring>
 
-void setColor(Stats stats)
-{
-	glColor3f((float) stats.color[0],(float) stats.color[1],(float) \
-		stats.color[2]);
-}
-
-
 /*
 void drawSquare(Stats *stats, int red, int blue, int green)
 {
@@ -454,7 +447,21 @@ void check_gblock_collision(Game *g)
 		}
 	}
 }
-
+/***************************************************
+*
+*
+*
+*
+*
+*
+*
+*
+****************************************************/
+void init_blocks(Game *g, gblock_info gbi)
+{
+	g->game_info.rows = gbi.rows;
+	g->game_info.columns = gbi.columns;
+}
 //
 //
 //
