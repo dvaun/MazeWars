@@ -4,7 +4,6 @@
 #include "game_objects.h"
 #include "game.h"
 #include <cstring>
-#include <type_traits>
 
 template <typename OType>
 void drawOType(OType otype, Game *g);
@@ -42,11 +41,17 @@ float getXYDistValue(float, float);
 // Templates section
 //
 //
+template<typename T>
+struct is_pointer { static const bool value = false; };
+
+template<typename T>
+struct is_pointer<T*> { static const bool value = true; };
+
 template <typename OType>
 void drawOType(OType otype, Game *g)
 {
 	Stats stats;
-	if (std::is_pointer<OType*>::value) {
+	if (is_pointer<otype>::value) {
 		stats = otype->stats;
 	} else {
 		stats = otype.stats;
@@ -65,7 +70,7 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	Stats stats;
-	if (std::is_pointer<OType*>::value == true) {
+	if (is_pointer<otype>::value) {
 		stats = otype->stats;
 	} else {
 		stats = otype.stats;
