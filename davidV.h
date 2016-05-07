@@ -4,6 +4,7 @@
 #include "game_objects.h"
 #include "game.h"
 #include <cstring>
+#include <type_traits>
 
 template <typename OType>
 void drawOType(OType otype, Game *g);
@@ -44,11 +45,17 @@ float getXYDistValue(float, float);
 template <typename OType>
 void drawOType(OType otype, Game *g)
 {
+	Stats stats;
+	if (std::is_pointer<otype*>) {
+		stats = otype->stats;
+	} else {
+		stats = otype.stats;
+	}
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
-		setColor(otype.stats);
-		xdist = (otype.stats.gpos[0] - g->Player_1.stats.gpos[0]);
-		ydist = (otype.stats.gpos[1] - g->Player_1.stats.gpos[1]);
+		setColor(stats);
+		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
+		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
 		otype.draw(xdist, ydist);
 	}
 }
@@ -57,13 +64,19 @@ template <typename OType>
 bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
+	Stats stats;
+	if (std::is_pointer<otype*>) {
+		stats = otype->stats;
+	} else {
+		stats = otype.stats;
+	}
 	bool indistancex = false, indistancey = false;
-	if (abs(player.stats.gpos[0] - otype.stats.gpos[0] +
-		    		otype.stats.width) < xcheck) {
+	if (abs(player.stats.gpos[0] - stats.gpos[0] +
+		    		stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.stats.gpos[1] - otype.stats.gpos[1] +
-		    		otype.stats.width) < ycheck) {
+	if (abs(player.stats.gpos[1] - stats.gpos[1] +
+		    		stats.width) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
