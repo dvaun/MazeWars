@@ -4,7 +4,6 @@
 #include "game_objects.h"
 #include "game.h"
 #include <cstring>
-#include "boost/is_pointer.hpp"
 
 template <typename OType>
 void drawOType(OType otype, Game *g);
