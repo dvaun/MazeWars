@@ -10,6 +10,7 @@
 #define DRAW_F
 
 #include <GL/glx.h>
+#include "game.h"
 #include "game_objects.h"
 #include "fonts/fonts.h"
 #include <sstream>
