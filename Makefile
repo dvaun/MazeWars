@@ -57,10 +57,9 @@ clean:
 	rm -f *.a
 	rm -f fonts/*.o
 
-update:
+update-%:
 	git add -A
-	read msg
-	git commit -m "$msg"
+	git commit -m "$(@:update-%=%)"
 	git push
 
 pullnmake:
