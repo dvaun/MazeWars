@@ -11,6 +11,7 @@ struct Stats {
 	double width, height;
 	double radius;
 	double speed;
+	double angle;
 	Vec vel;
 	Vec gpos;
 	Vec color;
