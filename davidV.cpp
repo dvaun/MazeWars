@@ -39,26 +39,27 @@ void drawSquare(Stats *stats, int red, int blue, int green)
 	glPopMatrix();
 }
 */
-template <typename Object>
-void drawOType(Object object, Game *g)
+template <typename OType>
+void drawOType(OType otype, Game *g)
 {
 	float xdist, ydist;
-	setColor(object.stats);
-	xdist = (object.stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
-	ydist = (object.stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
+	setColor(otype.stats);
+	xdist = (otype.stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
+	ydist = (otype.stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
+	otype.draw(xdist, ydist);
 }
 
-template <typename Object>
-bool checkDistanceStats(Object object, Game *g, float xcheck, float ycheck)
+template <typename OType>
+bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - object.stats.gpos[0] +
-		    		object.stats.width) < xcheck) {
+	if (abs(player.gpos[0] - otype.stats.gpos[0] +
+		    		otype.stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - object.stats.gpos[1] +
-		    		object.stats.width) < ycheck) {
+	if (abs(player.gpos[1] - otype.stats.gpos[1] +
+		    		otype.stats.width) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {

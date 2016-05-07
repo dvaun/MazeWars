@@ -12,9 +12,9 @@ struct Stats {
 	double width, height;
 	double radius;
 	double speed;
-	Vec center;
 	Vec gpos;
 	Vec color;
+	const char* image;
 	Stats() {
 		width = 0;
 		height = 0;
@@ -27,6 +27,16 @@ struct Stats {
 		color[1] = 0;
 		color[2] = 0;
 	}
+	void setImage(char* fname) {
+		image = fname;
+	}
+	~Stats() {}
+};
+
+struct Object {
+	Stats stats;
+	Object() {}
+	~Object() {}
 };
 
 struct Particle {
@@ -38,6 +48,7 @@ struct Particle {
 	    drawn = 0;
 	    //stats = (Stats) malloc(sizeof(Stats));
 	}
+	~Particle() {}
 };
 
 typedef struct game_block_def {
