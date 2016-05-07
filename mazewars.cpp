@@ -554,9 +554,9 @@ if ((keys[XK_space] || joy[0]) && (g->Player_1.Current_Ammo > 0) && (g->Player_1
 		b->stats.gpos[1] += ydir*20.0f;
 		b->vel[0] += xdir*6.0f + rnd()*0.1f;
 		b->vel[1] += ydir*6.0f + rnd()*0.1f;
-		b->color[0] = 1.0f;
-		b->color[1] = 1.0f;
-		b->color[2] = 1.0f;
+		b->stats.color[0] = 1.0f;
+		b->stats.color[1] = 1.0f;
+		b->stats.color[2] = 1.0f;
 		g->nbullets++;
 		g->Player_1.Current_Ammo--;
 	}

@@ -11,6 +11,7 @@ typedef int Explosive;
 struct Player {
 	Stats stats;
 	Vec dir;
+	Vec vel;
 	Vec pos;
 	float angle;
 	PowerUp P_UP[3];

@@ -146,7 +146,8 @@ void Restart(Player *x)
 	x->Current_Ammo = 100;
 	x->pos[0] = 40;
 	x->pos[1] = 40;
-	VecZero(x->stats.vel);
+	x->stats.gpos[0] = 500;
+	x->stats.gpos[1] = 500;
 	VecZero(x->dir);
 }
 void drawHealthPack(int x, int y, int z)

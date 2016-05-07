@@ -11,6 +11,7 @@ struct Stats {
 	double width, height;
 	double radius;
 	double speed;
+	Vec vel;
 	Vec gpos;
 	Vec color;
 	const char* image;
