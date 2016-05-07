@@ -598,10 +598,10 @@ void render(Game *g)
 		glBindTexture(GL_TEXTURE_2D, personTexture);
 		glBegin(GL_QUADS);
 			float w = 325;
-			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(1.0f, 0.0f); glVertex2f( w, w);
-			glTexCoord2f(1.0f, 1.0f); glVertex2f( w, -w);
-			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(-20.0, 20.0);
+			glTexCoord2f(1.0f, 0.0f); glVertex2f( 20.0, 20.0);
+			glTexCoord2f(1.0f, 1.0f); glVertex2f( 20.0, -20.0);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(-20.0,-20.0);
 		glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDisable(GL_ALPHA_TEST);
