@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <cstring>
+#include <boost/is_type.hpp>
 void setColor(Stats stats)
 {
 	glColor3f((float) stats.color[0],(float) stats.color[1],(float) \
