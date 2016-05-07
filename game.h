@@ -45,35 +45,35 @@ struct Particle {
 	Vec vel;
 	Vec pos;
 	Particle() {
-	    drawn = 0;
+		drawn = 0;
 	    //stats = (Stats) malloc(sizeof(Stats));
 	}
 	~Particle() {}
 };
 
 typedef struct game_block_def {
-    double width, height;
-    int rows, columns;
+	double width, height;
+	int rows, columns;
 } gblock_info;
 
 typedef struct game_block_type {
-    Stats stats;
-    int type, assigned;
-    game_block_type() {
-	type = 0;
-	assigned = 0;
-    }
-    void operator=(game_block_type gb) {
-	stats.gpos[0] = gb.stats.gpos[0];
-	stats.color[0] = gb.stats.color[0];
-	stats.width = gb.stats.width;
-	stats.height = gb.stats.height;
-    }
+	Stats stats;
+	int type, assigned;
+	game_block_type() {
+		type = 0;
+		assigned = 0;
+	}
+	void operator=(game_block_type gb) {
+		stats.gpos[0] = gb.stats.gpos[0];
+		stats.color[0] = gb.stats.color[0];
+		stats.width = gb.stats.width;
+		stats.height = gb.stats.height;
+	}
 } gblock;
 
 typedef struct game_camera {
-    int xprimary, yprimary;
-    int xsecondary, ysecondary;
+	int xprimary, yprimary;
+	int xsecondary, ysecondary;
 } gcamera;
 
 #endif

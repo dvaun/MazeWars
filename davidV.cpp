@@ -47,8 +47,8 @@ void drawOType(OType otype, Game *g)
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
 		setColor(otype.stats);
-		xdist = (otype.stats->gpos[0] - g->Player_1.stats.gpos[0] - 1.0);
-		ydist = (otype.stats->gpos[1] - g->Player_1.stats.gpos[1] - 1.0);
+		xdist = (otype.stats.gpos[0] - g->Player_1.stats.gpos[0] - 1.0);
+		ydist = (otype.stats.gpos[1] - g->Player_1.stats.gpos[1] - 1.0);
 		otype.draw(xdist, ydist);
 	}
 }
