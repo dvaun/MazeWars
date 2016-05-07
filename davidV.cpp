@@ -118,9 +118,9 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 	//setColor(*bullet);
 	float xdist, ydist;
 	glColor3f(1.0, 1.0, 1.0);
-	xdist = (b->stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
-	ydist = (b->stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
-	glTranslatef(0,0,b->stats->gpos[2]);
+	xdist = (b->stats.gpos[0] - g->Player_1.gpos[0] - 1.0);
+	ydist = (b->stats.gpos[1] - g->Player_1.gpos[1] - 1.0);
+	glTranslatef(0,0,b->stats.gpos[2]);
 	glBegin(GL_POINTS);
 		glVertex2f(xdist, ydist);
 		glVertex2f(xdist-1.0f, ydist);
