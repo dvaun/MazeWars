@@ -60,7 +60,7 @@ void job_opengl(Ppmimage *personImage, GLuint personTexture,
 GLuint silhouetteTexture)
 {
 	//Loading images -- commented out while looking for sprite
-	personImage = ppm6GetImage((char*)"sprite.ppm");
+	personImage = ppm6GetImage((char*)"images/test.ppm");
 	
 	//create opengl texture elements
 	glGenTextures(1, &personTexture);
