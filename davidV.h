@@ -47,6 +47,8 @@ struct is_pointer { static const bool value = false; };
 template<typename T>
 struct is_pointer<T*> { static const bool value = true; };
 
+
+// Template for objects with stats class - should apply to basically everything
 template <typename OType>
 void drawOType(OType otype, Game *g)
 {
@@ -61,6 +63,7 @@ void drawOType(OType otype, Game *g)
 	}
 }
 
+// Specialization for pointer objects
 template <typename OType>
 void drawOType(OType *otype, Game *g)
 {
@@ -71,10 +74,12 @@ void drawOType(OType *otype, Game *g)
 		setColor(stats);
 		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
 		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
-		otype.draw(xdist, ydist);
+		otype->draw(xdist, ydist);
 	}
 }
 
+// Checks the distance for objects via their stats
+// will be used in draw function and likely physics
 template <typename OType>
 bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
@@ -96,6 +101,8 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 	return false;
 }
 
+// Another specialization, once again for stats
+// and if the objects are pointers
 template <typename OType>
 bool checkDistanceStats(OType *otype, Game *g, float xcheck, float ycheck)
 {
