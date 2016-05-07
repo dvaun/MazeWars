@@ -143,12 +143,12 @@ bool checkBlockDistanceOType(OType otype, gblock block, float xcheck, float yche
 {
 	Stats stats = otype.stats;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.stats.gpos[0] - stats.gpos[0] +
-		    		stats.width) < xcheck) {
+	if (abs(stats.gpos[0] - block.stats.gpos[0] +
+		    		block.stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.stats.gpos[1] - stats.gpos[1] +
-		    		stats.width) < ycheck) {
+	if (abs(stats.gpos[1] - block.stats.gpos[1] +
+		    		block.stats.width) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
