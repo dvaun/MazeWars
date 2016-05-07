@@ -149,7 +149,7 @@ void drawPlayer(Player p)
 {
 	glColor3fv(p.color);
 	glPushMatrix();
-	glTranslatef(625, 450, p.gpos[2]);
+	glTranslatef(625, 450, p.stats.gpos[2]);
 	glRotatef(p.angle, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_TRIANGLES);
 		glVertex2f(-12.0f, -10.0f);
@@ -164,8 +164,8 @@ void drawPlayer(Player p)
 		glVertex2f(0.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
-	drawText(p.pos[0],p.pos[1],10,10,p.gpos[0]);
-	drawText(p.pos[0],p.pos[1],10,-10,p.gpos[1]);
+	drawText(p.pos[0],p.pos[1],10,10,p.stats.gpos[0]);
+	drawText(p.pos[0],p.pos[1],10,-10,p.stats.gpos[1]);
 }
 
 void assign_gblock(gblock &block, Stats &stats, int type, int row, int col)
@@ -286,7 +286,7 @@ bool inDrawingDistanceBlock(Game *g, gblock block)
 /*
 bool withinDistance(Player p, gblock block, int check)
 {
-	return (abs(p.gpos[0]
+	return (abs(p.stats.gpos[0]
 }
 */
 float getXYDistValue(float x, float y) {
