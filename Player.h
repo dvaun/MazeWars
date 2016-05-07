@@ -3,6 +3,7 @@
 
 #include "Power_up.h"
 #include "defs.h"
+#include "game.h"
 
 typedef int Explosive;
 
