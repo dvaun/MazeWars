@@ -31,7 +31,6 @@ struct Bullet {
 	Bullet() {
 		prev = NULL;
 		next = NULL;
-		stats = new Stats;
 	}
 	void operator=(Bullet x) {
 		stats.gpos[0] = x.stats.gpos[0];
