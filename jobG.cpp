@@ -88,6 +88,7 @@ GLuint silhouetteTexture)
 	
 	free(silhouetteData);
 
+
 }
 
 

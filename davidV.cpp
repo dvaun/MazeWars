@@ -148,7 +148,7 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 
 void drawPlayer(Player p)
 {
-	glColor3fv(p.color);
+	setColor(p.stats);
 	glPushMatrix();
 	glTranslatef(625, 450, p.stats.gpos[2]);
 	glRotatef(p.angle, 0.0f, 0.0f, 1.0f);
@@ -296,7 +296,7 @@ float getXYDistValue(float x, float y) {
 float getDistanceStatsVal(Game *g, Stats stats, int coord)
 {
 	Player player = g->Player_1;
-	float distance = player.gpos[coord] - stats.gpos[coord] 
+	float distance = player.stats.gpos[coord] - stats.stats.gpos[coord] 
 			+ stats.width; 
 	return distance;
 }

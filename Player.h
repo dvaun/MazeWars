@@ -21,13 +21,10 @@ struct Player {
 	Explosive P_Secondary;
 
 	Player() {
-		stats = new Stats;
-		speed = 2.0;
 		VecZero(dir);
 		pos[0] = 625;
 		pos[1] = 450;
 		pos[2] = 0.0f;
-		VecZero(vel);
 		Current_Health = 100;
 		Max_Health = 100;
 		angle = 0.0;

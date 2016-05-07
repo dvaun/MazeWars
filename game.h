@@ -26,7 +26,7 @@ struct Stats {
 		color[1] = 0;
 		color[2] = 0;
 	}
-	void setImage(char* fname) {
+	void setImage(const char* fname) {
 		image = fname;
 	}
 	~Stats() {}

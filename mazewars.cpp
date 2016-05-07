@@ -441,8 +441,8 @@ g->Player_1.vel[1] = ydir*2.0f;
 void physics(Game *g)
 {
 //Update Player_1 position
-	g->Player_1.gpos[0] += g->Player_1.vel[0];
-	g->Player_1.gpos[1] += g->Player_1.vel[1];
+	g->Player_1.stats.gpos[0] += g->Player_1.stats.vel[0];
+	g->Player_1.stats.gpos[1] += g->Player_1.stats.vel[1];
 	g->gun.pos[0] += g->gun.vel[0];
 	g->gun.pos[1] += g->gun.vel[1];
 //Check for collision with window edges
@@ -510,13 +510,13 @@ if (keys[XK_w] && (g->Player_1.Current_Health > 0)) {
 //convert angle to a vector
 	Flt xdir = cos(rad);
 	Flt ydir = sin(rad);
-	g->Player_1.vel[0] = xdir;
-	g->Player_1.vel[1] = ydir;
+	g->Player_1.stats.vel[0] = xdir;
+	g->Player_1.stats.vel[1] = ydir;
 //	g->gun.pos[0] = xdir;
 //	g->gun.pos[1] = ydir;
 } else {
-	g->Player_1.vel[0] = 0;
-	g->Player_1.vel[1] = 0;
+	g->Player_1.stats.vel[0] = 0;
+	g->Player_1.stats.vel[1] = 0;
 }
 if (keys[XK_s] && (g->Player_1.Current_Health > 0)) {
 //convert Player_1 angle to radians
@@ -524,8 +524,8 @@ if (keys[XK_s] && (g->Player_1.Current_Health > 0)) {
 //convert angle to a vector
 	Flt xdir = cos(rad);
 	Flt ydir = sin(rad);
-	g->Player_1.vel[0] = -1 * xdir;
-	g->Player_1.vel[1] = -1 * ydir;
+	g->Player_1.stats.vel[0] = -1 * xdir;
+	g->Player_1.stats.vel[1] = -1 * ydir;
 }
 if (axis[0] || axis[1] ||  axis[4] || axis[5]) {	
 	checkController(axis, g);

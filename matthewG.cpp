@@ -19,8 +19,8 @@ void movement(Game *g)
 	Flt xdir = cos(rad);
 	Flt ydir = sin(rad);
 
-	g->Player_1.vel[0] = xdir*2.0f;
-	g->Player_1.vel[1] = ydir*2.0f;
+	g->Player_1.stats.vel[0] = xdir*2.0f;
+	g->Player_1.stats.vel[1] = ydir*2.0f;
 }
 
 void checkController(int axis[], Game *g)
@@ -84,7 +84,7 @@ void checkController(int axis[], Game *g)
 		movement(g);
 	}
 	else {
-		g->Player_1.vel[0] = 0;
-		g->Player_1.vel[1] = 0;
+		g->Player_1.stats.vel[0] = 0;
+		g->Player_1.stats.vel[1] = 0;
 	}
 }
