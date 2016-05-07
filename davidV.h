@@ -70,11 +70,27 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	Stats stats;
-	if (is_pointer<otype>::value) {
-		stats = otype->stats;
-	} else {
-		stats = otype.stats;
+	stats = otype.stats;
+	bool indistancex = false, indistancey = false;
+	if (abs(player.stats.gpos[0] - stats.gpos[0] +
+		    		stats.width) < xcheck) {
+		indistancex = true;
 	}
+	if (abs(player.stats.gpos[1] - stats.gpos[1] +
+		    		stats.width) < ycheck) {
+		indistancey = true;
+	}
+	if (indistancex && indistancey) {
+		return true;
+	}
+	return false;
+}
+template <typename OType>
+bool checkDistanceStats(OType *otype, Game *g, float xcheck, float ycheck)
+{
+	Player player = g->Player_1;
+	Stats stats;
+	stats = otype->stats;
 	bool indistancex = false, indistancey = false;
 	if (abs(player.stats.gpos[0] - stats.gpos[0] +
 		    		stats.width) < xcheck) {
