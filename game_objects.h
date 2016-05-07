@@ -8,6 +8,8 @@
 #include "Power_up.h"
 #include <GL/glx.h>
 
+typedef int Explosive;
+
 struct Player {
 	Stats stats;
 	Vec dir;
@@ -36,7 +38,8 @@ struct Player {
 		P_UP[2] = 0;
 	}
 	void draw(float x, float y) {
-		setColor(p.stats);
+		glColor3f((float) stats.color[0],(float) stats.color[1],(float) \
+			stats.color[2]);
 		glPushMatrix();
 		glTranslatef(x, y, 0);
 		glRotatef(p.angle, 0.0f, 0.0f, 1.0f);
