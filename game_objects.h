@@ -3,6 +3,8 @@
 
 #include <ctime>
 #include "game.h"
+#include "Player.h"
+#include <GL/glx.h>
 
 struct Weapon{
 	Vec dir;
