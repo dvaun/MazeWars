@@ -39,11 +39,13 @@ float getXYDistValue(float, float);
 //
 //
 void init_blocks(Game *, gblock_info);
-//
+//***************************************
+//***************************************
 //
 // Templates section
 //
-//
+//***************************************
+//***************************************
 template <class T>
 class Class
 {
@@ -71,7 +73,7 @@ void drawOType(OType otype, Game *g)
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
 		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
-		otype.draw(xdist, ydist, stats.angle, p.pos);
+		otype.draw(xdist, ydist, p.angle, p.pos);
 	}
 }
 
@@ -87,14 +89,14 @@ void drawOType(OType *otype, Game *g)
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
 		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
-		otype->draw(xdist, ydist, stats.angle, p.pos);
+		otype->draw(xdist, ydist, p.angle, p.pos);
 	}
 }
 
 // Checks the distance for objects via their stats
 // will be used in draw function and likely physics
 template <typename OType>
-bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
+bool checkPlayerDistanceOType(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	Stats stats;
@@ -117,7 +119,7 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 // Another specialization, once again for stats
 // and if the objects are pointers
 template <typename OType>
-bool checkDistanceStats(OType *otype, Game *g, float xcheck, float ycheck)
+bool checkPlayerDistanceOType(OType *otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	Stats stats;
@@ -136,6 +138,68 @@ bool checkDistanceStats(OType *otype, Game *g, float xcheck, float ycheck)
 	}
 	return false;
 }
+template <typename OType>
+bool checkBlockDistanceOType(OType otype, gblock block, float xcheck, float ycheck)
+{
+	Stats stats = otype.stats;
+	bool indistancex = false, indistancey = false;
+	if (abs(player.stats.gpos[0] - stats.gpos[0] +
+		    		stats.width) < xcheck) {
+		indistancex = true;
+	}
+	if (abs(player.stats.gpos[1] - stats.gpos[1] +
+		    		stats.width) < ycheck) {
+		indistancey = true;
+	}
+	if (indistancex && indistancey) {
+		return true;
+	}
+	return false;
+}
+
+// Another specialization, once again for stats
+// and if the objects are pointers
+template <typename OType>
+bool checkBlockDistanceOType(OType *otype, gblock block, float xcheck, float ycheck)
+{
+	Stats stats = otype->stats;
+	bool indistancex = false, indistancey = false;
+	if (abs(otype->stats.gpos[0] - block.stats.gpos[0] +
+		    		block.stats.width) < xcheck) {
+		indistancex = true;
+	}
+	if (abs(otype->stats.gpos[1] - block.stats.gpos[1] +
+		    		block.stats.width) < ycheck) {
+		indistancey = true;
+	}
+	if (indistancex && indistancey) {
+		return true;
+	}
+	return false;
+}
+//*****************************
+//*****************************
+//
+// Physics/collision templates
+//
+//*****************************
+//*****************************
+template <typename OType>
+void check_gblock_collision(OType otype, Game *g, float xcheck, float ycheck)
+{
+	int nrows = g->game_info.rows;
+	int ncols = g->game_info.columns;
+	for (int i = 0; i < nrows; i++) {
+		for (int j = 0; j < ncols; j++) {
+			if (g->blocks[i][j].assigned == 1) {
+				if (checkBlockDistanceOType(otype,g->blocks[i][j],xcheck,ycheck)) {
+					
+				}
+			}
+		}
+	}
+}
+
 //
 //
 //

@@ -401,20 +401,7 @@ void drawGBlocks(Game *g)
 	}
 }
 
-void check_gblock_collision(Game *g)
-{
-	int nrows = g->game_info.rows;
-	int ncols = g->game_info.columns;
-	for (int i = 0; i < nrows; i++) {
-		for (int j = 0; j < ncols; j++) {
-			if (g->blocks[i][j].assigned == 1) {
-				if (checkDistanceBlock(g,g->blocks[i][j],50,50)) {
-					
-				}
-			}
-		}
-	}
-}
+
 /***************************************************
 *
 *

@@ -107,7 +107,7 @@ struct Bullet {
 		vel[1] = x.vel[1];
 	}
 	void draw(float x, float y, float angle, Vec ppos) {
-		glTranslatef(x,y,angle);
+		glTranslatef(x,y,0);
 		glBegin(GL_POINTS);
 			glVertex2f(x, y);
 			glVertex2f(x-1.0f, y);
