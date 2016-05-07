@@ -34,8 +34,8 @@ struct Bullet {
 		stats = new Stats;
 	}
 	void operator=(Bullet x) {
-		stats->gpos[0] = x.stats->gpos[0];
-		stats->gpos[1] = x.stats->gpos[1];
+		stats.gpos[0] = x.stats.gpos[0];
+		stats.gpos[1] = x.stats.gpos[1];
 		vel[0] = x.vel[0];
 		vel[1] = x.vel[1];
 		color[0] = x.color[0];
@@ -44,8 +44,8 @@ struct Bullet {
 		time = x.time;
 	}
 	void operator=(Weapon x) {
-		stats->gpos[0] = x.pos[0];
-		stats->gpos[1] = x.pos[1];
+		stats.gpos[0] = x.pos[0];
+		stats.gpos[1] = x.pos[1];
 		vel[0] = x.vel[0];
 		vel[1] = x.vel[1];
 	}

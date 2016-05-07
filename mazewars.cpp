@@ -476,8 +476,8 @@ void physics(Game *g)
 			g->nbullets--;
 		}
 		//move the bullet
-		b->stats->gpos[0] += 6*b->vel[0];
-		b->stats->gpos[1] += 6*b->vel[1];
+		b->stats.gpos[0] += 6*b->vel[0];
+		b->stats.gpos[1] += 6*b->vel[1];
 		//Check for collision with window edges
 		/*if (b->pos[0] < 0.0f) {
 			b->pos[0] += (float)xres;
@@ -541,8 +541,8 @@ void physics(Game *g)
 			//shoot a bullet...
 			Bullet *b = &g->barr[g->nbullets];
 			timeCopy(&b->time, &bt);
-			b->stats->gpos[0] = g->gun.pos[0];
-			b->stats->gpos[1] = g->gun.pos[1];
+			b->stats.gpos[0] = g->gun.pos[0];
+			b->stats.gpos[1] = g->gun.pos[1];
 			b->vel[0] = g->gun.vel[0];
 			b->vel[1] = g->gun.vel[1];
 			//convert Player_1 angle to radians
@@ -550,8 +550,8 @@ void physics(Game *g)
 			//convert angle to a vector
 			Flt xdir = cos(rad);
 			Flt ydir = sin(rad);
-			b->stats->gpos[0] += xdir*20.0f;
-			b->stats->gpos[1] += ydir*20.0f;
+			b->stats.gpos[0] += xdir*20.0f;
+			b->stats.gpos[1] += ydir*20.0f;
 			b->vel[0] += xdir*6.0f + rnd()*0.1f;
 			b->vel[1] += ydir*6.0f + rnd()*0.1f;
 			b->color[0] = 1.0f;
