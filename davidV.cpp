@@ -58,11 +58,11 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - otype.stats.gpos[0] +
+	if (abs(player.stats.gpos[0] - otype.stats.gpos[0] +
 		    		otype.stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - otype.stats.gpos[1] +
+	if (abs(player.stats.gpos[1] - otype.stats.gpos[1] +
 		    		otype.stats.width) < ycheck) {
 		indistancey = true;
 	}
@@ -269,13 +269,13 @@ bool inDrawingDistanceBlock(Game *g, gblock block)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	printf("%f ", block.stats.gpos[0] - player.gpos[0] - 25);
-	printf("%f\n", block.stats.gpos[1] - player.gpos[1] - 25);
-	if (abs(player.gpos[0] - block.stats.gpos[0] -
+	printf("%f ", block.stats.gpos[0] - player.stats.gpos[0] - 25);
+	printf("%f\n", block.stats.gpos[1] - player.stats.gpos[1] - 25);
+	if (abs(player.stats.gpos[0] - block.stats.gpos[0] -
 		    block.stats.width*2) < 625) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - block.stats.gpos[1] -
+	if (abs(player.stats.gpos[1] - block.stats.gpos[1] -
 		    block.stats.width*2) < 450) {
 		indistancey = true;
 	}
@@ -303,9 +303,9 @@ float getDistanceStatsVal(Game *g, Stats stats, int coord)
 float getDistanceStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
-	float distancex = player.gpos[0] - stats.gpos[0] 
+	float distancex = player.stats.gpos[0] - stats.gpos[0] 
 			+ stats.width;
-	float distancey = player.gpos[1] - stats.gpos[1] 
+	float distancey = player.stats.gpos[1] - stats.gpos[1] 
 			+ stats.width;
 	float distance = sqrt((distancex*distancex)+(distancey*distancey));
 	return distance;
@@ -315,11 +315,11 @@ bool checkDistanceBlock(Game *g, gblock block, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - block.stats.gpos[0] +
+	if (abs(player.stats.gpos[0] - block.stats.gpos[0] +
 		    block.stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - block.stats.gpos[1] +
+	if (abs(player.stats.gpos[1] - block.stats.gpos[1] +
 		    block.stats.width) < ycheck) {
 		indistancey = true;
 	}
@@ -333,11 +333,11 @@ bool checkDistanceStats(Game *g, Stats stats, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - stats.gpos[0] +
+	if (abs(player.stats.gpos[0] - stats.gpos[0] +
 		    stats.width) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - stats.gpos[1] +
+	if (abs(player.stats.gpos[1] - stats.gpos[1] +
 		    stats.width) < ycheck) {
 		indistancey = true;
 	}
@@ -353,10 +353,10 @@ void getDistanceBlock(Game *g, gblock block, int xcheck, int ycheck)
 	Vec distance;
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
-	if (abs(player.gpos[0] - block.stats.gpos[0] - 50) < xcheck) {
+	if (abs(player.stats.gpos[0] - block.stats.gpos[0] - 50) < xcheck) {
 		indistancex = true;
 	}
-	if (abs(player.gpos[1] - block.stats.gpos[1] - 50) < ycheck) {
+	if (abs(player.stats.gpos[1] - block.stats.gpos[1] - 50) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -390,9 +390,9 @@ void drawBlock(Game *g, gblock block)
 {
 	Player player = g->Player_1;
 	float xdist, ydist;
-	xdist = 625 + (block.stats.gpos[0] - player.gpos[0] -
+	xdist = 625 + (block.stats.gpos[0] - player.stats.gpos[0] -
 				block.stats.width);
-	ydist = 450 + (block.stats.gpos[1] - player.gpos[1] -
+	ydist = 450 + (block.stats.gpos[1] - player.stats.gpos[1] -
 				block.stats.width);
 	float size = block.stats.width;
 	glPushMatrix();
