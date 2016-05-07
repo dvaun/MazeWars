@@ -2,6 +2,7 @@
 #define TEXT_RENDER
 
 #include "defs.h"
+#include <cstring>
 
 void drawBlackNum(float x, float y, float offsetx, float offsety, float printvalue)
 {
