@@ -144,7 +144,8 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 
 void drawPlayer(Player p)
 {
-	setColor(p.stats);
+	glColor3f(p.stats.color[0], p.stats.color[1],
+			p.stats.color[3]);
 	glPushMatrix();
 	glTranslatef(625, 450, p.stats.gpos[2]);
 	glRotatef(p.angle, 0.0f, 0.0f, 1.0f);
