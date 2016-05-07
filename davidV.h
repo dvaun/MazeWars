@@ -49,7 +49,7 @@ class Class
 {
 	public:
 	Class(const Class &){}
-	Class & operator=(const CLass& c){return *this;}
+	Class & operator=(const Class& c){return *this;}
 };
 
 template<typename T>
@@ -85,8 +85,8 @@ void drawOType(OType *otype, Game *g)
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
-		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats->width);
-		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats->height);
+		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
 		*otype->draw(xdist, ydist, stats.angle, p.pos);
 	}
 }
