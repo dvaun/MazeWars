@@ -4,7 +4,7 @@
 #include <ctime>
 #include "game.h"
 //#include "Player.h"
-#include "davidV.cpp"
+//#include "davidV.cpp"
 #include <GL/glx.h>
 
 struct Player {
