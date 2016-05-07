@@ -70,11 +70,12 @@ void drawOType(OType *otype, Game *g)
 	Stats stats;
 	stats = otype->stats;
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
+		OType copy = *otype;
 		float xdist, ydist;
 		setColor(stats);
 		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
 		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
-		otype->draw(xdist, ydist);
+		copy.draw(xdist, ydist);
 	}
 }
 
