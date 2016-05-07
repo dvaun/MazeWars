@@ -59,7 +59,7 @@ void drawOType(OType otype, Game *g)
 	stats = otype.stats;
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
-		setColor(stats);
+		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
 		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
 		otype.draw(xdist, ydist);
@@ -74,7 +74,7 @@ void drawOType(OType *otype, Game *g)
 	stats = otype->stats;
 	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
-		setColor(stats);
+		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = (stats.gpos[0] - g->Player_1.stats.gpos[0]);
 		ydist = (stats.gpos[1] - g->Player_1.stats.gpos[1]);
 		otype->draw(xdist, ydist, stats.angle);
