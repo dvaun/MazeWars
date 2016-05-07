@@ -39,14 +39,17 @@ void drawSquare(Stats *stats, int red, int blue, int green)
 	glPopMatrix();
 }
 */
+
 template <typename OType>
 void drawOType(OType otype, Game *g)
 {
-	float xdist, ydist;
-	setColor(otype.stats);
-	xdist = (otype.stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
-	ydist = (otype.stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
-	otype.draw(xdist, ydist);
+	if (checkDistanceStats(otype, g, g->g_xres/2,g->g_yres/2)) {
+		float xdist, ydist;
+		setColor(otype.stats);
+		xdist = (otype.stats->gpos[0] - g->Player_1.gpos[0] - 1.0);
+		ydist = (otype.stats->gpos[1] - g->Player_1.gpos[1] - 1.0);
+		otype.draw(xdist, ydist);
+	}
 }
 
 template <typename OType>
@@ -119,9 +122,9 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 	//setColor(*bullet);
 	float xdist, ydist;
 	glColor3f(1.0, 1.0, 1.0);
-	xdist = (b->stats.gpos[0] - g->Player_1.gpos[0] - 1.0);
-	ydist = (b->stats.gpos[1] - g->Player_1.gpos[1] - 1.0);
-	glTranslatef(0,0,b->stats.gpos[2]);
+	xdist = 625 + (b->stats.gpos[0] - g->Player_1.gpos[0] - 1.0);
+	ydist = 450 + (b->stats.gpos[1] - g->Player_1.gpos[1] - 1.0);
+	glTranslatef(xdist,ydist,b->stats.gpos[2]);
 	glBegin(GL_POINTS);
 		glVertex2f(xdist, ydist);
 		glVertex2f(xdist-1.0f, ydist);
@@ -365,8 +368,8 @@ void drawStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
 	float xdist, ydist;
-	xdist = 625 + (stats.gpos[0] - g->Player_1.gpos[0] - stats.width);
-	ydist = 450 + (stats.gpos[1] - g->Player_1.gpos[1] - stats.width);
+	xdist = g->Player_1.pos[0] + (stats.gpos[0] - g->Player_1.gpos[0] - stats.width);
+	ydist = g->Player_1.pos[1] + (stats.gpos[1] - g->Player_1.gpos[1] - stats.width);
 	float size = stats.width;
 	glColor3f((int)stats.color[0], (int)stats.color[1],
 		(int)stats.color[2]);

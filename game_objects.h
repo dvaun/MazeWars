@@ -23,12 +23,13 @@ struct Bullet {
 	Stats stats;
 //Vec gpos;
 	Vec vel;
-	float speed;
-	float color[3];
 	struct timespec time;
 	struct Bullet *prev;
 	struct Bullet *next;
 	Bullet() {
+		stats.color[0] = 0;
+		stats.color[1] = 0;
+		stats.color[2] = 0;
 		prev = NULL;
 		next = NULL;
 	}
@@ -37,9 +38,6 @@ struct Bullet {
 		stats.gpos[1] = x.stats.gpos[1];
 		vel[0] = x.vel[0];
 		vel[1] = x.vel[1];
-		color[0] = x.color[0];
-		color[1] = x.color[1];
-		color[2] = x.color[2];
 		time = x.time;
 	}
 	void operator=(Weapon x) {
@@ -47,6 +45,22 @@ struct Bullet {
 		stats.gpos[1] = x.pos[1];
 		vel[0] = x.vel[0];
 		vel[1] = x.vel[1];
+	}
+	void draw(float x, float y) {
+		glTranslatef(x,y,0);
+		glBegin(GL_POINTS);
+			glVertex2f(x, y);
+			glVertex2f(x-1.0f, y);
+			glVertex2f(x+1.0f, y);
+			glVertex2f(x, y-1.0f);
+			glVertex2f(x, y+1.0f);
+		glColor3f(stats.color[0] - .2f, stats.color[1] - 0.2f,
+				stats.color[2] - 0.2f);
+			glVertex2f(x-1.0f, y-1.0f);
+			glVertex2f(x-1.0f, y+1.0f);
+			glVertex2f(x+1.0f, y-1.0f);
+			glVertex2f(x+1.0f, y+1.0f);
+		glEnd();
 	}
 };
 
