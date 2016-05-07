@@ -46,7 +46,7 @@ template <typename OType>
 void drawOType(OType otype, Game *g)
 {
 	Stats stats;
-	if (std::is_pointer<otype*>::value) {
+	if (std::is_pointer<OType*>::value) {
 		stats = otype->stats;
 	} else {
 		stats = otype.stats;
@@ -65,7 +65,7 @@ bool checkDistanceStats(OType otype, Game *g, float xcheck, float ycheck)
 {
 	Player player = g->Player_1;
 	Stats stats;
-	if (std::is_pointer<otype*>::value) {
+	if (std::is_pointer<OType*>::value) {
 		stats = otype->stats;
 	} else {
 		stats = otype.stats;
