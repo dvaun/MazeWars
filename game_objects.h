@@ -98,6 +98,9 @@ struct Bullet {
 	}
 	void draw(float x, float y, Stats stats) {
 		printf("x:%f y:%f\n", x, y);
+		printf("red:%f blue:%f green:%f\n",
+			stats.color[0], stats.color[1],
+				stats.color[2]);
 		glColor3f(stats.color[0], stats.color[1],
 				stats.color[2]);
 		glPushMatrix();
