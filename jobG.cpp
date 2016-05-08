@@ -26,13 +26,6 @@
 #include "ppm.h"
 #include <stdlib.h>
 
-//defined types
-
-//Person person;
-//Ppmimage *personImage = NULL;
-//GLuint personTexture;
-//int people = 0;
-
 unsigned char *buildAlphaData(Ppmimage *img)
 {
 	//add 4th component to RGB stream...
