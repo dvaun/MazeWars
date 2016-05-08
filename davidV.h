@@ -58,32 +58,28 @@ void init_blocks(Game *, gblock_info);
 //
 //***************************************
 //***************************************
-template <typename Receiver>
-template <typename Source>
+template <typename Receiver, typename Source>
 void exchangeGpos(Receiver receiver, Source source)
 {
 	receiver.stats.gpos[0] = source.stats.gpos[0];
 	receiver.stats.gpos[1] = source.stats.gpos[1];
 	receiver.stats.gpos[2] = source.stats.gpos[2];
 }
-template <typename Receiver>
-template <typename Source>
+template <typename Receiver, typename Source>
 void exchangeGpos(Receiver receiver, Source source)
 {
 	receiver->stats.gpos[0] = source.stats.gpos[0];
 	receiver->stats.gpos[1] = source.stats.gpos[1];
 	receiver->stats.gpos[2] = source.stats.gpos[2];
 }
-template <typename Receiver>
-template <typename Source>
+template <typename Receiver, typename Source>
 void exchangeGpos(Receiver receiver, Source source)
 {
 	receiver->stats.gpos[0] = source->stats.gpos[0];
 	receiver->stats.gpos[1] = source->stats.gpos[1];
 	receiver->stats.gpos[2] = source->stats.gpos[2];
 }
-template <typename Receiver>
-template <typename Source>
+template <typename Receiver, typename Source>
 void exchangeGpos(Receiver receiver, Source source)
 {
 	receiver.stats.gpos[0] = source->stats.gpos[0];

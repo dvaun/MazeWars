@@ -115,7 +115,7 @@ void drawPlayer(Player p)
 			p.stats.color[3]);
 	glPushMatrix();
 	glTranslatef(625, 450, p.stats.gpos[2]);
-	glRotatef(p.angle, 0.0f, 0.0f, 1.0f);
+	glRotatef(p.stats.angle, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_TRIANGLES);
 		glVertex2f(-12.0f, -10.0f);
 		glVertex2f(  0.0f,  20.0f);
@@ -129,8 +129,8 @@ void drawPlayer(Player p)
 		glVertex2f(0.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
-	drawText(p.pos[0],p.pos[1],10,10,p.stats.gpos[0]);
-	drawText(p.pos[0],p.pos[1],10,-10,p.stats.gpos[1]);
+	drawText(p.stats.pos[0],p.stats.pos[1],10,10,p.stats.gpos[0]);
+	drawText(p.stats.pos[0],p.stats.pos[1],10,-10,p.stats.gpos[1]);
 }
 
 void assign_gblock(gblock &block, Stats &stats, int type, int row, int col)

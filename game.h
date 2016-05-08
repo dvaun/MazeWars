@@ -24,21 +24,11 @@ struct Stats {
 		height = 0;
 		radius = 0;
 		speed = 0;
-		dir[0] = 0;
-		dir[1] = 0;
-		dir[2] = 0;
-		vel[0] = 0;
-		vel[1] = 0;
-		vel[2] = 0;
-		spos[0] = 0;
-		spos[1] = 0;
-		spos[2] = 0;
-		gpos[0] = 0;
-		gpos[1] = 0;
-		gpos[2] = 0;
-		color[0] = 0;
-		color[1] = 0;
-		color[2] = 0;
+		VecZero(dir);
+		VecZero(vel);
+		VecZero(spos);
+		VecZero(gpos);
+		VecZero(color);
 	}
 	void setImage(const char* fname) {
 		image = fname;

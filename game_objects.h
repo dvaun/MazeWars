@@ -20,18 +20,8 @@ struct Player {
 	int Max_Ammo = 100;
 	Explosive P_Secondary;
 	Player() {
-		VecZero(dir);
-		stats.spos[0] = 625;
-		stats.spos[1] = 450;
-		stats.spos[2] = 0.0f;
-		stats.gpos[0] = 500;
-		stats.gpos[1] = 500;
-		stats.color[0] = 130;
-		stats.color[1] = 240;
-		stats.color[2] = 30;
 		Current_Health = 100;
 		Max_Health = 100;
-		angle = 0.0;
 		//PowerUp type=0 is the default no powerup option
 		P_UP[0] = 0;
 		P_UP[1] = 0;

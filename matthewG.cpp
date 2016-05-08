@@ -60,28 +60,28 @@ void checkController(int axis[], Game *g)
 		float angle = atan2(axis[1], -axis[0]) / M_PI*180 + 180;
 		cout << angle << endl;
 		if (angle >= 337.5 || angle <= 22.5 ) 
-			g->Player_1.angle = 270;	
+			g->Player_1.stats.angle = 270;	
 	
 		else if (angle > 22.5 && angle <= 67.5) 
-			g->Player_1.angle = -45;
+			g->Player_1.stats.angle = -45;
 
 		else if (angle > 67.5 && angle <= 112.5) 
-			g->Player_1.angle = 0;
+			g->Player_1.stats.angle = 0;
 
 		else if (angle > 112.5 && angle <= 157.5) 
-			g->Player_1.angle = 45;
+			g->Player_1.stats.angle = 45;
 	
 		else if (angle > 157.5 && angle <= 202.5) 
-			g->Player_1.angle = 90;
+			g->Player_1.stats.angle = 90;
 	
 		else if (angle > 202.5 && angle <= 247.5) 
-			g->Player_1.angle = 135;
+			g->Player_1.stats.angle = 135;
 	
 		else if (angle > 247.5 && angle <= 292.5) 
-			g->Player_1.angle = 180;
+			g->Player_1.stats.angle = 180;
 	
 		else if (angle > 292.5 && angle <=337.5) 
-			g->Player_1.angle = 225;
+			g->Player_1.stats.angle = 225;
 	
 		movement(g);
 	}
@@ -90,8 +90,8 @@ void checkController(int axis[], Game *g)
 void renderCrosshair(int axis[], Game *g, bool keyboard) 
 {
 		int radius = 40;
-		int playerX = g->Player_1.pos[0]+1;
-		int playerY = g->Player_1.pos[1]+2;
+		int playerX = g->Player_1.stats.pos[0]+1;
+		int playerY = g->Player_1.stats.pos[1]+2;
 		
 		//Draw Crosshair for aiming
 		if(keyboard == false) 
@@ -119,8 +119,8 @@ void renderCrosshair(int axis[], Game *g, bool keyboard)
 void renderShield(Game *g) 
 {
 	int radius = 40;
-	int playerX = g->Player_1.pos[0]+1;
-	int playerY = g->Player_1.pos[1]+2;
+	int playerX = g->Player_1.stats.pos[0]+1;
+	int playerY = g->Player_1.stats.pos[1]+2;
 	
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glEnable(GL_POINT_SMOOTH);
