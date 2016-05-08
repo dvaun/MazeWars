@@ -7,14 +7,14 @@ CFLAGS = -I/usr/local/lib  -I/usr/include/malloc -g
 ##required for Arch linux: /usr/lib/libopenal.so
 LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm -l/usr/local/lib\
 		 libalut.a -L/usr/include/malloc\
-		 -lpng -lglu32 -lopengl32 #-lXrandr
+		 #-lXrandr
 else
 CFLAGS = -I ./include -g
 
 ##LIB    = ./libggfonts.so
 ##required for Arch linux: /usr/lib/libopenal.so
 LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm\
-			-lpng -lglu32 -lopengl32 #-lXrandr
+			#-lXrandr
 endif
 
 ##CFLAGS = -I ./include -g
