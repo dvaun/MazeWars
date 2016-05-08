@@ -208,6 +208,7 @@ void init_opengl(void)
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_FOG);
 	glDisable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
 	//
 	//Clear the screen to black
 	glClearColor(0.8, 0.8, 0.8, 1.0);
@@ -284,10 +285,8 @@ void pointPlayer(Game *g, int savex, int savey)
 {
 	//Make the player point at the cursor
 	exchangeGpos(&g->gun, &g->Player_1);
-	//g->gun.stats.gpos[0] = g->Player_1.stats.gpos[0];
-	//g->gun.stats.gpos[1] = g->Player_1.stats.gpos[1];
-	float weaponx = g->gun.stats.gpos[0];
-	float weapony = g->gun.stats.gpos[1];
+	float weaponx = g->Player_1.stats.spos[0];
+	float weapony = g->Player_1.stats.spos[1];
 
 	float nDeg = atan(((yres-savey)-(weapony))/\
 		((savex)-(weaponx))) * 180 / PI;
@@ -297,15 +296,15 @@ void pointPlayer(Game *g, int savex, int savey)
 	if (savex > weaponx && (yres - savey) < weapony)
 		nDeg -= 180;
 
-	if (g->gun.angle > 360.f)
-		g->gun.angle = 360.0f;
-	if (g->gun.angle <= 360.0f) {
+	if (g->gun.stats.angle > 360.f)
+		g->gun.stats.angle = 360.0f;
+	if (g->gun.stats.angle <= 360.0f) {
 		if (nDeg > 270)
 			nDeg -= 360;
-		g->gun.angle = nDeg + 90;
+		g->gun.stats.angle = nDeg + 90;
 	}
-	if (g->gun.angle < 0.0f)
-		g->gun.angle += 360.0f;
+	if (g->gun.stats.angle < 0.0f)
+		g->gun.stats.angle += 360.0f;
 }
 
 int check_keys(XEvent *e)
@@ -373,8 +372,8 @@ void physics(Game *g)
 			g->nbullets--;
 		}
 		//move the bullet
-		b->stats.gpos[0] += 6*b->vel[0];
-		b->stats.gpos[1] += 6*b->vel[1];
+		b->stats.gpos[0] += 6*b->stats.vel[0];
+		b->stats.gpos[1] += 6*b->stats.vel[1];
 
 	if (keys[XK_a] && (g->Player_1.Current_Health > 0)) {
 		g->Player_1.stats.angle += 4.0f;
@@ -483,6 +482,8 @@ void render(Game *g)
 		glPushMatrix();
 		glTranslatef(person.pos[0], person.pos[1], person.pos[2]);
 		glEnable(GL_ALPHA_TEST);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glBindTexture(GL_TEXTURE_2D, personTexture);
 		glBegin(GL_QUADS);

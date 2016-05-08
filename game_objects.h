@@ -56,14 +56,13 @@ struct Player {
 struct Weapon{
 	Stats stats;
 	const char* imagefile;
-	Weapon() {}
+	Weapon() {
+	}
 	~Weapon() {}
 };
 
 struct Bullet {
 	Stats stats;
-//Vec gpos;
-	Vec vel;
 	struct timespec time;
 	struct Bullet *prev;
 	struct Bullet *next;
