@@ -82,7 +82,7 @@ GLuint silhouetteTexture)
 			GL_UNSIGNED_BYTE, silhouetteData);
 	
 	free(silhouetteData);
-	GLuint tex_2d = SOIL_load_OGL_texture ("images/pikachu.png",
+	GLuint tex_2d = SOIL_load_OGL_texture("images/pikachu.png",
 					SOIL_LOAD_AUTO,
 					SOIL_CREATE_NEW_ID,
 					SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y |
