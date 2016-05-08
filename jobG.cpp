@@ -25,6 +25,7 @@
 #include <iostream>
 #include "ppm.h"
 #include <stdlib.h>
+#include "SOIL.h"
 
 unsigned char *buildAlphaData(Ppmimage *img)
 {
@@ -81,10 +82,12 @@ GLuint silhouetteTexture)
 			GL_UNSIGNED_BYTE, silhouetteData);
 	
 	free(silhouetteData);
-	/*
-	int width = 350;
-	int height = 350;
-	loadTexture("images/pikachu.png",width,height);*/
+	GLuint tex_2d = SOIL_load_OGL_texture ("images/pikachu.png",
+					SOIL_LOAD_AUTO,
+					SOIL_CREATE_NEW_ID,
+					SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y |
+					 SOIL_FLAG_NTSC_SAFE_RGB |
+					  SOIL_FLAG_COMPRESS_TO_DXT);
 
 }
 
