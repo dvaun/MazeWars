@@ -53,7 +53,7 @@ unsigned char *buildAlphaData(Ppmimage *img)
 void job_opengl(Ppmimage *personImage, GLuint personTexture, 
 GLuint silhouetteTexture)
 {
-	/*
+	
 	//Loading images -- commented out while looking for sprite
 	personImage = ppm6GetImage((char*)"images/test.ppm");
 	
@@ -82,10 +82,10 @@ GLuint silhouetteTexture)
 			GL_UNSIGNED_BYTE, silhouetteData);
 	
 	free(silhouetteData);
-	*/
+	/*
 	int width = 350;
 	int height = 350;
-	loadTexture("images/pikachu.png",width,height);
+	loadTexture("images/pikachu.png",width,height);*/
 
 }
 
