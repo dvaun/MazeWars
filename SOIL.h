@@ -423,8 +423,4 @@ const char*
 	);
 
 
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* HEADER_SIMPLE_OPENGL_IMAGE_LIBRARY	*/
