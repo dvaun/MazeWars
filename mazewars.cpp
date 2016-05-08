@@ -488,7 +488,7 @@ void render(Game *g)
 		//glAlphaFunc(GL_GREATER, 0.0f);
 		glBindTexture(GL_TEXTURE_2D, personTexture);
 		glBegin(GL_QUADS);
-		float w = 325;
+		float w = 350;
 			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(1.0f, 0.0f); glVertex2f( w, w);
 			glTexCoord2f(1.0f, 1.0f); glVertex2f( w, -w);
