@@ -206,6 +206,12 @@ void updateObjGposStat(OType otype)
 	otype.stats.gpos[0] = otype.stats.gpos[0] + otype.stats.vel[0];
 	otype.stats.gpos[1] = otype.stats.gpos[1] + otype.stats.vel[1];
 }
+template <typename OType>
+void updateObjGposStat(OType *otype)
+{
+	otype->stats.gpos[0] = otype->stats.gpos[0] + otype->stats.vel[0];
+	otype->stats.gpos[1] = otype->stats.gpos[1] + otype->stats.vel[1];
+}
 //
 //
 //
