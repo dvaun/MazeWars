@@ -2,7 +2,7 @@
 #define _JOBG_H_
 
 //Job Gomez
-#include "SOIL.h"
+#include "soil.h"
 #include "ppm.h"
 #include "game_objects.h"
 #include <GL/glx.h>

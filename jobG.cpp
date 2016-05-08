@@ -25,7 +25,7 @@
 #include <iostream>
 #include "ppm.h"
 #include <stdlib.h>
-#include "SOIL.h"
+#include "soil.h"
 
 unsigned char *buildAlphaData(Ppmimage *img)
 {
