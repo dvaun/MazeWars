@@ -31,6 +31,6 @@ void drawWhiteNum(float x, float y, float offsetx, float offsety, float printval
 	r.left = y + offsetx;
 	s = std::to_string(printvalue);
 	c = s.c_str();
-	ggprint8b(&r, 0x00ffffff, 0, "%s", c);
+	ggprint8b(&r, 0, 0x00ffffff, "%s", c);
 }
 #endif
