@@ -78,15 +78,15 @@ struct Bullet {
 	void operator=(Bullet x) {
 		stats.gpos[0] = x.stats.gpos[0];
 		stats.gpos[1] = x.stats.gpos[1];
-		vel[0] = x.vel[0];
-		vel[1] = x.vel[1];
+		stats.vel[0] = x.stats.vel[0];
+		stats.vel[1] = x.stats.vel[1];
 		time = x.time;
 	}
 	void operator=(Weapon x) {
 		stats.gpos[0] = x.stats.gpos[0];
 		stats.gpos[1] = x.stats.gpos[1];
-		vel[0] = x.stats.vel[0];
-		vel[1] = x.stats.vel[1];
+		stats.vel[0] = x.stats.vel[0];
+		stats.vel[1] = x.stats.vel[1];
 	}
 	void draw(float x, float y, Stats stats) {
 		printf("x:%f y:%f\n", x, y);
