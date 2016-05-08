@@ -5,8 +5,8 @@
  #include <GL/glu.h>
  #include <png.h>
  #include <cstdio>
- #include <string>
+ #include <cstring>
 
-GLuint loadTexture(const string filename, int &width, int &height);
+GLuint loadTexture(const std::string filename, int &width, int &height);
 
 #endif
