@@ -450,7 +450,7 @@ void physics(Game *g)
 		//Update Player_1 position
 		//g->Player_1.stats.gpos[0] += g->Player_1.stats.vel[0];
 		//g->Player_1.stats.gpos[1] += g->Player_1.stats.vel[1];
-		updateObjGposStat(&g->Player_1.stats);
+		updateObjGposStat(&g->Player_1);
 		updateObjGposStat(&g->gun);
 		//g->gun.stats.gpos[0] += g->gun.stats.vel[0];
 		//g->gun.stats.gpos[1] += g->gun.stats.vel[1];
