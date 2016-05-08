@@ -25,7 +25,6 @@
 #include <iostream>
 #include "ppm.h"
 #include <stdlib.h>
-#include "pngloader.h"
 
 unsigned char *buildAlphaData(Ppmimage *img)
 {

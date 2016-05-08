@@ -19,7 +19,7 @@ endif
 
 ##CFLAGS = -I ./include -g
 
-LIB    = ./libggfonts.a
+LIB    = ./lib/libggfonts.a ./lib/libSOIL.a
 CPPFILES = mazewars.cpp textrender.cpp pngloader.cpp
 ##required for Arch linux: /usr/lib/libopenal.so
 ##LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
