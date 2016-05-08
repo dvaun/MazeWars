@@ -21,7 +21,7 @@ using namespace std;
 * 					should be validated by the client of this function.
 * 
 */
-GLuint loadTexture(const string filename, int &width, int &height) 
+GLuint loadTexture(const std::string filename, int &width, int &height) 
 {
   //header for testing if it is a png
   png_byte header[8];
