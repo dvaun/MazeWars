@@ -117,7 +117,7 @@ int main(void)
 		begin_game(game, gbi);
 		Joystick joystick;
 		init(&game);
-		printf("%d\n",g->Player_1.stats.color[0]);
+		printf("%f\n",g->Player_1.stats.color[0]);
 		srand(time(NULL));
 		clock_gettime(CLOCK_REALTIME, &timePause);
 		clock_gettime(CLOCK_REALTIME, &timeStart);
