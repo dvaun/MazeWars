@@ -6,6 +6,8 @@
 #include <png.h>
 #include <cstdio>
 #include <cstring>
+#include <sstream>
+#include <stdlib.h>
 
 #define TEXTURE_LOAD_ERROR 0
 
