@@ -131,13 +131,10 @@ struct Bullet {
 	~Bullet() {}
 };
 struct Monster {
-	Stats stats
+	Stats stats;
 	void draw() {
-		
+
 	}
-	stuff
-	stuff
-	stuff
 }
 struct Game {
 	Player Player_1;
