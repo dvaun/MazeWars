@@ -27,6 +27,8 @@ struct Player {
 		pos[0] = 625;
 		pos[1] = 450;
 		pos[2] = 0.0f;
+		stats.gpos[0] = 500;
+		stats.gpos[1] = 500;
 		stats.color[0] = 130;
 		stats.color[1] = 240;
 		stats.color[2] = 30;

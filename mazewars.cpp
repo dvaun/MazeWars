@@ -358,8 +358,8 @@ void check_mouse(XEvent *e, Game *g)
 void pointPlayer(Game *g, int savex, int savey)
 {
 //Make the player point at the cursor
-	g->gun.pos[0] = g->Player_1.pos[0];
-	g->gun.pos[1] = g->Player_1.pos[1];
+	g->gun.pos[0] = g->Player_1.gpos[0];
+	g->gun.pos[1] = g->Player_1.gpos[1];
 	float weaponx = g->gun.pos[0];
 	float weapony = g->gun.pos[1];
 
