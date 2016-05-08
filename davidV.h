@@ -46,20 +46,58 @@ void init_blocks(Game *, gblock_info);
 //
 //***************************************
 //***************************************
-template <class T>
-class Class
+//***************************************
+//***************************************
+//
+// Operator= section, exchanging stats
+// -- Many of these templates may just be
+// copy-pasted to adjust for pointer obj
+// -ects, only because I haven't figured
+// out how to detect for pointer type
+// inside the template functions.
+//
+//***************************************
+//***************************************
+template <typename Receiver>
+template <typename Source>
+void exchangeGpos(Receiver receiver, Source source)
 {
-	public:
-	Class(const Class &){}
-	Class & operator=(const Class& c){return *this;}
-};
-
-template<typename T>
-struct is_pointer { static const bool value = false; };
-
-template<typename T>
-struct is_pointer<T*> { static const bool value = true; };
-
+	receiver.stats.gpos[0] = source.stats.gpos[0];
+	receiver.stats.gpos[1] = source.stats.gpos[1];
+	receiver.stats.gpos[2] = source.stats.gpos[2];
+}
+template <typename Receiver>
+template <typename Source>
+void exchangeGpos(Receiver receiver, Source source)
+{
+	receiver->stats.gpos[0] = source.stats.gpos[0];
+	receiver->stats.gpos[1] = source.stats.gpos[1];
+	receiver->stats.gpos[2] = source.stats.gpos[2];
+}
+template <typename Receiver>
+template <typename Source>
+void exchangeGpos(Receiver receiver, Source source)
+{
+	receiver->stats.gpos[0] = source->stats.gpos[0];
+	receiver->stats.gpos[1] = source->stats.gpos[1];
+	receiver->stats.gpos[2] = source->stats.gpos[2];
+}
+template <typename Receiver>
+template <typename Source>
+void exchangeGpos(Receiver receiver, Source source)
+{
+	receiver.stats.gpos[0] = source->stats.gpos[0];
+	receiver.stats.gpos[1] = source->stats.gpos[1];
+	receiver.stats.gpos[2] = source->stats.gpos[2];
+}
+//***************************************
+//***************************************
+//
+// Drawing section, including distance
+// checkers and some other stuff
+//
+//***************************************
+//***************************************
 // Checks the distance for objects via their stats
 // will be used in draw function and likely physics
 template <typename OType>
@@ -153,9 +191,8 @@ void drawOType(OType otype, Game *g)
 	stats = otype.stats;
 	if (checkPlayerDistanceOType(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
-		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
-		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
-		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
+		xdist = p.stats.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.stats.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
 		otype.draw(xdist, ydist, stats);
 	}
 }
@@ -169,9 +206,8 @@ void drawOType(OType *otype, Game *g)
 	stats = otype->stats;
 	if (checkPlayerDistanceOType(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
-		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
-		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
-		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
+		xdist = p.stats.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.stats.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
 		otype->draw(xdist, ydist, stats);
 	}
 }

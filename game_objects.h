@@ -13,9 +13,6 @@ typedef int Explosive;
 
 struct Player {
 	Stats stats;
-	Vec dir;
-	Vec pos;
-	float angle;
 	PowerUp P_UP[3];
 	int Max_Health;
 	int Current_Health;
@@ -24,9 +21,9 @@ struct Player {
 	Explosive P_Secondary;
 	Player() {
 		VecZero(dir);
-		pos[0] = 625;
-		pos[1] = 450;
-		pos[2] = 0.0f;
+		stats.spos[0] = 625;
+		stats.spos[1] = 450;
+		stats.spos[2] = 0.0f;
 		stats.gpos[0] = 500;
 		stats.gpos[1] = 500;
 		stats.color[0] = 130;
