@@ -55,15 +55,8 @@ struct Player {
 
 struct Weapon{
 	Stats stats;
-	Vec dir;
-	float angle;
-	Weapon(){
-		VecZero(dir);
-		stats.gpos[0] = 0;
-		stats.gpos[1] = 0;
-		VecZero(stats.vel);
-		angle = 0.0;
-	}
+	const char* imagefile;
+	Weapon() {}
 	~Weapon() {}
 };
 
