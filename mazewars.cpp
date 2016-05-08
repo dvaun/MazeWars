@@ -232,7 +232,7 @@ void init_opengl(void)
 		glDisable(GL_CULL_FACE);
 		//
 		//Clear the screen to black
-		glClearColor(0.0, 0.0, 0.0, 1.0);
+		glClearColor(0.8, 0.8, 0.8, 1.0);
 		//Do this to allow fonts
 		glEnable(GL_TEXTURE_2D);
 		initialize_fonts();
@@ -257,6 +257,8 @@ void init(Game *g)
 		clock_gettime(CLOCK_REALTIME, &g->bulletTimer);
 		memset(keys, 0, 65536);
 		g->Player_1.stats.color[0] = 255;
+		g->Player_1.stats.spos[0] = 625;
+		g->Player_1.stats.spos[1] = 450;
 		printf("%f\n",g->Player_1.stats.color[0]);
 }
 
