@@ -448,7 +448,7 @@ int check_keys(XEvent *e)
 
 void physics(Game *g)
 {
-		//Update Player_1.sposition
+		//Update Player_1.stats.sposition
 		//g->Player_1.stats.gpos[0] += g->Player_1.stats.vel[0];
 		//g->Player_1.stats.gpos[1] += g->Player_1.stats.vel[1];
 		updateObjGposStat(&g->Player_1);
@@ -456,17 +456,17 @@ void physics(Game *g)
 		//g->gun.stats.gpos[0] += g->gun.stats.vel[0];
 		//g->gun.stats.gpos[1] += g->gun.stats.vel[1];
 		//Check for collision with window edges
-		if (g->Player_1.spos[0] < 0.0f) {
-				g->Player_1.spos[0] += (float)xres;
+		if (g->Player_1.stats.spos[0] < 0.0f) {
+				g->Player_1.stats.spos[0] += (float)xres;
 		}
-		else if (g->Player_1.spos[0] > (float)xres) {
-				g->Player_1.spos[0] -= (float)xres;
+		else if (g->Player_1.stats.spos[0] > (float)xres) {
+				g->Player_1.stats.spos[0] -= (float)xres;
 		}
-		else if (g->Player_1.spos[1] < 0.0f) {
-				g->Player_1.spos[1] += (float)yres;
+		else if (g->Player_1.stats.spos[1] < 0.0f) {
+				g->Player_1.stats.spos[1] += (float)yres;
 		}
-		else if (g->Player_1.spos[1] > (float)yres) {
-				g->Player_1.spos[1] -= (float)yres;
+		else if (g->Player_1.stats.spos[1] > (float)yres) {
+				g->Player_1.stats.spos[1] -= (float)yres;
 		}
 		//
 		//
