@@ -374,7 +374,7 @@ void physics(Game *g)
 		//move the bullet
 		b->stats.gpos[0] += 6*b->stats.vel[0];
 		b->stats.gpos[1] += 6*b->stats.vel[1];
-
+	}
 	if (keys[XK_a] && (g->Player_1.Current_Health > 0)) {
 		g->Player_1.stats.angle += 4.0f;
 		if (g->Player_1.stats.angle >= 360.0f)
@@ -423,8 +423,8 @@ void physics(Game *g)
 			timeCopy(&b->time, &bt);
 			b->stats.gpos[0] = g->gun.stats.gpos[0];
 			b->stats.gpos[1] = g->gun.stats.gpos[1];
-			b->vel[0] = g->gun.stats.vel[0];
-			b->vel[1] = g->gun.stats.vel[1];
+			b->stats.vel[0] = g->gun.stats.vel[0];
+			b->stats.vel[1] = g->gun.stats.vel[1];
 			//convert Player_1.stats.angle to radians
 			Flt rad = ((g->gun.angle+90.0f) / 360.0f) * PI * 2.0f;
 			//convert angle to a vector
@@ -432,8 +432,8 @@ void physics(Game *g)
 			Flt ydir = sin(rad);
 			b->stats.gpos[0] += xdir*20.0f;
 			b->stats.gpos[1] += ydir*20.0f;
-			b->vel[0] += xdir*6.0f + rnd()*0.1f;
-			b->vel[1] += ydir*6.0f + rnd()*0.1f;
+			b->stats.vel[0] += xdir*6.0f + rnd()*0.1f;
+			b->stats.vel[1] += ydir*6.0f + rnd()*0.1f;
 			b->stats.color[0] = 1.0f;
 			b->stats.color[1] = 1.0f;
 			b->stats.color[2] = 1.0f;
