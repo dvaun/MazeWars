@@ -436,7 +436,7 @@ int check_keys(XEvent *e)
 }
 
 /*void movement(Game *g) {
-  Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
+  Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 
   Flt xdir = cos(rad);
   Flt ydir = sin(rad);
@@ -448,7 +448,7 @@ int check_keys(XEvent *e)
 
 void physics(Game *g)
 {
-		//Update Player_1 position
+		//Update Player_1.sposition
 		//g->Player_1.stats.gpos[0] += g->Player_1.stats.vel[0];
 		//g->Player_1.stats.gpos[1] += g->Player_1.stats.vel[1];
 		updateObjGposStat(&g->Player_1);
@@ -456,17 +456,17 @@ void physics(Game *g)
 		//g->gun.stats.gpos[0] += g->gun.stats.vel[0];
 		//g->gun.stats.gpos[1] += g->gun.stats.vel[1];
 		//Check for collision with window edges
-		if (g->Player_1.pos[0] < 0.0f) {
-				g->Player_1.pos[0] += (float)xres;
+		if (g->Player_1.spos[0] < 0.0f) {
+				g->Player_1.spos[0] += (float)xres;
 		}
-		else if (g->Player_1.pos[0] > (float)xres) {
-				g->Player_1.pos[0] -= (float)xres;
+		else if (g->Player_1.spos[0] > (float)xres) {
+				g->Player_1.spos[0] -= (float)xres;
 		}
-		else if (g->Player_1.pos[1] < 0.0f) {
-				g->Player_1.pos[1] += (float)yres;
+		else if (g->Player_1.spos[1] < 0.0f) {
+				g->Player_1.spos[1] += (float)yres;
 		}
-		else if (g->Player_1.pos[1] > (float)yres) {
-				g->Player_1.pos[1] -= (float)yres;
+		else if (g->Player_1.spos[1] > (float)yres) {
+				g->Player_1.spos[1] -= (float)yres;
 		}
 		//
 		//
@@ -505,18 +505,18 @@ void physics(Game *g)
 		//---------------------------------------------------
 		//check keys pressed now
 		if (keys[XK_a] && (g->Player_1.Current_Health > 0)) {
-				g->Player_1.angle += 4.0f;
-				if (g->Player_1.angle >= 360.0f)
-						g->Player_1.angle -= 360.0f;
+				g->Player_1.stats.angle += 4.0f;
+				if (g->Player_1.stats.angle >= 360.0f)
+						g->Player_1.stats.angle -= 360.0f;
 		}
 		if (keys[XK_d] && (g->Player_1.Current_Health > 0)) {
-				g->Player_1.angle -= 4.0f;
-				if (g->Player_1.angle < 0.0f)
-						g->Player_1.angle += 360.0f;
+				g->Player_1.stats.angle -= 4.0f;
+				if (g->Player_1.stats.angle < 0.0f)
+						g->Player_1.stats.angle += 360.0f;
 		}
 		if (keys[XK_w] && (g->Player_1.Current_Health > 0)) {
-				//convert Player_1 angle to radians
-				Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
+				//convert Player_1.stats.angle to radians
+				Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 				//convert angle to a vector
 				Flt xdir = cos(rad);
 				Flt ydir = sin(rad);
@@ -529,8 +529,8 @@ void physics(Game *g)
 				g->Player_1.stats.vel[1] = 0;
 		}
 		if (keys[XK_s] && (g->Player_1.Current_Health > 0)) {
-				//convert Player_1 angle to radians
-				Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * PI * 2.0f;
+				//convert Player_1.stats.angle to radians
+				Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 				//convert angle to a vector
 				Flt xdir = cos(rad);
 				Flt ydir = sin(rad);
@@ -556,7 +556,7 @@ void physics(Game *g)
 						b->stats.gpos[1] = g->gun.stats.gpos[1];
 						b->vel[0] = g->gun.stats.vel[0];
 						b->vel[1] = g->gun.stats.vel[1];
-						//convert Player_1 angle to radians
+						//convert Player_1.stats.angle to radians
 						Flt rad = ((g->gun.angle+90.0f) / 360.0f) * PI * 2.0f;
 						//convert angle to a vector
 						Flt xdir = cos(rad);

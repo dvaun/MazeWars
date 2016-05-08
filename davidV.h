@@ -187,8 +187,8 @@ void drawOType(OType otype, Game *g)
 	stats = otype.stats;
 	if (checkPlayerDistanceOType(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
-		xdist = p.stats.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
-		ydist = p.stats.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
+		xdist = p.stats.spos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.stats.spos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
 		otype.draw(xdist, ydist, stats);
 	}
 }
@@ -202,8 +202,8 @@ void drawOType(OType *otype, Game *g)
 	stats = otype->stats;
 	if (checkPlayerDistanceOType(otype, g, g->g_xres/2,g->g_yres/2)) {
 		float xdist, ydist;
-		xdist = p.stats.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
-		ydist = p.stats.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
+		xdist = p.stats.spos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
+		ydist = p.stats.spos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
 		otype->draw(xdist, ydist, stats);
 	}
 }

@@ -129,8 +129,8 @@ void drawPlayer(Player p)
 		glVertex2f(0.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
-	drawText(p.stats.pos[0],p.stats.pos[1],10,10,p.stats.gpos[0]);
-	drawText(p.stats.pos[0],p.stats.pos[1],10,-10,p.stats.gpos[1]);
+	drawText(p.stats.spos[0],p.stats.spos[1],10,10,p.stats.gpos[0]);
+	drawText(p.stats.spos[0],p.stats.spos[1],10,-10,p.stats.gpos[1]);
 }
 
 void assign_gblock(gblock &block, Stats &stats, int type, int row, int col)
@@ -333,8 +333,8 @@ void drawStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
 	float xdist, ydist;
-	xdist = g->Player_1.pos[0] + (stats.gpos[0] - g->Player_1.stats.gpos[0] - stats.width);
-	ydist = g->Player_1.pos[1] + (stats.gpos[1] - g->Player_1.stats.gpos[1] - stats.width);
+	xdist = g->Player_1.spos[0] + (stats.gpos[0] - g->Player_1.stats.gpos[0] - stats.width);
+	ydist = g->Player_1.spos[1] + (stats.gpos[1] - g->Player_1.stats.gpos[1] - stats.width);
 	float size = stats.width;
 	glColor3f((int)stats.color[0], (int)stats.color[1],
 		(int)stats.color[2]);

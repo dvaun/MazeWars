@@ -32,7 +32,7 @@ struct Player {
 			stats.color[2]);
 		glPushMatrix();
 		glTranslatef(x, y, 0);
-		glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		glRotatef(stats.angle, 0.0f, 0.0f, 1.0f);
 		glBegin(GL_TRIANGLES);
 			glVertex2f(-12.0f, -10.0f);
 			glVertex2f(  0.0f,  20.0f);

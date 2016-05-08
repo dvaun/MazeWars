@@ -44,7 +44,7 @@ void getJoystickEvent(JoystickEvent event, int joy[], int axis[])
 
 void movement(Game *g) 
 {
-	Flt rad = ((g->Player_1.angle+90.0f) / 360.0f) * M_PI * 2.0f;
+	Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * M_PI * 2.0f;
 
 	Flt xdir = cos(rad);
 	Flt ydir = sin(rad);	
@@ -90,8 +90,8 @@ void checkController(int axis[], Game *g)
 void renderCrosshair(int axis[], Game *g, bool keyboard) 
 {
 		int radius = 40;
-		int playerX = g->Player_1.stats.pos[0]+1;
-		int playerY = g->Player_1.stats.pos[1]+2;
+		int playerX = g->Player_1.stats.spos[0]+1;
+		int playerY = g->Player_1.stats.spos[1]+2;
 		
 		//Draw Crosshair for aiming
 		if(keyboard == false) 
@@ -119,8 +119,8 @@ void renderCrosshair(int axis[], Game *g, bool keyboard)
 void renderShield(Game *g) 
 {
 	int radius = 40;
-	int playerX = g->Player_1.stats.pos[0]+1;
-	int playerY = g->Player_1.stats.pos[1]+2;
+	int playerX = g->Player_1.stats.spos[0]+1;
+	int playerY = g->Player_1.stats.spos[1]+2;
 	
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glEnable(GL_POINT_SMOOTH);
