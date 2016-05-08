@@ -75,9 +75,9 @@ struct Bullet {
 	struct Bullet *prev;
 	struct Bullet *next;
 	Bullet() {
-		stats.color[0] = 255;
-		stats.color[1] = 255;
-		stats.color[2] = 255;
+		stats.color[0] = 50;
+		stats.color[1] = 100;
+		stats.color[2] = 150;
 		stats.width = 1;
 		stats.height = 1;
 		prev = NULL;
