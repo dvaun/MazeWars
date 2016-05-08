@@ -6,7 +6,8 @@ CFLAGS = -I/usr/local/lib  -I/usr/include/malloc -g
 ##LIB    = ./libggfonts.so
 ##required for Arch linux: /usr/lib/libopenal.so
 LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm -l/usr/local/lib\
-		 libalut.a -L/usr/include/malloc #-lXrandr	
+		 libalut.a -L/usr/include/malloc\
+		 -lpng -lglu32 -lopengl32#-lXrandr
 else
 CFLAGS = -I ./include -g
 
