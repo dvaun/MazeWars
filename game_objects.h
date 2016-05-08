@@ -7,6 +7,7 @@
 //#include "davidV.cpp"
 #include "Power_up.h"
 #include <GL/glx.h>
+#include <stdio.h>
 #include "textrender.h"
 
 typedef int Explosive;
