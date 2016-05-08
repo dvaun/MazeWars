@@ -7,7 +7,7 @@ CFLAGS = -I/usr/local/lib  -I/usr/include/malloc -g
 ##required for Arch linux: /usr/lib/libopenal.so
 LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm -l/usr/local/lib\
 		 libalut.a -L/usr/include/malloc\
-		 -lpng -lglu32 -lopengl32#-lXrandr
+		 -lpng -lglu32 -lopengl32 #-lXrandr
 else
 CFLAGS = -I ./include -g
 
@@ -44,7 +44,7 @@ staticLib: fonts.o fonttex.o
 	ar -cvq libggfonts.a fonts.o fonttex.o
 
 
-mazewars: mazewars.cpp ppm.c log.c defs.h fonts/fonts.h fonts/fonts.o fonts/fonttex.o
+mazewars: mazewars.cpp ppm.c log.c defs.h fonts/fonts.h fonts/fonts.o fonts/fonttex.o pngloader.cpp
 	g++ $(CFLAGS) matthewG.cpp davidV.cpp ppm.c jobG.cpp roseP.cpp fonttex.o fonts/fonts.cpp $(CPPFILES) $(LIB) log.c\
 			/usr/lib/x86_64-linux-gnu/libopenal.so /usr/lib/libalut.so\
 			joystick.cc -Wall -std=c++11 -Wextra $(LFLAGS)\
