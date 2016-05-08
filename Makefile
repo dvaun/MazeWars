@@ -13,7 +13,8 @@ CFLAGS = -I ./include -g
 
 ##LIB    = ./libggfonts.so
 ##required for Arch linux: /usr/lib/libopenal.so
-LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
+LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm\
+			-lpng -lglu32 -lopengl32 #-lXrandr
 endif
 
 ##CFLAGS = -I ./include -g
