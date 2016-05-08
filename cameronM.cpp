@@ -144,8 +144,8 @@ void Restart(Player *x)
 {
 	x->Current_Health = 100;
 	x->Current_Ammo = 100;
-	x->spos[0] = 625;
-	x->spos[1] = 450;
+	x->stats.spos[0] = 625;
+	x->stats.spos[1] = 450;
 	x->stats.gpos[0] = 500;
 	x->stats.gpos[1] = 500;
 	VecZero(x->stats.dir);
