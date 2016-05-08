@@ -28,7 +28,7 @@ struct Player {
 		P_UP[2] = 0;
 	}
 	void draw(float x, float y, Stats stats) {
-		glColor3f((float) stats.color[0],(float) stats.color[1],(float) \
+		glColor3f((float) stats.color[0],255,(float) \
 			stats.color[2]);
 		glPushMatrix();
 		glTranslatef(x, y, 0);
