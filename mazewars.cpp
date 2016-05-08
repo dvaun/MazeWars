@@ -8,7 +8,6 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
-#include "pngloader.h"
 #include "ppm.h"
 #include "log.h"
 //#include "Weapon.h"
