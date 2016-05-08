@@ -70,6 +70,7 @@ typedef struct game_block_type {
 		stats.width = gb.stats.width;
 		stats.height = gb.stats.height;
 	}
+	~game_block_type() {}
 } gblock;
 
 typedef struct game_camera {

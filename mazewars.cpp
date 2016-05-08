@@ -450,6 +450,8 @@ void physics(Game *g)
 		//Update Player_1 position
 		g->Player_1.stats.gpos[0] += g->Player_1.stats.vel[0];
 		g->Player_1.stats.gpos[1] += g->Player_1.stats.vel[1];
+		updateObjGposStat(&g->Player_1.stats);
+		updateObjGposStat(&g->gun);
 		g->gun.pos[0] += g->gun.vel[0];
 		g->gun.pos[1] += g->gun.vel[1];
 		//Check for collision with window edges

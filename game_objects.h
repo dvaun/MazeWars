@@ -62,21 +62,21 @@ struct Player {
 		drawWhiteNum(x,y,10,10,x);
 		drawWhiteNum(x,y,10,-10,y);
 	}
+	~Player() {}
 };
 
 struct Weapon{
+	Stats stats;
 	Vec dir;
-	Vec pos;
-	Vec vel;
 	float angle;
 	Weapon(){
 		VecZero(dir);
-		pos[0] = (Flt)(40);
-		pos[1] = (Flt)(40);
-		pos[2] = 0.0f;
-		VecZero(vel);
+		stats.gpos[0] = 0;
+		stats.gpos[1] = 0;
+		VecZero(stats.vel);
 		angle = 0.0;
 	}
+	~Weapon() {}
 };
 
 struct Bullet {
@@ -128,6 +128,7 @@ struct Bullet {
 		glEnd();
 		glPopMatrix();
 	}
+	~Bullet() {}
 };
 
 struct Game {
@@ -148,6 +149,7 @@ struct Game {
 		g_xres = 1250;
 		g_yres = 900;
 	}
+	~Game() {}
 };
 
 #endif
