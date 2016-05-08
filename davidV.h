@@ -66,21 +66,21 @@ void exchangeGpos(Receiver receiver, Source source)
 	receiver.stats.gpos[2] = source.stats.gpos[2];
 }
 template <typename Receiver, typename Source>
-void exchangeGpos(Receiver receiver, Source source)
+void exchangeGpos(Receiver *receiver, Source source)
 {
 	receiver->stats.gpos[0] = source.stats.gpos[0];
 	receiver->stats.gpos[1] = source.stats.gpos[1];
 	receiver->stats.gpos[2] = source.stats.gpos[2];
 }
 template <typename Receiver, typename Source>
-void exchangeGpos(Receiver receiver, Source source)
+void exchangeGpos(Receiver *receiver, Source *source)
 {
 	receiver->stats.gpos[0] = source->stats.gpos[0];
 	receiver->stats.gpos[1] = source->stats.gpos[1];
 	receiver->stats.gpos[2] = source->stats.gpos[2];
 }
 template <typename Receiver, typename Source>
-void exchangeGpos(Receiver receiver, Source source)
+void exchangeGpos(Receiver receiver, Source *source)
 {
 	receiver.stats.gpos[0] = source->stats.gpos[0];
 	receiver.stats.gpos[1] = source->stats.gpos[1];
