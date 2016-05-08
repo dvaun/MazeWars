@@ -19,7 +19,7 @@ endif
 ##CFLAGS = -I ./include -g
 
 LIB    = ./libggfonts.a
-CPPFILES = mazewars.cpp textrender.cpp
+CPPFILES = mazewars.cpp textrender.cpp pngloader.cpp
 ##required for Arch linux: /usr/lib/libopenal.so
 ##LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 
@@ -44,7 +44,7 @@ staticLib: fonts.o fonttex.o
 	ar -cvq libggfonts.a fonts.o fonttex.o
 
 
-mazewars: mazewars.cpp ppm.c log.c defs.h fonts/fonts.h fonts/fonts.o fonts/fonttex.o 
+mazewars: mazewars.cpp ppm.c log.c defs.h fonts/fonts.h fonts/fonts.o fonts/fonttex.o
 	g++ $(CFLAGS) matthewG.cpp davidV.cpp ppm.c jobG.cpp roseP.cpp fonttex.o fonts/fonts.cpp $(CPPFILES) $(LIB) log.c\
 			/usr/lib/x86_64-linux-gnu/libopenal.so /usr/lib/libalut.so\
 			joystick.cc -Wall -std=c++11 -Wextra $(LFLAGS)\
