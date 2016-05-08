@@ -359,10 +359,10 @@ void check_mouse(XEvent *e, Game *g)
 void pointPlayer(Game *g, int savex, int savey)
 {
 	//Make the player point at the cursor
-	g->gun.pos[0] = g->Player_1.stats.gpos[0];
-	g->gun.pos[1] = g->Player_1.stats.gpos[1];
-	float weaponx = g->gun.pos[0];
-	float weapony = g->gun.pos[1];
+	g->gun.stats.gpos[0] = g->Player_1.stats.gpos[0];
+	g->gun.stats.gpos[1] = g->Player_1.stats.gpos[1];
+	float weaponx = g->gun.stats.gpos[0];
+	float weapony = g->gun.stats.gpos[1];
 
 	float nDeg = atan(((yres-savey)-(weapony))/\
 					((savex)-(weaponx))) * 180 / PI;
@@ -448,12 +448,12 @@ int check_keys(XEvent *e)
 void physics(Game *g)
 {
 		//Update Player_1 position
-		g->Player_1.stats.gpos[0] += g->Player_1.stats.vel[0];
-		g->Player_1.stats.gpos[1] += g->Player_1.stats.vel[1];
+		//g->Player_1.stats.gpos[0] += g->Player_1.stats.vel[0];
+		//g->Player_1.stats.gpos[1] += g->Player_1.stats.vel[1];
 		updateObjGposStat(&g->Player_1.stats);
 		updateObjGposStat(&g->gun);
-		g->gun.pos[0] += g->gun.vel[0];
-		g->gun.pos[1] += g->gun.vel[1];
+		//g->gun.stats.gpos[0] += g->gun.stats.vel[0];
+		//g->gun.stats.gpos[1] += g->gun.stats.vel[1];
 		//Check for collision with window edges
 		if (g->Player_1.pos[0] < 0.0f) {
 				g->Player_1.pos[0] += (float)xres;
@@ -551,10 +551,10 @@ void physics(Game *g)
 						//shoot a bullet...
 						Bullet *b = &g->barr[g->nbullets];
 						timeCopy(&b->time, &bt);
-						b->stats.gpos[0] = g->gun.pos[0];
-						b->stats.gpos[1] = g->gun.pos[1];
-						b->vel[0] = g->gun.vel[0];
-						b->vel[1] = g->gun.vel[1];
+						b->stats.gpos[0] = g->gun.stats.gpos[0];
+						b->stats.gpos[1] = g->gun.stats.gpos[1];
+						b->vel[0] = g->gun.stats.vel[0];
+						b->vel[1] = g->gun.stats.vel[1];
 						//convert Player_1 angle to radians
 						Flt rad = ((g->gun.angle+90.0f) / 360.0f) * PI * 2.0f;
 						//convert angle to a vector
