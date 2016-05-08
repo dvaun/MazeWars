@@ -40,7 +40,7 @@ struct Player {
 		P_UP[1] = 0;
 		P_UP[2] = 0;
 	}
-	void draw(float x, float y, float angle, Vec ppos) {
+	void draw(float x, float y, Stats stats) {
 		glColor3f((float) stats.color[0],(float) stats.color[1],(float) \
 			stats.color[2]);
 		glPushMatrix();
@@ -108,7 +108,7 @@ struct Bullet {
 		vel[0] = x.stats.vel[0];
 		vel[1] = x.stats.vel[1];
 	}
-	void draw(float x, float y, float angle, Vec ppos) {
+	void draw(float x, float y, Stats stats) {
 		glColor3f(stats.color[0], stats.color[1],
 				stats.color[2]);
 		glPushMatrix();

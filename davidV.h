@@ -156,7 +156,7 @@ void drawOType(OType otype, Game *g)
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
 		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
-		otype.draw(xdist, ydist, p.angle, p.pos);
+		otype.draw(xdist, ydist, stats);
 	}
 }
 
@@ -172,7 +172,7 @@ void drawOType(OType *otype, Game *g)
 		glColor3f(stats.color[0],stats.color[1],stats.color[2]);
 		xdist = p.pos[0] + (stats.gpos[0] - p.stats.gpos[0] - stats.width);
 		ydist = p.pos[1] + (stats.gpos[1] - p.stats.gpos[1] - stats.height);
-		otype->draw(xdist, ydist, p.angle, p.pos);
+		otype->draw(xdist, ydist, stats);
 	}
 }
 

@@ -12,15 +12,27 @@ struct Stats {
 	double radius;
 	double speed;
 	double angle;
+	Vec dir;
+	Vec spos;
 	Vec vel;
 	Vec gpos;
 	Vec color;
 	const char* image;
 	Stats() {
+		angle = 0;
 		width = 0;
 		height = 0;
 		radius = 0;
 		speed = 0;
+		dir[0] = 0;
+		dir[1] = 0;
+		dir[2] = 0;
+		vel[0] = 0;
+		vel[1] = 0;
+		vel[2] = 0;
+		spos[0] = 0;
+		spos[1] = 0;
+		spos[2] = 0;
 		gpos[0] = 0;
 		gpos[1] = 0;
 		gpos[2] = 0;
