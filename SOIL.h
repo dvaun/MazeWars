@@ -40,9 +40,6 @@
 #ifndef HEADER_SIMPLE_OPENGL_IMAGE_LIBRARY
 #define HEADER_SIMPLE_OPENGL_IMAGE_LIBRARY
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
 	The format of images that may be loaded (force_channels).
