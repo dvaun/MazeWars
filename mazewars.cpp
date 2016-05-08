@@ -257,7 +257,7 @@ void init(Game *g)
 		clock_gettime(CLOCK_REALTIME, &g->bulletTimer);
 		memset(keys, 0, 65536);
 		g->Player_1.stats.color[0] = 255;
-		printf("%d\n",g->Player_1.stats.color[0]);
+		printf("%f\n",g->Player_1.stats.color[0]);
 }
 
 void normalize(Vec v) 
