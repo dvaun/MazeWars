@@ -426,7 +426,7 @@ void physics(Game *g)
 			b->stats.vel[0] = g->gun.stats.vel[0];
 			b->stats.vel[1] = g->gun.stats.vel[1];
 			//convert Player_1.stats.angle to radians
-			Flt rad = ((g->gun.angle+90.0f) / 360.0f) * PI * 2.0f;
+			Flt rad = ((g->gun.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 			//convert angle to a vector
 			Flt xdir = cos(rad);
 			Flt ydir = sin(rad);
