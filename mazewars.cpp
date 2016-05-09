@@ -464,13 +464,6 @@ void render(Game *g)
 	if (joy[4] || keys[XK_b]) 
 		renderShield(g);
 
-	//Draw the bullets
-	for (int i=0; i<g->nbullets; i++) {
-		Bullet *b = &g->barr[i];
-		if (b != NULL) {
-			drawOType(b, g);
-		}
-	}
 	drawHealth(g->Player_1);
 	drawAmmo(g->Player_1);
 	if(g->Player_1.Current_Health == 0)
@@ -498,4 +491,13 @@ void render(Game *g)
 		glPopMatrix();
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	for (int i=0; i<g->nbullets; i++) {
+		Bullet *b = &g->barr[i];
+		if (b != NULL) {
+			//drawOType(b, g);
+			drawBullet(g, b, 1.0, 0.0, 0.0);
+		}
+	}
 }

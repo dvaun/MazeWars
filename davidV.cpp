@@ -85,10 +85,10 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 	//Stats *bullet = b->stats;
 	//setColor(*bullet);
 	float xdist, ydist;
-	glColor3f(1.0, 1.0, 1.0);
+	//glColor3f(red, green, blue);
 	xdist = 625 + (b->stats.gpos[0] - g->Player_1.stats.gpos[0] - 1.0);
 	ydist = 450 + (b->stats.gpos[1] - g->Player_1.stats.gpos[1] - 1.0);
-	glTranslatef(xdist,ydist,b->stats.gpos[2]);
+	//glTranslatef(xdist,ydist, 0);
 	glBegin(GL_POINTS);
 		glVertex2f(xdist, ydist);
 		glVertex2f(xdist-1.0f, ydist);
@@ -101,6 +101,7 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 		glVertex2f(xdist+1.0f, ydist-1.0f);
 		glVertex2f(xdist+1.0f, ydist+1.0f);
 	glEnd();
+
 }
 
 // Cameron wrote some player render code w/Gordons
@@ -112,7 +113,7 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 void drawPlayer(Player p)
 {
 	glColor3f(p.stats.color[0], p.stats.color[1],
-			p.stats.color[3]);
+			p.stats.color[2]);
 	glPushMatrix();
 	glTranslatef(625, 450, p.stats.gpos[2]);
 	glRotatef(p.stats.angle, 0.0f, 0.0f, 1.0f);
