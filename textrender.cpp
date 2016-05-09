@@ -18,7 +18,8 @@ void drawBlackNum(float x, float y, float offsetx, float offsety, float printval
 	r.bot = x + offsety;
 	r.left = y + offsetx;
 	s = std::to_string(printvalue);
-	ggprint8b(&r, 0, 0, "%s", s);
+	c = s.c_str();
+	ggprint8b(&r, 0, 0, "%s", c);
 }
 void drawWhiteNum(float x, float y, float offsetx, float offsety, float printvalue)
 {
@@ -29,6 +30,7 @@ void drawWhiteNum(float x, float y, float offsetx, float offsety, float printval
 	r.bot = x + offsety;
 	r.left = y + offsetx;
 	s = std::to_string(printvalue);
-	ggprint8b(&r, 0, 0x00ffffff, "%s", s);
+	c = s.c_str();
+	ggprint8b(&r, 0, 0x00ffffff, "%s", c);
 }
 #endif

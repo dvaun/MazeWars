@@ -3,7 +3,6 @@
 
 #include "game_objects.h"
 #include "game.h"
-#include "picopng.h"
 #include <cstring>
 
 template <typename OType>

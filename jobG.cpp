@@ -18,7 +18,6 @@
 */
 
 #include "game.h"
-#include "picopng.h"
 #include "jobG.h"
 #include <X11/Xlib.h>
 #include <GL/glx.h>
@@ -40,10 +39,17 @@ unsigned char *buildAlphaData(Ppmimage *img)
 		a = *(data+0);
 		b = *(data+1);
 		c = *(data+2);
-		*(ptr+0) = a;
-		*(ptr+1) = b;
-		*(ptr+2) = c;
-		*(ptr+3) = (a|b|c);
+		if (a == 255 && b == 255 && c == 255) {
+			*(ptr+0) = a;
+			*(ptr+1) = b;
+			*(ptr+2) = c;
+			*(ptr+3) = (0);
+		} else {
+			*(ptr+0) = a;
+			*(ptr+1) = b;
+			*(ptr+2) = c;
+			*(ptr+3) = (1);
+		}
 		ptr += 4;
 		data += 3;
 	}
@@ -55,7 +61,7 @@ GLuint silhouetteTexture)
 {
 	
 	//Loading images -- commented out while looking for sprite
-	personImage = ppm6GetImage((char*)"images/test.ppm");
+	personImage = ppm6GetImage((char*)"images/pikachu.ppm");
 	
 	//create opengl texture elements
 	glGenTextures(1, &personTexture);

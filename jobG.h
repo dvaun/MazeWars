@@ -6,7 +6,6 @@
 #include "game_objects.h"
 #include <GL/glx.h>
 #include "person.h"
-#include "picopng.h"
 
 void job_opengl(Ppmimage *personImage, GLuint personTexture, GLuint silhouetteTexture);
 void job_keys(int, int &quit, Person person, int &people);

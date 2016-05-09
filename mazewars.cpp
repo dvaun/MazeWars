@@ -448,10 +448,10 @@ void render(Game *g)
 		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 		glPushMatrix();
 		glTranslatef(person.pos[0], person.pos[1], person.pos[2]);
-		//glEnable(GL_ALPHA_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glAlphaFunc(GL_GREATER, 0.0f);
+		glEnable(GL_ALPHA_TEST);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glAlphaFunc(GL_GREATER, 0.0f);
 		glBindTexture(GL_TEXTURE_2D, personTexture);
 		glBegin(GL_QUADS);
 		float w = 350;
