@@ -15,10 +15,10 @@ typedef int Explosive;
 struct Player {
 	Stats stats;
 	PowerUp P_UP[3];
-	int Max_Health;
-	int Current_Health;
-	int Current_Ammo = 100;
-	int Max_Ammo = 100;
+	double Max_Health;
+	double Current_Health;
+	double Current_Ammo = 100;
+	double Max_Ammo = 100;
 	Explosive P_Secondary;
 	Player() {
 		Current_Health = 100;
