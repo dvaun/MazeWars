@@ -19,8 +19,8 @@ endif
 
 ##CFLAGS = -I ./include -g
 
-LIB    = ./lib/libggfonts.a lib/libSOIL.a
-CPPFILES = mazewars.cpp textrender.cpp
+LIB    = ./lib/libggfonts.a
+CPPFILES = mazewars.cpp textrender.cpp picopng.cpp
 ##required for Arch linux: /usr/lib/libopenal.so
 ##LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 

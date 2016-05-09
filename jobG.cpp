@@ -18,6 +18,7 @@
 */
 
 #include "game.h"
+#include "picopng.h"
 #include "jobG.h"
 #include <X11/Xlib.h>
 #include <GL/glx.h>
@@ -25,7 +26,6 @@
 #include <iostream>
 #include "ppm.h"
 #include <stdlib.h>
-#include "soil.h"
 
 unsigned char *buildAlphaData(Ppmimage *img)
 {
@@ -82,11 +82,6 @@ GLuint silhouetteTexture)
 			GL_UNSIGNED_BYTE, silhouetteData);
 	
 	free(silhouetteData);
-	GLuint tex_2d = SOIL_load_OGL_texture("images/pikachu.png",
-					SOIL_LOAD_AUTO,
-					SOIL_CREATE_NEW_ID,
-					SOIL_FLAG_NTSC_SAFE_RGB);
-
 }
 
 
