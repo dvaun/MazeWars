@@ -3,6 +3,7 @@
 
 #include "game_objects.h"
 #include "game.h"
+#include "jobG.h"
 #include <cstring>
 
 template <typename OType>
@@ -36,6 +37,9 @@ bool checkDistanceStats(Game *, Stats, float, float);
 float getDistanceStatsVal(Game *, Stats, int);
 float getDistanceStats(Game *, Stats);
 float getXYDistValue(float, float);
+
+char* getBlockTexture(gblock block);
+void renderBlockTexture(gblock block);
 //
 //
 void init_blocks(Game *, gblock_info);

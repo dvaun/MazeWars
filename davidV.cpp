@@ -13,6 +13,7 @@
 #include "game.h"
 #include "game_objects.h"
 #include "fonts/fonts.h"
+#include "jobG.h"
 #include <sstream>
 #include <iostream>
 #include <stdio.h>
@@ -417,6 +418,37 @@ void init_blocks(Game *g, gblock_info gbi)
 {
 	g->game_info.rows = gbi.rows;
 	g->game_info.columns = gbi.columns;
+}
+
+char* getBlockTexture(gblock block)
+{
+	switch(block.type) {
+	    case 0:
+		return "images/pokecavefloor.ppm";
+		break;
+	    case 1:
+		return "images/pokecavewallleft.ppm";
+		break;
+	    default:
+		return "images/pikachu.ppm";
+		break;
+	}
+}
+
+void renderBlockTexture(gblock block)
+{
+	char* filepath = getBlockTexture(block);
+	Ppmimage *blockImage = ppm6GetImage(filepath);
+	GLuint blockTexture;
+	int w = block.stats.width;
+	int h = block.stats.height;
+	glBindTexture(GL_TEXTURE_2D, blockTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *imageData = buildAlphaData(blockImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+			GL_UNSIGNED_BYTE, imageData);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 //
 //
