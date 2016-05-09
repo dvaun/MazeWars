@@ -9,31 +9,43 @@
  * In the mazewars.cpp I modified all of the original asteroids code to remove
  * the engine from the ship and the asteroid field, also changed the window title
  * 
- 
-void pointPlayer(Game *g)
+*/
+int *res;
+
+void getScreenRes(int x, int y)
 {
-	//Make the player point at the cursor
-	g->gun.pos[0] = g->Player_1.pos[0];
-	g->gun.pos[1] = g->Player_1.pos[1];
-	float weaponx = g->gun.pos[0];
-	float weapony = g->gun.pos[1];
-
-	float nDeg = atan(((yres-savey)-(weapony))/((savex)-(weaponx))) * 180 / PI;
-
-    if (savex > weaponx && (yres - savey) > weapony)
-		nDeg += 180;
-	if (savex > weaponx && (yres - savey) < weapony)
-		nDeg -= 180;
-	if (g->gun.angle >= 360.f)
-		g->gun.angle -= 360.0f;
-	if (g->gun.angle <= 360.0f){
- 		if (nDeg > 270)
-			nDeg -= 360;
-		g->gun.angle = nDeg + 90;
-	}
-	if (g->gun.angle < 0.0f)
-		g->gun.angle += 360.0f;
+        res = new int[2];
+        res[0] = x;
+        res[1] = y;
 }
+	
+void pointPlayer(Game *g, int savex, int savey)
+{
+        //Make the player point at the cursor
+        exchangeGpos(&g->gun, &g->Player_1);
+        float weaponx = g->Player_1.stats.spos[0];
+        float weapony = g->Player_1.stats.spos[1];
+
+        float nDeg = atan(((res[1]-savey)-(weapony))/\
+                ((savex)-(weaponx))) * 180 / 3.1415926;
+
+        if (savex > weaponx && (res[1] - savey) > weapony)
+                nDeg += 180;
+        if (savex > weaponx && (res[1] - savey) < weapony)
+                nDeg -= 180;
+
+        if (g->gun.stats.angle > 360.f)
+                g->gun.stats.angle = 360.0f;
+        if (g->gun.stats.angle <= 360.0f) {
+                if (nDeg > 270)
+                        nDeg -= 360;
+                g->gun.stats.angle = nDeg + 90;
+        }
+        if (g->gun.stats.angle < 0.0f)
+                g->gun.stats.angle += 360.0f;
+}
+
+/*
 void MouseCrosshairs()
 {
 	if(keyboard == true){	
@@ -48,20 +60,144 @@ void MouseCrosshairs()
 	}
 }
 */
-int *res;
-
-void getScreenRes(int x, int y)
+void drawHUD(Player x)
 {
-	res = new int[2];
-	res[0] = x;
-	res[1] = y;
+
+	drawBackground();
+	drawHealth(x);
+	drawAmmo(x);
+//	drawArtifacts(x);
+
 }
+void drawBackground()
+{
+	glColor3ub(176, 140, 41);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(0, 0);
+                glVertex2i(-350, 0);
+		glVertex2i(-350, 120);
+                glVertex2i(-320, 150);
+                glVertex2i(0, 150);
+        glEnd();
+        glPopMatrix();
+
+	glColor3ub(179, 144, 49);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-340, 10);
+                glVertex2i(-350, 0);
+                glVertex2i(-350, 120);
+                glVertex2i(-340, 115);
+        glEnd();
+        glPopMatrix();
+
+	glColor3ub(226, 212, 175);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-340, 115);
+                glVertex2i(-350, 120);
+                glVertex2i(-320, 150);
+                glVertex2i(-315, 140);
+        glEnd();
+        glPopMatrix();
+
+	glColor3ub(216, 198, 148);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-315, 140);
+                glVertex2i(-320, 150);
+                glVertex2i(0, 150);
+                glVertex2i(-15, 140);
+        glEnd();
+        glPopMatrix();
+
+	glColor3ub(44, 35, 10);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-15, 140);
+                glVertex2i(0, 150);
+                glVertex2i(0, 0);
+		glVertex2i(-15,10);
+        glEnd();
+        glPopMatrix();
+
+	glColor3ub(44, 35, 10);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(0, 0);
+                glVertex2i(-350, 0);
+                glVertex2i(-340, 10);
+                glVertex2i(-15, 10);
+        glEnd();
+        glPopMatrix();	
+
+//draw diamond backgrounds
+      drawDiamondBack(80);
+      drawDiamondBack(160);
+      drawDiamondBack(240);
+}
+void drawDiamondBack(int x){
+
+glColor3ub(226, 212, 175);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-315+x, 40);
+                glVertex2i(-330+x, 40);
+                glVertex2i(-310+x, 60);
+                glVertex2i(-310+x, 45);
+        glEnd();
+        glPopMatrix();
+
+        glColor3ub(128, 102, 30);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-310+x, 45);
+                glVertex2i(-310+x, 60);
+                glVertex2i(-290+x, 40);
+                glVertex2i(-305+x, 40);
+        glEnd();
+        glPopMatrix();
+
+        glColor3ub(44, 35, 10);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-305+x, 40);
+                glVertex2i(-290+x, 40);
+                glVertex2i(-310+x, 20);
+                glVertex2i(-310+x, 35);
+        glEnd();
+        glPopMatrix();
+
+        glColor3ub(44, 35, 10);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-310+x, 35);
+                glVertex2i(-310+x, 20);
+                glVertex2i(-330+x, 40);
+                glVertex2i(-315+x, 40);
+        glEnd();
+        glPopMatrix();
+
+}
+
 void drawHealth(Player x)
 {
+double remaining = 100-((x.Current_Health/x.Max_Health)*100);
     //Background of health bar
 	glColor3ub(255, 0, 0);
 	glPushMatrix();
-	glTranslatef(res[0]-150, 50, 0);
+	glTranslatef(res[0]-150, 85, 0);
 	glBegin(GL_QUADS);
 		glVertex2i(-100, -15);
 		glVertex2i(-100, 15);
@@ -71,10 +207,10 @@ void drawHealth(Player x)
 	glPopMatrix();
 
 	//remaining health
-	int remaining = 100 - x.Current_Health;
+	//int remaining = 100 - x.Current_Health;
 	glColor3ub(0, 255, 0);
         glPushMatrix();
-        glTranslatef((res[0]-150)-remaining, 50, 0);
+        glTranslatef((res[0]-150)-remaining, 85, 0);
         glBegin(GL_QUADS);
                 glVertex2i(-(100 - remaining), -15);
                 glVertex2i(-(100 - remaining), 15);
@@ -85,21 +221,16 @@ void drawHealth(Player x)
 
 	Rect r;
 	//
-	r.bot = 20;
-	r.left = res[0] - 200;
+	r.bot = 75;
+	r.left = res[0] - 310;
 	r.center = 0;
-	ggprint8b(&r, 16, 0x00ffffff, "Total Health: %i", x.Max_Health);
-	if(x.Current_Health <= 50){
-            ggprint8b(&r, 16, 0x00ff0000, "Remaining Health: %i", x.Current_Health);
-        }else{
-            ggprint8b(&r, 16, 0x0000ff00, "Remaining Health: %i", x.Current_Health);
-        }
+	ggprint8b(&r, 16, 0x00ffffff, "Health:");
 }
 void drawAmmo(Player x){
     //Background of ammo bar
         glColor3ub(255, 0, 0);
         glPushMatrix();
-        glTranslatef(res[0]-150, 150, 0);
+        glTranslatef(res[0]-150, 120, 0);
         glBegin(GL_QUADS);
                 glVertex2i(-100, -15);
                 glVertex2i(-100, 15);
@@ -108,11 +239,11 @@ void drawAmmo(Player x){
         glEnd();
         glPopMatrix();
 
-        //remaining health
+        //remaining ammo
         int remaining = 100 - x.Current_Ammo;
         glColor3ub(0, 0, 255);
         glPushMatrix();
-        glTranslatef((res[0]-150)-remaining, 150, 0);
+        glTranslatef((res[0]-150)-remaining, 120, 0);
         glBegin(GL_QUADS);
                 glVertex2i(-(100 - remaining), -15);
                 glVertex2i(-(100 - remaining), 15);
@@ -123,15 +254,10 @@ void drawAmmo(Player x){
 	
         Rect r;
         //
-        r.bot = 120;
-        r.left = res[0] - 200;
+        r.bot = 110;
+        r.left = res[0] - 310;
         r.center = 0;
-        ggprint8b(&r, 16, 0x00ffffff, "Total Ammo: %i", x.Max_Ammo);
-        if(x.Current_Ammo <= 50){
-	    ggprint8b(&r, 16, 0x00ff0000, "Remaining Ammo: %i", x.Current_Ammo);
-	}else{
-	    ggprint8b(&r, 16, 0x0000ff00, "Remaining Ammor: %i", x.Current_Ammo);
-	}
+        ggprint8b(&r, 16, 0x00ffffff, "Ammo:");
 }
 void GameOver(){
     	Rect r;
