@@ -422,6 +422,15 @@ void physics(Game *g)
 	if(keys[XK_F6]){
 		Restart(&g->Player_1);
 	}
+	if(keys[XK_F8]){
+	    g->Player_1.artifact[0] = !g->Player_1.artifact[0];
+	}
+	if(keys[XK_F9]){
+            g->Player_1.artifact[1] = !g->Player_1.artifact[1];
+        }
+	if(keys[XK_F10]){
+            g->Player_1.artifact[2] = !g->Player_1.artifact[2];
+        }
 }
 
 void render(Game *g)

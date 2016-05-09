@@ -19,6 +19,7 @@ struct Player {
 	double Current_Health;
 	double Current_Ammo = 100;
 	double Max_Ammo = 100;
+	bool artifact[3];
 	Explosive P_Secondary;
 	Player() {
 		Current_Health = 100;
@@ -27,6 +28,9 @@ struct Player {
 		P_UP[0] = 0;
 		P_UP[1] = 0;
 		P_UP[2] = 0;
+		artifact[0] = 1;
+		artifact[1] = 0;
+		artifact[2] = 0;
 	}
 	void draw(float x, float y, Stats stats) {
 		glColor3f((float) stats.color[0],255,(float) \

@@ -4,7 +4,7 @@ void drawHealth(Player x);
 void drawAmmo(Player x);
 void drawDiamondBack(int x);
 void drawDiamond(int x);
-//void drawArtifacts(Player x);
+void drawArtifacts(Player x);
 void drawBackground();
 void drawHUD(Player x);
 struct HealthPack{
