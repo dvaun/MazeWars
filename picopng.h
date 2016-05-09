@@ -2,7 +2,7 @@
 #define PICOPNG_H
 
 #include <vector>
-#include <stdlib.h>
+#include <cstring>
 
 void loadFile(std::vector<unsigned char>& buffer, const std::string& filename);
 
