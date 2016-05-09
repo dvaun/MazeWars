@@ -18,6 +18,7 @@
 */
 
 #include "game.h"
+#include "picopng.h"
 #include "jobG.h"
 #include <X11/Xlib.h>
 #include <GL/glx.h>
