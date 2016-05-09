@@ -139,11 +139,13 @@ void drawBackground()
         glPopMatrix();	
 
 //draw diamond backgrounds
-      drawDiamondBack(80);
+      //drawDiamondBack(80);
       drawDiamondBack(160);
       drawDiamondBack(240);
+      drawDiamond(80);
 }
-void drawDiamondBack(int x){
+void drawDiamondBack(int x)
+{
 
 glColor3ub(226, 212, 175);
         glPushMatrix();
@@ -190,7 +192,65 @@ glColor3ub(226, 212, 175);
         glPopMatrix();
 
 }
+void drawDiamond(int x)
+{
 
+glColor3ub(180, 226, 175);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-320+x, 40);
+                glVertex2i(-330+x, 40);
+                glVertex2i(-310+x, 60);
+                glVertex2i(-310+x, 50);
+        glEnd();
+        glPopMatrix();
+
+        glColor3ub(39, 128, 30);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-310+x, 50);
+                glVertex2i(-310+x, 60);
+                glVertex2i(-290+x, 40);
+                glVertex2i(-300+x, 40);
+        glEnd();
+        glPopMatrix();
+
+        glColor3ub(13, 44, 10);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-300+x, 40);
+                glVertex2i(-290+x, 40);
+                glVertex2i(-310+x, 20);
+                glVertex2i(-310+x, 30);
+        glEnd();
+        glPopMatrix();
+
+        glColor3ub(13, 44, 10);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-310+x, 30);
+                glVertex2i(-310+x, 20);
+                glVertex2i(-330+x, 40);
+                glVertex2i(-320+x, 40);
+        glEnd();
+        glPopMatrix();
+        
+         glColor3ub(54, 176, 41);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-310+x, 30);
+                glVertex2i(-300+x, 40);
+                glVertex2i(-290+x, 30);
+                glVertex2i(-310+x, 20);
+        glEnd();
+        glPopMatrix();
+
+}
 void drawHealth(Player x)
 {
 double remaining = 100-((x.Current_Health/x.Max_Health)*100);
