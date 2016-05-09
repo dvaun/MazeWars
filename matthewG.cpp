@@ -134,3 +134,10 @@ void renderShield(Game *g)
 	glEnd();
 }
 
+// montage name-?.png name-??.png -tile 16x16 -geometry 64x64+0+0 -background 
+// transparent name.png
+
+void spriteSheet() {
+
+
+}

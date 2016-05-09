@@ -1,4 +1,5 @@
 #include "game_objects.h"
+#include "joystick.hh"
 //author: Matthew Gaitan
 void getJoystickEvent(JoystickEvent event, int joy[], int axis[]);
 void movement(Game *g);

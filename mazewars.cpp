@@ -25,6 +25,7 @@
 #include "fonts/fonts.h"
 #include "cameronM.h"
 #include "cameronM.cpp"
+
 using namespace std;
 
 //constants
@@ -62,11 +63,16 @@ int xres=1250, yres=900;
 int keys[65536];
 int joy[65536];
 int axis[65536];
+GLuint texture[10];
 int people = 0;
-Ppmimage *personImage = NULL;
-GLuint personTexture;
-GLuint silhouetteTexture;
+Ppmimage *personImage1 = NULL;
+Ppmimage *personImage2 = NULL;
+GLuint personTexture1;
+GLuint personTexture2;
+//GLuint silhouetteTexture;
 Person person;
+
+
 
 //function prototypes
 void initXWindows(void);
@@ -214,8 +220,14 @@ void init_opengl(void)
 	glClearColor(0.8, 0.8, 0.8, 1.0);
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
+	//glGenTextures(2, texture);
 	initialize_fonts();
-	job_opengl(personImage, personTexture, silhouetteTexture);
+	
+	personImage1 = ppm6GetImage((char*)"images/red.ppm");
+	//personImage2 = ppm6GetImage((char*)"images/sprite.ppm");
+	job_opengl(personImage1, personTexture1);
+	//job_opengl(personImage2, personTexture2);
+
 }
 
 void check_resize(XEvent *e)
@@ -353,6 +365,9 @@ void physics(Game *g)
 		g->Player_1.stats.angle += 4.0f;
 		if (g->Player_1.stats.angle >= 360.0f)
 			g->Player_1.stats.angle -= 360.0f;
+
+	person.pos[0] =	g->Player_1.stats.spos[0];
+		person.pos[1] = g->Player_1.stats.spos[1];
 	}
 	if (keys[XK_d] && (g->Player_1.Current_Health > 0)) {
 		g->Player_1.stats.angle -= 4.0f;
@@ -432,11 +447,16 @@ void physics(Game *g)
             g->Player_1.artifact[2] = !g->Player_1.artifact[2];
         }
 }
+int i = 0;
+struct timespec animationStart, animationCurrent;
+double animationSpan=0.0;
 
 void render(Game *g)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
+	if(animationSpan > 60/1000.0f) {	
+		clock_gettime(CLOCK_REALTIME, &animationStart);
+	}
 	drawGBlocks(g);
 	//Draw the Player_1
 	if(g->Player_1.Current_Health > 0)
@@ -456,25 +476,47 @@ void render(Game *g)
 	if (people) {
 		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 		glPushMatrix();
-		glTranslatef(person.pos[0], person.pos[1], person.pos[2]);
+		glTranslatef(person.pos[0], person.pos[1], person.pos[2]);	
+		glRotatef(g->Player_1.stats.angle, 0, 0, 1.0f);
+		glBindTexture(GL_TEXTURE_2D, personTexture1);
 		glEnable(GL_ALPHA_TEST);
-		//glEnable(GL_BLEND);
+	//	glEnable(GL_BLEND);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glAlphaFunc(GL_GREATER, 0.0f);
-		glBindTexture(GL_TEXTURE_2D, personTexture);
+//		glBindTexture(GL_TEXTURE_2D, personTexture);
+		//glBindTexture(GL_TEXTURE_2D, personTexture1);
 		glBegin(GL_QUADS);
-		float w = 350;
-			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(1.0f, 0.0f); glVertex2f( w, w);
-			glTexCoord2f(1.0f, 1.0f); glVertex2f( w, -w);
-			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+		float w = personImage1->width/4;
+		
+		clock_gettime(CLOCK_REALTIME, &animationCurrent);
+		animationSpan = timeDiff(&animationStart, &animationCurrent);
+		glBindTexture(GL_TEXTURE_2D, personTexture1);
+		if(i % 2 == 0 && animationSpan > 60.0/1000.0f) {
+			//	glBindTexture(GL_TEXTURE_2D, 0);
+			//	glBindTexture(GL_TEXTURE_2D, personTexture1);
+				glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+				glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+				glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+				glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+			}
+		else if(animationSpan > 60/1000.0f) {
+			//glBindTexture(GL_TEXTURE_2D, 0);
+			//glBindTexture(GL_TEXTURE_2D, personTexture1);
+					glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
+					glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
+					glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
+					glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
+		}
+		i++;
+			//glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+			//glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+			//glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+			//glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
 		glEnd();
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glDisable(GL_ALPHA_TEST);
 		glPopMatrix();
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
-
+	glDisable(GL_ALPHA_TEST);
 
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];

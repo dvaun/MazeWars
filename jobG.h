@@ -8,7 +8,7 @@
 #include "person.h"
 
 unsigned char* buildAlphaData(Ppmimage *);
-void job_opengl(Ppmimage *personImage, GLuint personTexture, GLuint silhouetteTexture);
+void job_opengl(Ppmimage *personImage, GLuint personTexture);
 void job_keys(int, int &quit, Person person, int &people);
 
 

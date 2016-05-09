@@ -56,38 +56,39 @@ unsigned char *buildAlphaData(Ppmimage *img)
 	return newdata;
 }
 
-void job_opengl(Ppmimage *personImage, GLuint personTexture, 
-GLuint silhouetteTexture)
+void job_opengl(Ppmimage *personImage, GLuint personTexture)
 {
 	
 	//Loading images -- commented out while looking for sprite
-	personImage = ppm6GetImage((char*)"images/pikachu.ppm");
+//	personImage = ppm6GetImage(img);
+
 	
 	//create opengl texture elements
-	glGenTextures(1, &personTexture);
-	
+	//glBindTexture(GL_TEXTURE_2D,0);
+	//glGenTextures(10, &personTexture);
+	//glGenTextures(1, &personTexture[i]);	
 	//person
 	int w = personImage->width;
 	int h = personImage->height;
-	
-	glBindTexture(GL_TEXTURE_2D, personTexture);
+	std::cout << w << std::endl;	
+	/*glBindTexture(GL_TEXTURE_2D, personTexture);
 	//
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
-			GL_UNSIGNED_BYTE, personImage->data);
-//
+	unsigned char *personData = buildAlphaData(personImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 64, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, personData);
+	free(personData);*/
 	//
 
-	//
-	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	glBindTexture(GL_TEXTURE_2D, personTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *silhouetteData = buildAlphaData(personImage);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
-			GL_UNSIGNED_BYTE, silhouetteData);
+	unsigned char *personData = buildAlphaData(personImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 64, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, personData);
 	
-	free(silhouetteData);
+	free(personData);
 }
 
 
