@@ -2,6 +2,7 @@
 #define PICOPNG_CPP
 
 #include <vector>
+#include <stdlib.h>
 
 /*
 decodePNG: The picoPNG function, decodes a PNG file buffer in memory, into a raw pixel buffer.
