@@ -66,7 +66,7 @@ void drawHUD(Player x)
 	drawBackground();
 	drawHealth(x);
 	drawAmmo(x);
-//	drawArtifacts(x);
+	drawArtifacts(x);
 
 }
 void drawBackground()
@@ -138,11 +138,6 @@ void drawBackground()
         glEnd();
         glPopMatrix();	
 
-//draw diamond backgrounds
-      //drawDiamondBack(80);
-      drawDiamondBack(160);
-      drawDiamondBack(240);
-      drawDiamond(80);
 }
 void drawDiamondBack(int x)
 {
@@ -243,13 +238,31 @@ glColor3ub(180, 226, 175);
         glPushMatrix();
         glTranslatef(res[0], 0, 0);
         glBegin(GL_POLYGON);
-                glVertex2i(-310+x, 30);
+                glVertex2i(-320+x, 40);
+                glVertex2i(-310+x, 50);
                 glVertex2i(-300+x, 40);
-                glVertex2i(-290+x, 30);
-                glVertex2i(-310+x, 20);
+                glVertex2i(-310+x, 30);
         glEnd();
         glPopMatrix();
 
+}
+void drawArtifacts(Player x)
+{
+	if(x.artifact[0]){
+	    drawDiamond(80);
+	}else{
+	    drawDiamondBack(80);
+	}
+	if(x.artifact[1]){
+	    drawDiamond(160);
+	}else{
+	    drawDiamondBack(160);
+	} 
+	if(x.artifact[2]){
+	    drawDiamond(240);
+	}else{
+	    drawDiamondBack(240);
+	} 
 }
 void drawHealth(Player x)
 {
