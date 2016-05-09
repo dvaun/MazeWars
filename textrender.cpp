@@ -8,7 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include "fonts/fonts.h"
-
+using namespace std;
 void drawBlackNum(float x, float y, float offsetx, float offsety, float printvalue)
 {
 	Rect r;
@@ -18,8 +18,7 @@ void drawBlackNum(float x, float y, float offsetx, float offsety, float printval
 	r.bot = x + offsety;
 	r.left = y + offsetx;
 	s = std::to_string(printvalue);
-	c = s.c_str();
-	ggprint8b(&r, 0, 0, "%s", c);
+	ggprint8b(&r, 0, 0, "%s", s);
 }
 void drawWhiteNum(float x, float y, float offsetx, float offsety, float printvalue)
 {
@@ -30,7 +29,6 @@ void drawWhiteNum(float x, float y, float offsetx, float offsety, float printval
 	r.bot = x + offsety;
 	r.left = y + offsetx;
 	s = std::to_string(printvalue);
-	c = s.c_str();
-	ggprint8b(&r, 0, 0x00ffffff, "%s", c);
+	ggprint8b(&r, 0, 0x00ffffff, "%s", s);
 }
 #endif

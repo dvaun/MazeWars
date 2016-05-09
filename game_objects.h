@@ -47,8 +47,8 @@ struct Player {
 			glVertex2f(0.0f, 0.0f);
 		glEnd();
 		glPopMatrix();
-		drawWhiteNum(stats.spos[0],stats.spos[1],10,10,stats.gpos[0]);
-		drawWhiteNum(stats.spos[0],stats.spos[1],10,-10,stats.gpos[1]);
+		//drawWhiteNum(stats.spos[0],stats.spos[1],10,10,stats.gpos[0]);
+		//drawWhiteNum(stats.spos[0],stats.spos[1],10,-10,stats.gpos[1]);
 	}
 	~Player() {}
 };
@@ -93,24 +93,24 @@ struct Bullet {
 		printf("red:%f blue:%f green:%f\n",
 			stats.color[0], stats.color[1],
 				stats.color[2]);
-		glColor3f(stats.color[0], stats.color[1],
-				stats.color[2]);
-		glPushMatrix();
-		glTranslatef(x,y,0);
+		//glColor3f(stats.color[0], stats.color[1],
+		//		stats.color[2]);
+		//glPushMatrix();
+		//glTranslatef(x,y,0);
 		glBegin(GL_POINTS);
 			glVertex2f(x, y);
 			glVertex2f(x-1.0f, y);
 			glVertex2f(x+1.0f, y);
 			glVertex2f(x, y-1.0f);
 			glVertex2f(x, y+1.0f);
-		glColor3f(stats.color[0] - .2f, stats.color[1] - 0.2f,
-				stats.color[2] - 0.2f);
+		//glColor3f(stats.color[0] - .2f, stats.color[1] - 0.2f,
+	//			stats.color[2] - 0.2f);
 			glVertex2f(x-1.0f, y-1.0f);
 			glVertex2f(x-1.0f, y+1.0f);
 			glVertex2f(x+1.0f, y-1.0f);
 			glVertex2f(x+1.0f, y+1.0f);
 		glEnd();
-		glPopMatrix();
+		//glPopMatrix();
 	}
 	~Bullet() {}
 };
