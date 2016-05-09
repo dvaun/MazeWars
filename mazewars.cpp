@@ -89,8 +89,8 @@ int main(void)
 	init_opengl();
 	Game game;
 	gblock_info gbi;
-	gbi.width = 5;
-	gbi.height = 5;
+	gbi.width = 16;
+	gbi.height = 16;
 	gbi.rows = 50;
 	gbi.columns = 50;
 	begin_game(game, gbi);

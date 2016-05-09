@@ -176,6 +176,38 @@ Game init_game(Game g, gblock_info gbi)
 	return game;
 }
 
+char* getBlockTexture(gblock block)
+{
+	switch(block.type) {
+	    case 0:
+		return "images/pokecavefloor.ppm";
+		break;
+	    case 1:
+		return "images/pokecavewallleft.ppm";
+		break;
+	    default:
+		return "images/pikachu.ppm";
+		break;
+	}
+}
+
+GLuint renderBlockTexture(gblock& block)
+{
+	char* filepath = getBlockTexture(block);
+	block.stats.texture = ppm6GetImage(filepath);
+	GLuint blockTexture;
+	int w = block.stats.width;
+	int h = block.stats.height;
+	glBindTexture(GL_TEXTURE_2D, blockTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *imageData = buildAlphaData(block.stats.texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+			GL_UNSIGNED_BYTE, imageData);
+	glBindTexture(GL_TEXTURE_2D, 0);
+    return blockTexture;
+}
+
 void set_gblock_gpos(double& gposition, int num, int bsize)
 {
 	gposition = (double)num * bsize;
@@ -193,6 +225,7 @@ void create_gblock(gblock& block, int type, int row, int col)
 {
 	block.type = type;
 	block.assigned = 1;
+    block.stats.obj_texture = renderBlockTexture(block);
 	set_gblock_gpos(block.stats.gpos[0], row, block.stats.width*2);
 	set_gblock_gpos(block.stats.gpos[1], col, block.stats.width*2);
 	printf("Block[%d][%d] located at x(%f) y(%f)\n", row, col, 
@@ -363,17 +396,18 @@ void drawBlock(Game *g, gblock block)
 	float size = block.stats.width;
 	glPushMatrix();
 	glTranslatef(xdist, ydist, 0.0f);
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.0f);
+    glBindTexture(GL_TEXTURE_2D, block.stats.obj_texture);
 	glBegin(GL_QUADS);
-		glVertex2f(-size, -size);
-		glVertex2f(-size, size);
-		glVertex2f(size, size);
-		glVertex2f(size, -size);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
+		glTexCoord2d(1.0f, 0.0f); glVertex2f(-size, size);
+		glTexCoord2d(1.0f, 1.0f); glVertex2f(size, size);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(size, -size);
 	glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
-	drawText(block.stats.gpos[0], block.stats.gpos[1], 10,
-		10,block.stats.gpos[0]);
-	drawText(block.stats.gpos[0], block.stats.gpos[1], 10,
-		-10,block.stats.gpos[1]);
 }
 
 void drawGameStats(Game *g, Stats stats)
@@ -391,11 +425,6 @@ void drawGBlocks(Game *g)
 		for (int j = 0; j < ncols; j++) {
 			if (g->blocks[i][j].assigned == 1) {
 				if (checkDistanceBlock(g,g->blocks[i][j],(float)g->g_xres/2,(float)g->g_yres/2)) {
-					if (g->blocks[i][j].type == 1) {
-						glColor3f(1.0,0.0,0.0);
-					} else {
-						glColor3f(0.0,1.0,0.0);
-					}
 					drawBlock(g, g->blocks[i][j]);
 				}
 			}
@@ -420,36 +449,6 @@ void init_blocks(Game *g, gblock_info gbi)
 	g->game_info.columns = gbi.columns;
 }
 
-char* getBlockTexture(gblock block)
-{
-	switch(block.type) {
-	    case 0:
-		return "images/pokecavefloor.ppm";
-		break;
-	    case 1:
-		return "images/pokecavewallleft.ppm";
-		break;
-	    default:
-		return "images/pikachu.ppm";
-		break;
-	}
-}
-
-void renderBlockTexture(gblock block)
-{
-	char* filepath = getBlockTexture(block);
-	Ppmimage *blockImage = ppm6GetImage(filepath);
-	GLuint blockTexture;
-	int w = block.stats.width;
-	int h = block.stats.height;
-	glBindTexture(GL_TEXTURE_2D, blockTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *imageData = buildAlphaData(blockImage);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
-			GL_UNSIGNED_BYTE, imageData);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
 //
 //
 //

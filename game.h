@@ -2,7 +2,9 @@
 #define GAME_H
 
 #include <cstdlib>
+#include <GL/glx.h>
 #include "defs.h"
+#include "ppm.h"
 
 const int MAX_BULLETS = 4;
 
@@ -17,8 +19,11 @@ struct Stats {
 	Vec vel;
 	Vec gpos;
 	Vec color;
+    Ppmimage* texture;
+    GLuint obj_texture;
 	const char* image;
 	Stats() {
+        texture = new Ppmimage;
 		angle = 0;
 		width = 0;
 		height = 0;
