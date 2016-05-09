@@ -281,32 +281,6 @@ void check_mouse(XEvent *e, Game *g)
 	pointPlayer(g, savex, savey);
 }
 
-void pointPlayer(Game *g, int savex, int savey)
-{
-	//Make the player point at the cursor
-	exchangeGpos(&g->gun, &g->Player_1);
-	float weaponx = g->Player_1.stats.spos[0];
-	float weapony = g->Player_1.stats.spos[1];
-
-	float nDeg = atan(((yres-savey)-(weapony))/\
-		((savex)-(weaponx))) * 180 / PI;
-
-	if (savex > weaponx && (yres - savey) > weapony)
-		nDeg += 180;
-	if (savex > weaponx && (yres - savey) < weapony)
-		nDeg -= 180;
-
-	if (g->gun.stats.angle > 360.f)
-		g->gun.stats.angle = 360.0f;
-	if (g->gun.stats.angle <= 360.0f) {
-		if (nDeg > 270)
-			nDeg -= 360;
-		g->gun.stats.angle = nDeg + 90;
-	}
-	if (g->gun.stats.angle < 0.0f)
-		g->gun.stats.angle += 360.0f;
-}
-
 int check_keys(XEvent *e)
 {
 	//keyboard input?
@@ -463,9 +437,9 @@ void render(Game *g)
 		renderCrosshair(axis, g, false);
 	if (joy[4] || keys[XK_b]) 
 		renderShield(g);
-
-	drawHealth(g->Player_1);
-	drawAmmo(g->Player_1);
+	drawHUD(g->Player_1);
+	//drawHealth(g->Player_1);
+	//drawAmmo(g->Player_1);
 	if(g->Player_1.Current_Health == 0)
 		GameOver();
 	drawHealthPack(500, 400, 0);
