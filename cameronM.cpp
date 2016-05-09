@@ -3,12 +3,12 @@
 
 /* Name: Cameron Morrow
  * Date: May 04, 2016
- * Last Modified: May 04, 2016
+ * Last Modified: May 09, 2016
  * Description: My code handles all of the weapon movement if a controller 
  * is not being used.
  * In the mazewars.cpp I modified all of the original asteroids code to remove
  * the engine from the ship and the asteroid field, also changed the window title
- * 
+ * I am drawing and handling the health bar and "HUD" 
 */
 int *res;
 
@@ -190,7 +190,7 @@ glColor3ub(226, 212, 175);
 void drawDiamond(int x)
 {
 
-glColor3ub(180, 226, 175);
+		glColor3ub(180, 226, 175);
         glPushMatrix();
         glTranslatef(res[0], 0, 0);
         glBegin(GL_POLYGON);
@@ -234,13 +234,17 @@ glColor3ub(180, 226, 175);
         glEnd();
         glPopMatrix();
         
-         glColor3ub(54, 176, 41);
+        
         glPushMatrix();
         glTranslatef(res[0], 0, 0);
         glBegin(GL_POLYGON);
+				glColor3ub(143, 235, 133);
                 glVertex2i(-320+x, 40);
+                glColor3ub(54, 176, 41);
                 glVertex2i(-310+x, 50);
+                glColor3ub(143, 235, 133);
                 glVertex2i(-300+x, 40);
+                glColor3ub(54, 176, 41);
                 glVertex2i(-310+x, 30);
         glEnd();
         glPopMatrix();
@@ -271,24 +275,47 @@ double remaining = 100-((x.Current_Health/x.Max_Health)*100);
 	glColor3ub(255, 0, 0);
 	glPushMatrix();
 	glTranslatef(res[0]-150, 85, 0);
-	glBegin(GL_QUADS);
-		glVertex2i(-100, -15);
-		glVertex2i(-100, 15);
-		glVertex2i(100, 15);
-		glVertex2i(100, -15);
-	glEnd();
-	glPopMatrix();
+        glBegin(GL_POLYGON);
+                glVertex2i(-90, -15);
+                glVertex2i(-100, -5);
+                
+                glVertex2i(-100, 5);
+                glVertex2i(-90, 15);
+                
+                glVertex2i(90, 15);
+                glVertex2i(100, 5);
+                
+                glVertex2i(100, -5);
+                glVertex2i(90, -15);
+        glEnd();
+        glPopMatrix();
 
 	//remaining health
 	//int remaining = 100 - x.Current_Health;
+	int test = 10-x.Current_Health;
 	glColor3ub(0, 255, 0);
         glPushMatrix();
         glTranslatef((res[0]-150)-remaining, 85, 0);
-        glBegin(GL_QUADS);
-                glVertex2i(-(100 - remaining), -15);
-                glVertex2i(-(100 - remaining), 15);
-                glVertex2i((100 - remaining), 15);
-                glVertex2i((100 - remaining), -15);
+        glBegin(GL_POLYGON);
+				if(100-remaining > 10){
+                glVertex2i(-(90 - remaining), -15);
+                glVertex2i(-(100 - remaining), -5);
+                glVertex2i(-(100 - remaining), 5);
+                glVertex2i(-(90 - remaining), 15);
+                glVertex2i((90 - remaining), 15);
+                glVertex2i((100 - remaining), 5);
+                glVertex2i((100 - remaining), -5);
+                glVertex2i((90 - remaining), -15);
+                }else{
+				glVertex2i(-(90 - remaining + test), -15 + (test));
+                glVertex2i(-(100 - remaining), -5);
+                glVertex2i(-(100 - remaining), 5);
+                glVertex2i(-(90 - remaining + test), 15 - (test));
+				glVertex2i((90 - remaining + test), 15 - (test));
+                glVertex2i((100 - remaining), 5);
+                glVertex2i((100 - remaining), -5);
+                glVertex2i((90 - remaining + test), -15 + (test));
+				}
         glEnd();
         glPopMatrix();
 
@@ -300,31 +327,52 @@ double remaining = 100-((x.Current_Health/x.Max_Health)*100);
 	ggprint8b(&r, 16, 0x00ffffff, "Health:");
 }
 void drawAmmo(Player x){
+	double remaining = 100-((x.Current_Ammo/x.Max_Ammo)*100);
     //Background of ammo bar
         glColor3ub(255, 0, 0);
         glPushMatrix();
         glTranslatef(res[0]-150, 120, 0);
-        glBegin(GL_QUADS);
-                glVertex2i(-100, -15);
-                glVertex2i(-100, 15);
-                glVertex2i(100, 15);
-                glVertex2i(100, -15);
+        glBegin(GL_POLYGON);
+                glVertex2i(-90, -15);
+                glVertex2i(-100, -5);
+                
+                glVertex2i(-100, 5);
+                glVertex2i(-90, 15);
+                
+                glVertex2i(90, 15);
+                glVertex2i(100, 5);
+                
+                glVertex2i(100, -5);
+                glVertex2i(90, -15);
         glEnd();
         glPopMatrix();
-
-        //remaining ammo
-        int remaining = 100 - x.Current_Ammo;
+		int test = 10-x.Current_Ammo;
         glColor3ub(0, 0, 255);
         glPushMatrix();
         glTranslatef((res[0]-150)-remaining, 120, 0);
-        glBegin(GL_QUADS);
-                glVertex2i(-(100 - remaining), -15);
-                glVertex2i(-(100 - remaining), 15);
-                glVertex2i((100 - remaining), 15);
-                glVertex2i((100 - remaining), -15);
+        glBegin(GL_POLYGON);
+				if(100-remaining > 10){
+                glVertex2i(-(90 - remaining), -15);
+                glVertex2i(-(100 - remaining), -5);
+                glVertex2i(-(100 - remaining), 5);
+                glVertex2i(-(90 - remaining), 15);
+                glVertex2i((90 - remaining), 15);
+                glVertex2i((100 - remaining), 5);
+                glVertex2i((100 - remaining), -5);
+                glVertex2i((90 - remaining), -15);
+                }else{
+				glVertex2i(-(90 - remaining + test), -15 + (test));
+                glVertex2i(-(100 - remaining), -5);
+                glVertex2i(-(100 - remaining), 5);
+                glVertex2i(-(90 - remaining + test), 15 - (test));
+				glVertex2i((90 - remaining + test), 15 - (test));
+                glVertex2i((100 - remaining), 5);
+                glVertex2i((100 - remaining), -5);
+                glVertex2i((90 - remaining + test), -15 + (test));
+				}
         glEnd();
         glPopMatrix();
-	
+		
         Rect r;
         //
         r.bot = 110;
