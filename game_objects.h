@@ -20,6 +20,8 @@ struct Player {
 	double Current_Ammo = 100;
 	double Max_Ammo = 100;
 	bool artifact[3];
+	bool gameOver = false;
+	int lives = 2;
 	Explosive P_Secondary;
 	Player() {
 		Current_Health = 100;
@@ -130,6 +132,7 @@ struct Game {
 	Player Player_1;
 	Weapon gun;
 	Bullet *barr;
+
 	int g_xres;
 	int g_yres;
 	int nbullets;

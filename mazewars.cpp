@@ -328,22 +328,7 @@ void physics(Game *g)
 {
 	updateObjGposStat(&g->Player_1);
 	updateObjGposStat(&g->gun);
-	//Check for collision with window edges
-	if (g->Player_1.stats.spos[0] < 0.0f) {
-		g->Player_1.stats.spos[0] += (float)xres;
-	}
-	else if (g->Player_1.stats.spos[0] > (float)xres) {
-		g->Player_1.stats.spos[0] -= (float)xres;
-	}
-	else if (g->Player_1.stats.spos[1] < 0.0f) {
-		g->Player_1.stats.spos[1] += (float)yres;
-	}
-	else if (g->Player_1.stats.spos[1] > (float)yres) {
-		g->Player_1.stats.spos[1] -= (float)yres;
-	}
-	//
-	//
-	//Update bullet positions
+
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	for (int i=0; i<g->nbullets; i++) {
@@ -361,7 +346,7 @@ void physics(Game *g)
 		b->stats.gpos[0] += 6*b->stats.vel[0];
 		b->stats.gpos[1] += 6*b->stats.vel[1];
 	}
-	if (keys[XK_a] && (g->Player_1.Current_Health > 0)) {
+	if (keys[XK_a] && !g->Player_1.gameOver) {
 		g->Player_1.stats.angle += 4.0f;
 		if (g->Player_1.stats.angle >= 360.0f)
 			g->Player_1.stats.angle -= 360.0f;
@@ -369,12 +354,12 @@ void physics(Game *g)
 	person.pos[0] =	g->Player_1.stats.spos[0];
 		person.pos[1] = g->Player_1.stats.spos[1];
 	}
-	if (keys[XK_d] && (g->Player_1.Current_Health > 0)) {
+	if (keys[XK_d] && !g->Player_1.gameOver) {
 		g->Player_1.stats.angle -= 4.0f;
 		if (g->Player_1.stats.angle < 0.0f)
 			g->Player_1.stats.angle += 360.0f;
 	}
-	if (keys[XK_w] && (g->Player_1.Current_Health > 0)) {
+	if (keys[XK_w] && !g->Player_1.gameOver) {
 		//convert Player_1.stats.angle to radians
 		Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
@@ -386,7 +371,7 @@ void physics(Game *g)
 		g->Player_1.stats.vel[0] = 0;
 		g->Player_1.stats.vel[1] = 0;
 	}
-	if (keys[XK_s] && (g->Player_1.Current_Health > 0)) {
+	if (keys[XK_s] && !g->Player_1.gameOver) {
 		//convert Player_1.stats.angle to radians
 		Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
@@ -400,7 +385,7 @@ void physics(Game *g)
 	}
 
 	if ((keys[XK_space] || joy[0]) && (g->Player_1.Current_Ammo > 0) && 
-		(g->Player_1.Current_Health > 0)) {
+		(!g->Player_1.gameOver)) {
 		//a little time between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
@@ -430,7 +415,7 @@ void physics(Game *g)
 			g->Player_1.Current_Ammo--;
 		}
 	}
-	if(keys[XK_F7]){
+	if(keys[XK_F7] && !g->Player_1.gameOver){
 		if(g->Player_1.Current_Health > 0)
 			g->Player_1.Current_Health -= 5;
 	}
@@ -446,6 +431,10 @@ void physics(Game *g)
 	if(keys[XK_F10]){
             g->Player_1.artifact[2] = !g->Player_1.artifact[2];
         }
+    if(keys[XK_F12]){
+		g->Player_1.lives += 1;
+		g->Player_1.lives = g->Player_1.lives % 5;
+	}
 }
 int i = 0;
 struct timespec animationStart, animationCurrent;
@@ -459,7 +448,7 @@ void render(Game *g)
 	}
 	drawGBlocks(g);
 	//Draw the Player_1
-	if(g->Player_1.Current_Health > 0)
+	if(g->Player_1.Current_Health > 0 && !g->Player_1.gameOver)
 		drawOType(g->Player_1, g);
 
 	if (axis[3] || axis[4])
@@ -467,10 +456,14 @@ void render(Game *g)
 	if (joy[4] || keys[XK_b]) 
 		renderShield(g);
 	drawHUD(g->Player_1);
-	//drawHealth(g->Player_1);
-	//drawAmmo(g->Player_1);
-	if(g->Player_1.Current_Health == 0)
+	if(g->Player_1.Current_Health == 0){
+		g->Player_1.lives--;
+		g->Player_1.Current_Health = g->Player_1.Max_Health;
+	}
+	if(g->Player_1.lives == 0){
 		GameOver();
+		g->Player_1.gameOver = true;
+	}
 	drawHealthPack(500, 400, 0);
 	drawHealthPack(100, 800, 0);
 	if (people) {

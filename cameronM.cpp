@@ -67,7 +67,16 @@ void drawHUD(Player x)
 	drawHealth(x);
 	drawAmmo(x);
 	drawArtifacts(x);
-
+	switch(x.lives){
+	case 4:
+		drawLives(10, 0);
+	case 3:
+		drawLives(50, 0);
+	case 2:
+		drawLives(10, -30);
+	case 1:
+		drawLives(50, -30);
+	}
 }
 void drawBackground()
 {
@@ -272,20 +281,28 @@ void drawHealth(Player x)
 {
 double remaining = 100-((x.Current_Health/x.Max_Health)*100);
     //Background of health bar
-	glColor3ub(255, 0, 0);
 	glPushMatrix();
 	glTranslatef(res[0]-150, 85, 0);
         glBegin(GL_POLYGON);
+				
+				//glColor3ub(230, 20, 20);
                 glVertex2i(-90, -15);
+                //glColor3ub(240, 110, 110);
                 glVertex2i(-100, -5);
                 
+                //glColor3ub(240, 110, 110);
                 glVertex2i(-100, 5);
+                //glColor3ub(230, 20, 20);
                 glVertex2i(-90, 15);
                 
+                //glColor3ub(230, 20, 20);
                 glVertex2i(90, 15);
+                //glColor3ub(240, 110, 110);
                 glVertex2i(100, 5);
                 
+                //glColor3ub(240, 110, 110);
                 glVertex2i(100, -5);
+                //glColor3ub(230, 20, 20);
                 glVertex2i(90, -15);
         glEnd();
         glPopMatrix();
@@ -380,8 +397,26 @@ void drawAmmo(Player x){
         r.center = 0;
         ggprint8b(&r, 16, 0x00ffffff, "Ammo:");
 }
-void GameOver(){
-    	Rect r;
+void drawLives(int x, int y)
+{
+	
+		glColor3ub(255, 0, 0);
+        glPushMatrix();
+        glTranslatef(res[0], 0, 0);
+        glBegin(GL_POLYGON);
+                glVertex2i(-320+x, 45+y);
+                glVertex2i(-330+x, 60+y);
+                glVertex2i(-325+x, 65+y);
+                glVertex2i(-320+x, 60+y);
+                glVertex2i(-315+x, 65+y);
+                glVertex2i(-310+x, 60+y);
+        glEnd();
+        glPopMatrix();
+	
+}
+void GameOver()
+{
+    Rect r;
 	r.bot = 500;
 	r.left = 600;
 	r.center = 0;
@@ -391,10 +426,12 @@ void Restart(Player *x)
 {
 	x->Current_Health = 100;
 	x->Current_Ammo = 100;
+	x->lives = 4;
 	x->stats.spos[0] = 625;
 	x->stats.spos[1] = 450;
 	x->stats.gpos[0] = 500;
 	x->stats.gpos[1] = 500;
+	x->gameOver = false;
 	VecZero(x->stats.dir);
 }
 void drawHealthPack(int x, int y, int z)
