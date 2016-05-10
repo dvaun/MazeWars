@@ -451,7 +451,11 @@ void render(Game *g)
 	drawGBlocks(g);
 	//Draw the Player_1
 	if(g->Player_1.Current_Health > 0 && !g->Player_1.gameOver)
+<<<<<<< HEAD
 	//drawOType(g->Player_1, g);
+=======
+		//drawOType(g->Player_1, g);
+>>>>>>> b61137aba3d393d924d641a149b02b89196d382e
 
 	if (axis[3] || axis[4])
 	renderCrosshair(axis, g, false);
@@ -479,6 +483,7 @@ void render(Game *g)
 	glBindTexture(GL_TEXTURE_2D, personTexture1);
 	glEnable(GL_ALPHA_TEST);
 	//	glEnable(GL_BLEND);
+<<<<<<< HEAD
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	//		glBindTexture(GL_TEXTURE_2D, personTexture);
@@ -502,6 +507,44 @@ void render(Game *g)
 		glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
 		glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
 		glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+=======
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glAlphaFunc(GL_GREATER, 0.0f);
+//		glBindTexture(GL_TEXTURE_2D, personTexture);
+		//glBindTexture(GL_TEXTURE_2D, personTexture1);
+		glBegin(GL_QUADS);
+		float w = personImage1->width/4;
+		
+		clock_gettime(CLOCK_REALTIME, &animationCurrent);
+		animationSpan = timeDiff(&animationStart, &animationCurrent);
+		glBindTexture(GL_TEXTURE_2D, personTexture1);
+		static int control = 0;
+		if(control <= 10 && (keys[XK_w] || keys[XK_s])) {
+			//	glBindTexture(GL_TEXTURE_2D, 0);
+			//	glBindTexture(GL_TEXTURE_2D, personTexture1);
+                                        glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
+                                        glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
+                                        glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
+                                        glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
+			}
+		else{
+			//glBindTexture(GL_TEXTURE_2D, 0);
+			//glBindTexture(GL_TEXTURE_2D, personTexture1);
+                                glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+                                glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+                                glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+                                glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+		}
+		control += 1;
+		control = control % 20;
+		i++;
+			//glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+			//glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+			//glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+			//glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+		glEnd();
+		glPopMatrix();
+>>>>>>> b61137aba3d393d924d641a149b02b89196d382e
 	}
 	control++;
 	control %= 20;
