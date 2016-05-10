@@ -251,9 +251,9 @@ void begin_game(Game& game, gblock_info& gbi)
 	create_gblock(game.blocks[15][5],0,15,5);
 	create_gblock(game.blocks[10][5],1,10,5);
 	for (int i = 0; i < 20; i++) {
-	    create_gblock(game.blocks[20][i],1,20,i);
-	    create_gblock(game.blocks[21][i],0,21,i);
-	    create_gblock(game.blocks[22][i],1,22,i);
+	    create_gblock(game.blocks[20][i],0,20,i);
+	    create_gblock(game.blocks[21][i],1,21,i);
+	    create_gblock(game.blocks[22][i],0,22,i);
 	}
 }
 
@@ -425,6 +425,7 @@ void drawGBlocks(Game *g)
 		for (int j = 0; j < ncols; j++) {
 			if (g->blocks[i][j].assigned == 1) {
 				if (checkDistanceBlock(g,g->blocks[i][j],(float)g->g_xres/2,(float)g->g_yres/2)) {
+					glColor3f(255.0, 255.0, 255.0);
 					drawBlock(g, g->blocks[i][j]);
 				}
 			}
