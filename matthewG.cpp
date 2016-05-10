@@ -170,9 +170,9 @@ void renderCharacter(Person person, Game *g, float w, GLuint spriteTexture,
 		glBegin(GL_QUADS);	
 		//clock_gettime(CLOCK_REALTIME, &animationCurrent);
 		//animationSpan = timeDiff(&animationStart, &animationCurrent);
-		glBindTexture(GL_TEXTURE_2D, spriteTexture);
+		//glBindTexture(GL_TEXTURE_2D, spriteTexture);
 		static int control = 0;
-		if (control <= 20 && (keys[XK_w] || keys[XK_s])) {
+		if (control <= 10 && (keys[XK_w] || keys[XK_s])) {
 				glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
 				glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
 				glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
@@ -186,9 +186,10 @@ void renderCharacter(Person person, Game *g, float w, GLuint spriteTexture,
 				glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
 		}
 		control++;
-		control %= 40;
-
+		control %= 20;
+		
 		glEnd();
+		glDisable(GL_ALPHA_TEST);
 		glPopMatrix();
 }
 
