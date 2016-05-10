@@ -181,8 +181,8 @@ void initXWindows(void)
 	swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
 	StructureNotifyMask | SubstructureNotifyMask;
 	win = XCreateWindow(dpy, root, 0, 0, xres, yres, 0,
-		vi->depth, InputOutput, vi->visual,
-		CWColormap | CWEventMask, &swa);
+	vi->depth, InputOutput, vi->visual,
+	CWColormap | CWEventMask, &swa);
 	set_title();
 	glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
 	glXMakeCurrent(dpy, win, glc);
@@ -223,8 +223,10 @@ void init_opengl(void)
 	//glGenTextures(2, texture);
 	initialize_fonts();
 	
-	personImage1 = ppm6GetImage((char*)"images/red.ppm");
+	//personImage1 = ppm6GetImage((char*)"images/red.ppm");
 	//personImage2 = ppm6GetImage((char*)"images/sprite.ppm");
+	string characterSelected = "red";
+	personImage1 = characterSelection(characterSelected);
 	job_opengl(personImage1, personTexture1);
 	//job_opengl(personImage2, personTexture2);
 
@@ -235,10 +237,10 @@ void check_resize(XEvent *e)
 	//The ConfigureNotify is sent by the
 	//server if the window is resized.
 	if (e->type != ConfigureNotify)
-		return;
+	return;
 	XConfigureEvent xce = e->xconfigure;
 	if (xce.width != xres || xce.height != yres) {
-	//Window size did change.
+		//Window size did change.
 		reshape_window(xce.width, xce.height);
 	}
 }
@@ -278,14 +280,14 @@ void check_mouse(XEvent *e, Game *g)
 	}
 	if (e->type == ButtonPress) {
 		if (e->xbutton.button==1) {
-	//Left button is down
+			//Left button is down
 		}
 		if (e->xbutton.button==3) {
-	//Right button is down
+			//Right button is down
 		}
 	}
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
-	//Mouse moved
+		//Mouse moved
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
 	}
@@ -304,7 +306,7 @@ int check_keys(XEvent *e)
 	if (e->type == KeyRelease) {
 		keys[key]=0;
 		if (key == XK_Shift_L || key == XK_Shift_R)
-			shift=0;
+		shift=0;
 		return 0;
 	}
 	if (e->type == KeyPress) {
@@ -317,11 +319,11 @@ int check_keys(XEvent *e)
 		return 0;
 	}
 	if (shift){}
-		job_keys(key, quit, person, people);
+	job_keys(key, quit, person, people);
 	if (quit == 1) 
-		return 1;
+	return 1;
 	else
-		return 0;
+	return 0;
 }
 
 void physics(Game *g)
@@ -349,15 +351,15 @@ void physics(Game *g)
 	if (keys[XK_a] && !g->Player_1.gameOver) {
 		g->Player_1.stats.angle += 4.0f;
 		if (g->Player_1.stats.angle >= 360.0f)
-			g->Player_1.stats.angle -= 360.0f;
+		g->Player_1.stats.angle -= 360.0f;
 
-	person.pos[0] =	g->Player_1.stats.spos[0];
+		person.pos[0] =	g->Player_1.stats.spos[0];
 		person.pos[1] = g->Player_1.stats.spos[1];
 	}
 	if (keys[XK_d] && !g->Player_1.gameOver) {
 		g->Player_1.stats.angle -= 4.0f;
 		if (g->Player_1.stats.angle < 0.0f)
-			g->Player_1.stats.angle += 360.0f;
+		g->Player_1.stats.angle += 360.0f;
 	}
 	if (keys[XK_w] && !g->Player_1.gameOver) {
 		//convert Player_1.stats.angle to radians
@@ -385,7 +387,7 @@ void physics(Game *g)
 	}
 
 	if ((keys[XK_space] || joy[0]) && (g->Player_1.Current_Ammo > 0) && 
-		(!g->Player_1.gameOver)) {
+			(!g->Player_1.gameOver)) {
 		//a little time between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
@@ -417,26 +419,26 @@ void physics(Game *g)
 	}
 	if(keys[XK_F7] && !g->Player_1.gameOver){
 		if(g->Player_1.Current_Health > 0)
-			g->Player_1.Current_Health -= 5;
+		g->Player_1.Current_Health -= 5;
 	}
 	if(keys[XK_F6]){
 		Restart(&g->Player_1);
 	}
 	if(keys[XK_F8]){
-	    g->Player_1.artifact[0] = !g->Player_1.artifact[0];
+		g->Player_1.artifact[0] = !g->Player_1.artifact[0];
 	}
 	if(keys[XK_F9]){
-            g->Player_1.artifact[1] = !g->Player_1.artifact[1];
-        }
+		g->Player_1.artifact[1] = !g->Player_1.artifact[1];
+	}
 	if(keys[XK_F10]){
-            g->Player_1.artifact[2] = !g->Player_1.artifact[2];
-        }
-    if(keys[XK_F12]){
+		g->Player_1.artifact[2] = !g->Player_1.artifact[2];
+	}
+	if(keys[XK_F12]){
 		g->Player_1.lives += 1;
 		g->Player_1.lives = g->Player_1.lives % 5;
 	}
 }
-int i = 0;
+
 struct timespec animationStart, animationCurrent;
 double animationSpan=0.0;
 
@@ -449,12 +451,12 @@ void render(Game *g)
 	drawGBlocks(g);
 	//Draw the Player_1
 	if(g->Player_1.Current_Health > 0 && !g->Player_1.gameOver)
-		drawOType(g->Player_1, g);
+	//drawOType(g->Player_1, g);
 
 	if (axis[3] || axis[4])
-		renderCrosshair(axis, g, false);
+	renderCrosshair(axis, g, false);
 	if (joy[4] || keys[XK_b]) 
-		renderShield(g);
+	renderShield(g);
 	drawHUD(g->Player_1);
 	if(g->Player_1.Current_Health == 0){
 		g->Player_1.lives--;
@@ -466,51 +468,50 @@ void render(Game *g)
 	}
 	drawHealthPack(500, 400, 0);
 	drawHealthPack(100, 800, 0);
-	if (people) {
-		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
-		glPushMatrix();
-		glTranslatef(person.pos[0], person.pos[1], person.pos[2]);	
-		glRotatef(g->Player_1.stats.angle, 0, 0, 1.0f);
-		glBindTexture(GL_TEXTURE_2D, personTexture1);
-		glEnable(GL_ALPHA_TEST);
+	float w = personImage1->width/4;
+	//renderCharacter(g, w, keys);
+ 	 
+	renderCharacter(person, g, w, personTexture1, keys); 
+	/* glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+	glPushMatrix();
+	glTranslatef(person.pos[0], person.pos[1], person.pos[2]);	
+	glRotatef(g->Player_1.stats.angle, 0, 0, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, personTexture1);
+	glEnable(GL_ALPHA_TEST);
 	//	glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glAlphaFunc(GL_GREATER, 0.0f);
-//		glBindTexture(GL_TEXTURE_2D, personTexture);
-		//glBindTexture(GL_TEXTURE_2D, personTexture1);
-		glBegin(GL_QUADS);
-		float w = personImage1->width/4;
-		
-		clock_gettime(CLOCK_REALTIME, &animationCurrent);
-		animationSpan = timeDiff(&animationStart, &animationCurrent);
-		glBindTexture(GL_TEXTURE_2D, personTexture1);
-		if(i % 2 == 0 && animationSpan > 60.0/1000.0f) {
-			//	glBindTexture(GL_TEXTURE_2D, 0);
-			//	glBindTexture(GL_TEXTURE_2D, personTexture1);
-				glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-				glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
-				glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
-				glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
-			}
-		else if(animationSpan > 60/1000.0f) {
-			//glBindTexture(GL_TEXTURE_2D, 0);
-			//glBindTexture(GL_TEXTURE_2D, personTexture1);
-					glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
-					glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
-					glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
-					glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
-		}
-		i++;
-			//glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-			//glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
-			//glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
-			//glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
-		glEnd();
-		glPopMatrix();
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	//		glBindTexture(GL_TEXTURE_2D, personTexture);
+	//glBindTexture(GL_TEXTURE_2D, personTexture1);
+	glBegin(GL_QUADS);
+	float w = personImage1->width/4;
+	
+	clock_gettime(CLOCK_REALTIME, &animationCurrent);
+	animationSpan = timeDiff(&animationStart, &animationCurrent);
+	glBindTexture(GL_TEXTURE_2D, personTexture1);
+	static int control = 0;
+	if(control <= 10 && (keys[XK_w] || keys[XK_s])) {
+		glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
+		glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
 	}
+	else
+	{
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+		glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+		glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+	}
+	control++;
+	control %= 20;
+
+	glEnd();
+	glPopMatrix();
+ 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_ALPHA_TEST);
-
+	*/
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
 		if (b != NULL) {

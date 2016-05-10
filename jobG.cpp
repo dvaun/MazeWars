@@ -68,9 +68,8 @@ void job_opengl(Ppmimage *personImage, GLuint personTexture)
 	//glGenTextures(10, &personTexture);
 	//glGenTextures(1, &personTexture[i]);	
 	//person
-	int w = personImage->width;
-	int h = personImage->height;
-	std::cout << w << std::endl;	
+	//int w = personImage->width;
+	//int h = personImage->height;
 	/*glBindTexture(GL_TEXTURE_2D, personTexture);
 	//
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
