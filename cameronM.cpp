@@ -315,7 +315,6 @@ void drawHealth(Player x)
 	glPopMatrix();
 
 	Rect r;
-	//
 	r.bot = 75;
 	r.left = res[0] - 310;
 	r.center = 0;
@@ -371,7 +370,6 @@ void drawAmmo(Player x){
 	glEnd();
 	glPopMatrix();
 	Rect r;
-	//
 	r.bot = 110;
 	r.left = res[0] - 310;
 	r.center = 0;
@@ -425,7 +423,6 @@ void drawHealthPack(int x, int y, int z)
 	glEnd();
 	glPopMatrix();
 	Rect r;
-	//
 	r.bot = y-5;
 	r.left = x-17;
 	r.center = 0;
