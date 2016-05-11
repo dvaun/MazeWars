@@ -449,7 +449,7 @@ void render(Game *g)
 	drawGBlocks(g);
 	//Draw the Player_1
 	if(g->Player_1.Current_Health > 0 && !g->Player_1.gameOver)
-		drawOType(g->Player_1, g);
+		//drawOType(g->Player_1, g);
 
 	if (axis[3] || axis[4])
 		renderCrosshair(axis, g, false);
@@ -484,22 +484,25 @@ void render(Game *g)
 		clock_gettime(CLOCK_REALTIME, &animationCurrent);
 		animationSpan = timeDiff(&animationStart, &animationCurrent);
 		glBindTexture(GL_TEXTURE_2D, personTexture1);
-		if(i % 2 == 0 && animationSpan > 60.0/1000.0f) {
+		static int control = 0;
+		if(control <= 10 && (keys[XK_w] || keys[XK_s])) {
 			//	glBindTexture(GL_TEXTURE_2D, 0);
 			//	glBindTexture(GL_TEXTURE_2D, personTexture1);
-				glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-				glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
-				glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
-				glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+                                        glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
+                                        glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
+                                        glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
+                                        glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
 			}
-		else if(animationSpan > 60/1000.0f) {
+		else{
 			//glBindTexture(GL_TEXTURE_2D, 0);
 			//glBindTexture(GL_TEXTURE_2D, personTexture1);
-					glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
-					glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
-					glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
-					glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
+                                glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+                                glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+                                glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+                                glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
 		}
+		control += 1;
+		control = control % 20;
 		i++;
 			//glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
 			//glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
