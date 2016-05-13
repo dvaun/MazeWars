@@ -2,7 +2,7 @@
 #define CAMERON_CPP
 /* Name: Cameron Morrow
 * Date: May 04, 2016
-* Last Modified: May 09, 2016
+* Last Modified: May 13, 2016
 * Description: My code handles all of the weapon movement if a controller 
 * is not being used.
 * In the mazewars.cpp I modified all of the original asteroids code to remove
@@ -63,19 +63,24 @@ void drawHUD(Player x)
 }
 void drawBackground()
 {
-	glColor3ub(176, 140, 41);
+	glColor3ub(47, 47, 47);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
+	glColor3ub(47, 47, 47);
 	glVertex2i(0, 0);
+	glColor3ub(84, 84, 84);
 	glVertex2i(-350, 0);
+	glColor3ub(48, 48, 48);
 	glVertex2i(-350, 120);
+	glColor3ub(54, 54, 54);
 	glVertex2i(-320, 150);
+	glColor3ub(84, 84, 84);
 	glVertex2i(0, 150);
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(179, 144, 49);
+	glColor3ub(54, 54, 54);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -86,7 +91,7 @@ void drawBackground()
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(226, 212, 175);
+	glColor3ub(179, 179, 179);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -97,7 +102,7 @@ void drawBackground()
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(216, 198, 148);
+	glColor3ub(152, 152, 152);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -108,7 +113,7 @@ void drawBackground()
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(44, 35, 10);
+	glColor3ub(12, 12, 12);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -119,7 +124,7 @@ void drawBackground()
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(44, 35, 10);
+	glColor3ub(12, 12, 12);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -132,7 +137,7 @@ void drawBackground()
 }
 void drawDiamondBack(int x)
 {
-	glColor3ub(226, 212, 175);
+	glColor3ub(17, 17, 17);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -143,7 +148,7 @@ void drawDiamondBack(int x)
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(128, 102, 30);
+	glColor3ub(36, 36, 36);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -154,7 +159,7 @@ void drawDiamondBack(int x)
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(44, 35, 10);
+	glColor3ub(142, 142, 142);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -165,7 +170,7 @@ void drawDiamondBack(int x)
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(44, 35, 10);
+	glColor3ub(62, 62, 62);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -177,7 +182,7 @@ void drawDiamondBack(int x)
 	glPopMatrix();
 }
 void drawDiamond(int x)
-{
+{	
 	glColor3ub(180, 226, 175);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
@@ -189,7 +194,7 @@ void drawDiamond(int x)
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(39, 128, 30);
+	glColor3ub(40, 126, 35);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -200,7 +205,7 @@ void drawDiamond(int x)
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(13, 44, 10);
+	glColor3ub(30, 90, 40);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -211,7 +216,7 @@ void drawDiamond(int x)
 	glEnd();
 	glPopMatrix();
 
-	glColor3ub(13, 44, 10);
+	glColor3ub(67, 153, 80);
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
@@ -222,23 +227,23 @@ void drawDiamond(int x)
 	glEnd();
 	glPopMatrix();
 
-
 	glPushMatrix();
 	glTranslatef(res[0], 0, 0);
 	glBegin(GL_POLYGON);
-	glColor3ub(143, 235, 133);
+	glColor3ub(140, 236, 135);
 	glVertex2i(-320+x, 40);
-	glColor3ub(54, 176, 41);
+	glColor3ub(50, 175, 40);
 	glVertex2i(-310+x, 50);
-	glColor3ub(143, 235, 133);
+	glColor3ub(140, 236, 135);
 	glVertex2i(-300+x, 40);
-	glColor3ub(54, 176, 41);
+	glColor3ub(50, 175, 40);
 	glVertex2i(-310+x, 30);
 	glEnd();
 	glPopMatrix();
 }
 void drawArtifacts(Player x)
 {
+
 	if(x.artifact[0]){
 		drawDiamond(80);
 	}else{
@@ -254,6 +259,11 @@ void drawArtifacts(Player x)
 	}else{
 		drawDiamondBack(240);
 	}
+	Rect r;
+	r.bot = 35;
+	r.left = res[0] - 320;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00ffffff, "Artifacts:");
 }
 void drawHealth(Player x)
 {
@@ -261,9 +271,9 @@ void drawHealth(Player x)
 	//Background of health bar
 	glPushMatrix();
 	glTranslatef(res[0]-150, 85, 0);
+	glColor3ub(100, 100, 100);
 	glBegin(GL_POLYGON);
 
-	//glColor3ub(230, 20, 20);
 	glVertex2i(-90, -15);
 	//glColor3ub(240, 110, 110);
 	glVertex2i(-100, -5);
@@ -286,37 +296,37 @@ void drawHealth(Player x)
 	glPopMatrix();
 
 	int test = 10-x.Current_Health;
-	
-	glColor3ub(0, 255, 0);
-	glPushMatrix();
-	glTranslatef((res[0]-150)-remaining, 85, 0);
-	glBegin(GL_POLYGON);
-	
-	if(100-remaining > 10){
-		glVertex2i(-(90 - remaining), -15);
-		glVertex2i(-(100 - remaining), -5);
-		glVertex2i(-(100 - remaining), 5);
-		glVertex2i(-(90 - remaining), 15);
-		glVertex2i((90 - remaining), 15);
-		glVertex2i((100 - remaining), 5);
-		glVertex2i((100 - remaining), -5);
-		glVertex2i((90 - remaining), -15);
-	}else{
-		glVertex2i(-(90 - remaining + test), -15 + (test));
-		glVertex2i(-(100 - remaining), -5);
-		glVertex2i(-(100 - remaining), 5);
-		glVertex2i(-(90 - remaining + test), 15 - (test));
-		glVertex2i((90 - remaining + test), 15 - (test));
-		glVertex2i((100 - remaining), 5);
-		glVertex2i((100 - remaining), -5);
-		glVertex2i((90 - remaining + test), -15 + (test));
+	if(x.lives > 0){
+		glColor3ub(164, 20, 20);
+		glPushMatrix();
+		glTranslatef((res[0]-150)-remaining, 85, 0);
+		glBegin(GL_POLYGON);
+		
+		if(100-remaining > 10){
+			glVertex2i(-(90 - remaining), -15);
+			glVertex2i(-(100 - remaining), -5);
+			glVertex2i(-(100 - remaining), 5);
+			glVertex2i(-(90 - remaining), 15);
+			glVertex2i((90 - remaining), 15);
+			glVertex2i((100 - remaining), 5);
+			glVertex2i((100 - remaining), -5);
+			glVertex2i((90 - remaining), -15);
+		}else{
+			glVertex2i(-(90 - remaining + test), -15 + (test));
+			glVertex2i(-(100 - remaining), -5);
+			glVertex2i(-(100 - remaining), 5);
+			glVertex2i(-(90 - remaining + test), 15 - (test));
+			glVertex2i((90 - remaining + test), 15 - (test));
+			glVertex2i((100 - remaining), 5);
+			glVertex2i((100 - remaining), -5);
+			glVertex2i((90 - remaining + test), -15 + (test));
+		}
+		glEnd();
+		glPopMatrix();
 	}
-	glEnd();
-	glPopMatrix();
-
 	Rect r;
-	r.bot = 75;
-	r.left = res[0] - 310;
+	r.bot = 80;
+	r.left = res[0] - 240;
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00ffffff, "Health:");
 }
@@ -324,7 +334,7 @@ void drawAmmo(Player x){
 	double remaining = 100-((x.Current_Ammo/x.Max_Ammo)*100);
 	
 	//Background of ammo bar
-	glColor3ub(255, 0, 0);
+	glColor3ub(100, 100, 100);
 	glPushMatrix();
 	glTranslatef(res[0]-150, 120, 0);
 	glBegin(GL_POLYGON);
@@ -343,35 +353,36 @@ void drawAmmo(Player x){
 	glPopMatrix();
 	
 	int test = 10-x.Current_Ammo;
-	
-	glColor3ub(0, 0, 255);
-	glPushMatrix();
-	glTranslatef((res[0]-150)-remaining, 120, 0);
-	glBegin(GL_POLYGON);
-	if(100-remaining > 10){
-		glVertex2i(-(90 - remaining), -15);
-		glVertex2i(-(100 - remaining), -5);
-		glVertex2i(-(100 - remaining), 5);
-		glVertex2i(-(90 - remaining), 15);
-		glVertex2i((90 - remaining), 15);
-		glVertex2i((100 - remaining), 5);
-		glVertex2i((100 - remaining), -5);
-		glVertex2i((90 - remaining), -15);
-	}else{
-		glVertex2i(-(90 - remaining + test), -15 + (test));
-		glVertex2i(-(100 - remaining), -5);
-		glVertex2i(-(100 - remaining), 5);
-		glVertex2i(-(90 - remaining + test), 15 - (test));
-		glVertex2i((90 - remaining + test), 15 - (test));
-		glVertex2i((100 - remaining), 5);
-		glVertex2i((100 - remaining), -5);
-		glVertex2i((90 - remaining + test), -15 + (test));
+	if(100-remaining > 0){
+		glColor3ub(30, 20, 150);
+		glPushMatrix();
+		glTranslatef((res[0]-150)-remaining, 120, 0);
+		glBegin(GL_POLYGON);
+		if(100-remaining > 10){
+			glVertex2i(-(90 - remaining), -15);
+			glVertex2i(-(100 - remaining), -5);
+			glVertex2i(-(100 - remaining), 5);
+			glVertex2i(-(90 - remaining), 15);
+			glVertex2i((90 - remaining), 15);
+			glVertex2i((100 - remaining), 5);
+			glVertex2i((100 - remaining), -5);
+			glVertex2i((90 - remaining), -15);
+		}else{
+			glVertex2i(-(90 - remaining + test), -15 + (test));
+			glVertex2i(-(100 - remaining), -5);
+			glVertex2i(-(100 - remaining), 5);
+			glVertex2i(-(90 - remaining + test), 15 - (test));
+			glVertex2i((90 - remaining + test), 15 - (test));
+			glVertex2i((100 - remaining), 5);
+			glVertex2i((100 - remaining), -5);
+			glVertex2i((90 - remaining + test), -15 + (test));
+		}
+		glEnd();
+		glPopMatrix();
 	}
-	glEnd();
-	glPopMatrix();
 	Rect r;
-	r.bot = 110;
-	r.left = res[0] - 310;
+	r.bot = 115;
+	r.left = res[0] - 240;
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00ffffff, "Ammo:");
 }
@@ -379,7 +390,7 @@ void drawLives(int x, int y)
 {
 	glColor3ub(255, 0, 0);
 	glPushMatrix();
-	glTranslatef(res[0], 0, 0);
+	glTranslatef(res[0], 60, 0);
 	glBegin(GL_POLYGON);
 	glVertex2i(-320+x, 45+y);
 	glVertex2i(-330+x, 60+y);
