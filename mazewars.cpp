@@ -25,7 +25,7 @@
 #include "fonts/fonts.h"
 #include "cameronM.h"
 #include "cameronM.cpp"
-
+#include </usr/include/AL/alut.h>
 using namespace std;
 
 //constants
@@ -72,7 +72,8 @@ GLuint personTexture2;
 //GLuint silhouetteTexture;
 Person person;
 
-
+//ALuint alGunBuffer;
+//ALuint alGunSource;
 
 //function prototypes
 void initXWindows(void);
@@ -84,7 +85,6 @@ void pointPlayer(Game *g, int savex, int savey);
 //void getJoystickEvent(JoystickEvent event);
 int check_keys(XEvent *e);
 void init(Game *g);
-void init_sounds(void);
 void physics(Game *game);
 void render(Game *game);
 
@@ -93,6 +93,8 @@ int main(void)
 	logOpen();
 	initXWindows();
 	init_opengl();
+	init_sounds();
+	load_sounds();
 	Game game;
 	gblock_info gbi;
 	gbi.width = 16;
@@ -136,6 +138,7 @@ int main(void)
 	cleanupXWindows();
 	cleanup_fonts();
 	logClose();
+	release_sounds();
 	return 0;
 }
 
@@ -229,7 +232,6 @@ void init_opengl(void)
 	personImage1 = characterSelection(characterSelected);
 	job_opengl(personImage1, personTexture1);
 	//job_opengl(personImage2, personTexture2);
-
 }
 
 void check_resize(XEvent *e)
@@ -386,7 +388,8 @@ void physics(Game *g)
 		checkController(axis, g);
 	}
 
-	if ((keys[XK_space] || joy[0])) {
+	if ((keys[XK_space] || joy[0]) && g->Player_1.Current_Ammo > 0 && 
+									  g->Player_1.Current_Health > 0) {
 		//a little time between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
@@ -440,7 +443,7 @@ void physics(Game *g)
 
 struct timespec animationStart, animationCurrent;
 double animationSpan=0.0;
-
+static int a = 0;
 void render(Game *g)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -459,6 +462,9 @@ void render(Game *g)
 	drawHUD(g->Player_1);
 	if(g->Player_1.Current_Health == 0){
 		g->Player_1.lives--;
+		//Play death groan upon player death
+		if (g->Player_1.lives == 0)
+			play_sounds(1);
 		g->Player_1.Current_Health = g->Player_1.Max_Health;
 	}
 	if(g->Player_1.lives == 0){
@@ -468,13 +474,19 @@ void render(Game *g)
 	drawHealthPack(500, 400, 0);
 	drawHealthPack(100, 800, 0);
 	float w = personImage1->width/4;
- 	
-	renderCharacter(person, g, w, personTexture1, keys); 
+ 
+	if (g->Player_1.gameOver == false)
+		renderCharacter(person, g, w, personTexture1, keys); 
+	
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
 		if (b != NULL) {
 			//drawOType(b, g);
 			drawBullet(g, b, 0.0, 0.0, 0.0);
+			if (a == 0) {
+			play_sounds(0); 
+			//a++;
+			}
 		}	
 	}
 }
