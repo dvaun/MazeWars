@@ -3,7 +3,7 @@
 
 // Name: Rose Phannavong
 // Written: 27 April 2016
-// Modified: 28 April 2016
+// Modified: 15 May 2016
 // Description: The code will be implementing sound/music for the game.
 // Sound affects when the player uses the weapon.
 
@@ -12,6 +12,9 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include </usr/include/AL/alut.h>
+
+ALuint alSource[10];
+ALuint alBuffer[10];
 
 void init_sounds()
 {
@@ -28,41 +31,64 @@ void init_sounds()
     alListenerfv(AL_ORIENTATION, vec);
     alListenerf(AL_GAIN, 1.0f);
 
-    //Create a buffer to hold sound information.
-    ALuint alBuffer;
-    alBuffer = alutCreateBufferFromFile("./pewpew.wav");
+}
 
-    ALuint alSource;
-    alGenSources(1, &alSource);
-    alSourcei(alSource, AL_BUFFER, alBuffer);
-    
+void release_sounds()
+{
+    //First we must delete the source.
+    alDeleteSources(1, &alSource[0]);
+    alDeleteSources(1, &alSource[1]);
+    //alDeleteSources(1, &alSource[2]);
+
+    //Second we must delete the buffer.
+    alDeleteBuffers(1, &alBuffer[0]);
+    alDeleteBuffers(1, &alBuffer[1]);
+    //alDeleteBuffers(1, &alBuffer[2]);
+
+    //Get active context and device for active context.
+    ALCcontext *Context = alcGetCurrentContext();
+    ALCdevice *Device = alcGetContextsDevice(Context);
+
+    //Disable and release context.
+    alcMakeContextCurrent(NULL);
+    alcDestroyContext(Context);
+
+    //Close device.
+    alcCloseDevice(Device);
+}
+
+void load_sounds()
+{
+    //Bullet sound.
+    alBuffer[0] = alutCreateBufferFromFile("./sound/pewpew.wav");
+    alGenSources(1, &alSource[0]);
+    alSourcei(alSource[0], AL_BUFFER, alBuffer[0]);
+
+    //Death sound.
+    alBuffer[1] = alutCreateBufferFromFile("./sound/male_death.wav");
+    alGenSources(1, &alSource[1]);
+    alSourcei(alSource[1], AL_BUFFER, alBuffer[1]);
+
+    /*//Background sound.
+    alBuffer[2] = alutCreateBufferFromFIle("./sound/.wav");
+    alGenSources(1, &alSource[2]);
+    alSourcei(alSource[2], AL_BUFFER, alBuffer[2]);
+
+    */
+}
+
+void play_sounds(int soundOption)
+{
     //Set volume and pitch.
-    alSourcef(alSource, AL_GAIN, 1.0f);
-    alSourcef(alSource, AL_PITCH, 1.0f);
-    alSourcei(alSource, AL_LOOPING, AL_FALSE);
+    alSourcef(alSource[soundOption], AL_GAIN, 1.0f);
+    alSourcef(alSource[soundOption], AL_PITCH, 1.0f);
+    alSourcei(alSource[soundOption], AL_LOOPING, AL_FALSE);
 
     //No looping for sound.
     if (alGetError() != AL_NO_ERROR) {
         printf("Error: Setting Source\n");
     }
-    for (int i = 0; i < 4; i++) {
-        alSourcePlay(alSource);
-        usleep(250000);
-    }
-
-    //First we must delete the source.
-    alDeleteSources(1, &alSource);
-    
-    //Second we must delete the buffer.
-    alDeleteBuffers(1, &alBuffer);
-
-    ALCcontext *Context = alcGetCurrentContext();
-    ALCdevice *Device = alcGetContextsDevice(Context);
-
-    alcMakeContextCurrent(NULL);
-    alcDestroyContext(Context);
-    alcCloseDevice(Device);
-
+    alSourcePlay(alSource[soundOption]);
 }
 
 #endif
