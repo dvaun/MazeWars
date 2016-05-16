@@ -18,7 +18,7 @@ void getScreenRes(int x, int y)
 }
 void pointPlayer(Game *g, int savex, int savey)
 {
-	//Make the player point at the cursor
+	//Make the player's gun point at the cursor
 	exchangeGpos(&g->gun, &g->Player_1);
 	float weaponx = g->Player_1.stats.spos[0];
 	float weapony = g->Player_1.stats.spos[1];
@@ -31,7 +31,7 @@ void pointPlayer(Game *g, int savex, int savey)
 	if (savex > weaponx && (res[1] - savey) < weapony)
 		nDeg -= 180;
 
-	if (g->gun.stats.angle > 360.f){
+	if (g->gun.stats.angle > 360.f) {
 		g->gun.stats.angle = 360.0f;
 	}
 	if (g->gun.stats.angle <= 360.0f) {
@@ -40,7 +40,7 @@ void pointPlayer(Game *g, int savex, int savey)
 		}
 		g->gun.stats.angle = nDeg + 90;
 	}
-	if (g->gun.stats.angle < 0.0f){
+	if (g->gun.stats.angle < 0.0f) {
 		g->gun.stats.angle += 360.0f;
 	}
 }
@@ -50,7 +50,7 @@ void drawHUD(Player x)
 	drawHealth(x);
 	drawAmmo(x);
 	drawArtifacts(x);
-	switch(x.lives){
+	switch (x.lives) {
 		case 4:
 			drawLives(10, 0);
 		case 3:
@@ -244,19 +244,19 @@ void drawDiamond(int x)
 void drawArtifacts(Player x)
 {
 
-	if(x.artifact[0]){
+	if (x.artifact[0]) {
 		drawDiamond(80);
-	}else{
+	} else {
 		drawDiamondBack(80);
 	}
-	if(x.artifact[1]){
+	if (x.artifact[1]) {
 		drawDiamond(160);
-	}else{
+	} else {
 		drawDiamondBack(160);
 	} 
-	if(x.artifact[2]){
+	if (x.artifact[2]) {
 		drawDiamond(240);
-	}else{
+	} else {
 		drawDiamondBack(240);
 	}
 	Rect r;
@@ -296,13 +296,13 @@ void drawHealth(Player x)
 	glPopMatrix();
 
 	int test = 10-x.Current_Health;
-	if(x.lives > 0){
+	if (x.lives > 0) {
 		glColor3ub(164, 20, 20);
 		glPushMatrix();
 		glTranslatef((res[0]-150)-remaining, 85, 0);
 		glBegin(GL_POLYGON);
 		
-		if(100-remaining > 10){
+		if (100-remaining > 10) {
 			glVertex2i(-(90 - remaining), -15);
 			glVertex2i(-(100 - remaining), -5);
 			glVertex2i(-(100 - remaining), 5);
@@ -311,7 +311,7 @@ void drawHealth(Player x)
 			glVertex2i((100 - remaining), 5);
 			glVertex2i((100 - remaining), -5);
 			glVertex2i((90 - remaining), -15);
-		}else{
+		} else {
 			glVertex2i(-(90 - remaining + test), -15 + (test));
 			glVertex2i(-(100 - remaining), -5);
 			glVertex2i(-(100 - remaining), 5);
@@ -353,12 +353,12 @@ void drawAmmo(Player x){
 	glPopMatrix();
 	
 	int test = 10-x.Current_Ammo;
-	if(100-remaining > 0){
+	if (100-remaining > 0) {
 		glColor3ub(30, 20, 150);
 		glPushMatrix();
 		glTranslatef((res[0]-150)-remaining, 120, 0);
 		glBegin(GL_POLYGON);
-		if(100-remaining > 10){
+		if (100-remaining > 10) {
 			glVertex2i(-(90 - remaining), -15);
 			glVertex2i(-(100 - remaining), -5);
 			glVertex2i(-(100 - remaining), 5);
@@ -367,7 +367,7 @@ void drawAmmo(Player x){
 			glVertex2i((100 - remaining), 5);
 			glVertex2i((100 - remaining), -5);
 			glVertex2i((90 - remaining), -15);
-		}else{
+		} else {
 			glVertex2i(-(90 - remaining + test), -15 + (test));
 			glVertex2i(-(100 - remaining), -5);
 			glVertex2i(-(100 - remaining), 5);
