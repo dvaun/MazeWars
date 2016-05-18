@@ -46,11 +46,15 @@ const double oobillion = 1.0 / 1e9;
 struct timespec timeStart, timeCurrent;
 struct timespec timePause;
 struct timespec timeT1;
+struct timespec timeT2;
+struct timespec timeT3;
 double physicsCountdown=0.0;
 double timeSpan=0.0;
-double timeSpanT=0.0;
-//unsigned int upause=0;
+double timeSpanT1=0.0;
+double timeSpanT2=0.0;
+double timeSpanT3=0.0;
 
+//unsigned int upause=0;
 double timeDiff(struct timespec *start, struct timespec *end) 
 {
 	return (double)(end->tv_sec - start->tv_sec ) +
@@ -399,6 +403,7 @@ void physics(Game *g)
 		clock_gettime(CLOCK_REALTIME, &bt);
 		double ts = timeDiff(&g->bulletTimer, &bt);
 		if (ts > 0.1 && g->nbullets < MAX_BULLETS) {
+			 play_sounds(0);
 			timeCopy(&g->bulletTimer, &bt);
 			//shoot a bullet...
 			Bullet *b = &g->barr[g->nbullets];
@@ -431,17 +436,26 @@ void physics(Game *g)
 		Restart(&g->Player_1);
 	}
 	if(keys[XK_F8]){
-		timeSpanT = timeDiff(&timeT1, &timeCurrent);
-		if(timeSpanT > 1000){
+		timeSpanT1 = timeDiff(&timeT1, &timeCurrent);
+		if(timeSpanT1 > 0.2){
 			clock_gettime(CLOCK_REALTIME, &timeT1);
 			g->Player_1.artifact[0] = !g->Player_1.artifact[0];
 		}
 	}
 	if(keys[XK_F9]){
-		g->Player_1.artifact[1] = !g->Player_1.artifact[1];
+		timeSpanT2 = timeDiff(&timeT2, &timeCurrent);
+                if(timeSpanT2 > 0.2){
+                        clock_gettime(CLOCK_REALTIME, &timeT2);
+                        g->Player_1.artifact[1] = !g->Player_1.artifact[1];
+                }
 	}
 	if(keys[XK_F10]){
-		g->Player_1.artifact[2] = !g->Player_1.artifact[2];
+		timeSpanT3 = timeDiff(&timeT3, &timeCurrent);
+                if(timeSpanT3 > 0.2){
+                        clock_gettime(CLOCK_REALTIME, &timeT3);
+                        g->Player_1.artifact[2] = !g->Player_1.artifact[2];
+                }
+
 	}
 	if(keys[XK_F12]){
 		g->Player_1.lives += 1;
@@ -492,7 +506,6 @@ void render(Game *g)
 			//drawOType(b, g);
 			drawBullet(g, b, 0.0, 0.0, 0.0);
 			if (a == 0) {
-			play_sounds(0); 
 			//a++;
 			}
 		}	
