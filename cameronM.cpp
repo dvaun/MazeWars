@@ -439,5 +439,51 @@ void drawHealthPack(int x, int y, int z)
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00000000, "Health");
 }
-
+void shadowBox()
+{
+	//topLeft
+	glBegin(GL_POLYGON);		
+		glColor3f(0, 0, 0);
+		glVertex2f(0, res[1]);
+		glVertex2f((res[0]/2), res[1]);
+		glVertex2f((res[0]/2), res[1]-50);
+		glVertex2f((res[0]/2)-150, res[1]-50);
+		glVertex2f((res[0]/2)-300, (res[1]/2)+100);
+		glVertex2f((res[0]/2)-300, (res[1]/2));
+		glVertex2f(0, (res[1]/2));
+	glEnd();
+	//bottomLeft
+	glBegin(GL_POLYGON);	
+		glColor3f(0, 0, 0);
+		glVertex2f(0, 0);
+		glVertex2f(0, (res[1]/2));
+		glVertex2f((res[0]/2)-300, (res[1]/2));
+		glVertex2f((res[0]/2)-300, (res[1]/2)-100);
+		glVertex2f((res[0]/2)-150, 50);
+		glVertex2f(res[0]/2, 50);
+		glVertex2f(res[0]/2, 0);
+	glEnd();		
+	//topRight	
+	glBegin(GL_POLYGON);		
+		glColor3f(0, 0, 0);		
+		glVertex2f(res[0], res[1]);		
+		glVertex2f((res[0]/2), res[1]);		
+		glVertex2f((res[0]/2), res[1]-50);		
+		glVertex2f((res[0]/2)+150, res[1]-50);		
+		glVertex2f((res[0]/2)+300, (res[1]/2)+100);		
+		glVertex2f((res[0]/2)+300, (res[1]/2));	
+		glVertex2f(res[0], (res[1]/2));
+	glEnd();
+	//bottomRight	
+	glBegin(GL_POLYGON);	
+		glColor3f(0, 0, 0);	
+		glVertex2f(res[0], 0);	
+		glVertex2f(res[0], (res[1]/2));
+		glVertex2f((res[0]/2)+300, (res[1]/2));	
+		glVertex2f((res[0]/2)+300, (res[1]/2)-100);	
+		glVertex2f((res[0]/2)+150, 50);	
+		glVertex2f(res[0]/2, 50);	
+		glVertex2f(res[0]/2, 0);
+	glEnd();
+}
 #endif
