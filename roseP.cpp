@@ -38,12 +38,12 @@ void release_sounds()
     //First we must delete the source.
     alDeleteSources(1, &alSource[0]);
     alDeleteSources(1, &alSource[1]);
-    //alDeleteSources(1, &alSource[2]);
+    alDeleteSources(1, &alSource[2]);
 
     //Second we must delete the buffer.
     alDeleteBuffers(1, &alBuffer[0]);
     alDeleteBuffers(1, &alBuffer[1]);
-    //alDeleteBuffers(1, &alBuffer[2]);
+    alDeleteBuffers(1, &alBuffer[2]);
 
     //Get active context and device for active context.
     ALCcontext *Context = alcGetCurrentContext();
@@ -69,6 +69,11 @@ void load_sounds()
     alGenSources(1, &alSource[1]);
     alSourcei(alSource[1], AL_BUFFER, alBuffer[1]);
 
+	//Walk sound.
+    alBuffer[2] = alutCreateBufferFromFile("./sound/walk.wav");
+    alGenSources(1, &alSource[2]);
+    alSourcei(alSource[2], AL_BUFFER, alBuffer[2]);
+    
     /*//Background sound.
     alBuffer[2] = alutCreateBufferFromFIle("./sound/.wav");
     alGenSources(1, &alSource[2]);
