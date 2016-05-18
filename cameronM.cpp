@@ -446,10 +446,10 @@ void shadowBox()
 		glColor3f(0, 0, 0);
 		glVertex2f(0, res[1]);
 		glVertex2f((res[0]/2), res[1]);
-		glVertex2f((res[0]/2), res[1]-50);
-		glVertex2f((res[0]/2)-150, res[1]-50);
-		glVertex2f((res[0]/2)-300, (res[1]/2)+100);
-		glVertex2f((res[0]/2)-300, (res[1]/2));
+		glVertex2f((res[0]/2), res[1]-75);
+		glVertex2f((res[0]/2)-150, res[1]-75);
+		glVertex2f((res[0]/2)-400, (res[1]/2)+100);
+		glVertex2f((res[0]/2)-400, (res[1]/2));
 		glVertex2f(0, (res[1]/2));
 	glEnd();
 	//bottomLeft
@@ -457,10 +457,10 @@ void shadowBox()
 		glColor3f(0, 0, 0);
 		glVertex2f(0, 0);
 		glVertex2f(0, (res[1]/2));
-		glVertex2f((res[0]/2)-300, (res[1]/2));
-		glVertex2f((res[0]/2)-300, (res[1]/2)-100);
-		glVertex2f((res[0]/2)-150, 50);
-		glVertex2f(res[0]/2, 50);
+		glVertex2f((res[0]/2)-400, (res[1]/2));
+		glVertex2f((res[0]/2)-400, (res[1]/2)-100);
+		glVertex2f((res[0]/2)-150, 75);
+		glVertex2f(res[0]/2, 75);
 		glVertex2f(res[0]/2, 0);
 	glEnd();		
 	//topRight	
@@ -468,21 +468,21 @@ void shadowBox()
 		glColor3f(0, 0, 0);		
 		glVertex2f(res[0], res[1]);		
 		glVertex2f((res[0]/2), res[1]);		
-		glVertex2f((res[0]/2), res[1]-50);		
-		glVertex2f((res[0]/2)+150, res[1]-50);		
-		glVertex2f((res[0]/2)+300, (res[1]/2)+100);		
-		glVertex2f((res[0]/2)+300, (res[1]/2));	
+		glVertex2f((res[0]/2), res[1]-75);		
+		glVertex2f((res[0]/2)+150, res[1]-75);		
+		glVertex2f((res[0]/2)+400, (res[1]/2)+100);		
+		glVertex2f((res[0]/2)+400, (res[1]/2));	
 		glVertex2f(res[0], (res[1]/2));
 	glEnd();
 	//bottomRight	
 	glBegin(GL_POLYGON);	
-		glColor3f(0, 0, 0);	
+		glColor4f(0, 0, 0, .5);	
 		glVertex2f(res[0], 0);	
 		glVertex2f(res[0], (res[1]/2));
-		glVertex2f((res[0]/2)+300, (res[1]/2));	
-		glVertex2f((res[0]/2)+300, (res[1]/2)-100);	
-		glVertex2f((res[0]/2)+150, 50);	
-		glVertex2f(res[0]/2, 50);	
+		glVertex2f((res[0]/2)+400, (res[1]/2));	
+		glVertex2f((res[0]/2)+400, (res[1]/2)-100);	
+		glVertex2f((res[0]/2)+150, 75);	
+		glVertex2f(res[0]/2, 75);	
 		glVertex2f(res[0]/2, 0);
 	glEnd();
 }
