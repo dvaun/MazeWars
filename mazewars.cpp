@@ -90,6 +90,9 @@ GLuint boulderTexture;
 Ppmimage *logo = NULL;
 GLuint logoTexture;
 
+Ppmimage *enter = NULL;
+GLuint enterTexture;
+
 Person person;
 int enterPressed = 0;
 
@@ -156,7 +159,7 @@ int main(void)
 				enterPressed = keys[XK_Return];
 			}
 			titleScreen = renderTitleScreen(titleTexture, logoTexture, boulderTexture, 
-					logo, boulders, enterPressed);
+					enterTexture, logo, boulders, enter, enterPressed);
 		}
 		else {
 			glClearColor(0.8, 0.8, 0.8, 1.0);
@@ -264,18 +267,19 @@ void init_opengl(void)
 	//job_opengl(personImage1, personTexture1);
 	//job_opengl(personImage2, personTexture2);
 
-
-
 	string characterSelected = "red";
 	personImage1 = characterSelection(characterSelected);
 
 	titleBackground = ppm6GetImage((char*)"images/titleBackground.ppm");
 	boulders = ppm6GetImage((char*)"images/boulder.ppm");
 	logo = ppm6GetImage((char*)"images/logo.ppm");
+	enter = ppm6GetImage((char*)"images/enterBold.ppm");
+
 	glGenTextures(1, &personTexture1);
 	glGenTextures(1, &titleTexture);
 	glGenTextures(1, &boulderTexture);
 	glGenTextures(1, &logoTexture);
+	glGenTextures(1, &enterTexture);
 
 	//Character Texture
 	float w = personImage1->width;
@@ -322,6 +326,17 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, logoData);
 	free(logoData);
+
+	//enter maze texture
+	w = enter->width;
+	h = enter->height;
+	glBindTexture(GL_TEXTURE_2D, enterTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *enterData = buildAlphaData(enter);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, enterData);
+	free(enterData);
 }
 
 void check_resize(XEvent *e)
@@ -571,8 +586,8 @@ void render(Game *g)
 	//}
 	drawGBlocks(g);
 	//Draw the Player_1
-	if(g->Player_1.Current_Health > 0 && !g->Player_1.gameOver)
-		drawOType(g->Player_1, g);
+	//if(g->Player_1.Current_Health > 0 && !g->Player_1.gameOver)
+	//	drawOType(g->Player_1, g);
 	
 	if (axis[3] || axis[4])
 		renderCrosshair(axis, g, false);
@@ -597,17 +612,10 @@ void render(Game *g)
  
 	if (g->Player_1.gameOver == false)
 		renderCharacter(person, g, w, keys, personTexture1); 
-		
 
-	
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
-		if (b != NULL) {
-			//drawOType(b, g);
-			drawBullet(g, b, 0.0, 0.0, 0.0);
-			if (a == 0) {
-			//a++;
-			}
-		}	
+		if (b != NULL)
+			drawBullet(g, b, 0.0, 0.0, 0.0);	
 	}
 }

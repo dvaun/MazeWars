@@ -217,13 +217,15 @@ int fallingBouldersTimer = 1;
 int pos[3] = {0, yheight, 0};
 int posLogo[3] = {0, -50, 0};
 int renderTitleScreen(GLuint titleTexture, GLuint logoTexture, 
-	GLuint boulderTexture, Ppmimage *logo, Ppmimage *boulders, int enterPressed)
+	GLuint boulderTexture, GLuint enterTexture, Ppmimage *logo, 
+	Ppmimage *boulders, Ppmimage *enter, int enterPressed)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//set background to black to give cenematic feel
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	
+	//Background
 	glBindTexture(GL_TEXTURE_2D, titleTexture);
 	glBegin(GL_QUADS);
 		
@@ -260,6 +262,7 @@ int renderTitleScreen(GLuint titleTexture, GLuint logoTexture,
 		glDisable(GL_ALPHA_TEST);
 
 	}
+
 	//Falling Boulders
 	if (fallingBouldersTimer == 1) {
 		clock_gettime(CLOCK_REALTIME, &totStart);
@@ -289,6 +292,26 @@ int renderTitleScreen(GLuint titleTexture, GLuint logoTexture,
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
 	
+	//Enter Maze
+	glPushMatrix();
+	//glTranslatef(pos[0], pos[1], pos[2]);
+
+	glBindTexture(GL_TEXTURE_2D, enterTexture);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+
+	cout << enter->height << endl;
+	cout << enter->width << endl;
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, enter->height);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(enter->width, enter->height);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(enter->width, 0);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 0);
+
+	glEnd();
+	glDisable(GL_ALPHA_TEST);
+	glPopMatrix();	
+
 	clock_gettime(CLOCK_REALTIME, &bouldersCurrent);
 	bouldersSpan += timeDiff(&bouldersStart, &bouldersCurrent);
 	//cout << bouldersSpan << endl;
@@ -310,8 +333,10 @@ int renderTitleScreen(GLuint titleTexture, GLuint logoTexture,
 		if (posLogo[1] < 300 && logoSpan > .8) {
 			posLogo[1] += 25;
 		}
-		if (posLogo[1] == 300)
+		if (posLogo[1] == 300) {
+
 			return 0;
+		}
 	}
 
 	return 1;
