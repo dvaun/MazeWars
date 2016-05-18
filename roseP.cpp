@@ -60,7 +60,7 @@ void release_sounds()
 void load_sounds()
 {
     //Bullet sound.
-    alBuffer[0] = alutCreateBufferFromFile("./sound/pewpew.wav");
+    alBuffer[0] = alutCreateBufferFromFile("./sound/bang.wav");
     alGenSources(1, &alSource[0]);
     alSourcei(alSource[0], AL_BUFFER, alBuffer[0]);
 
