@@ -10,4 +10,6 @@ void checkKeys(int keys[], Game *g);
 void renderCrosshair(int axis[], Game *g, bool keyboard);
 void renderShield(Game *g);
 Ppmimage* characterSelection(std::string characterSelected);
-void renderCharacter(Person person, Game *g, float w, GLuint spriteTexture, int keys[]); 
+void renderCharacter(Person person, Game *g, float w, int keys[], GLuint personTexture1); 
+int renderTitleScreen(GLuint tileTexture, GLuint logoTexture, GLuint boulderTexture, Ppmimage *logo, Ppmimage *boulders, int enterPressed);
+void resolution(int width, int height);

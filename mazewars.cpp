@@ -18,7 +18,6 @@
 #include "matthewG.h"
 #include "roseP.h"
 #include "jobG.h"
-#include <unistd.h> //required for controller
 #include "davidV.h"
 #include "defs.h"
 #include "person.h"
@@ -26,6 +25,8 @@
 #include "cameronM.h"
 #include "cameronM.cpp"
 #include </usr/include/AL/alut.h>
+#include "mtime.h"
+
 using namespace std;
 
 //constants
@@ -42,7 +43,7 @@ GLXContext glc;
 //-----------------------------------------------------------------------------
 //Setup timers
 const double physicsRate = 1.0 / 60.0;
-const double oobillion = 1.0 / 1e9;
+//const double oobillion = 1.0 / 1e9;
 struct timespec timeStart, timeCurrent;
 struct timespec timePause;
 struct timespec timeT1;
@@ -58,7 +59,7 @@ double timeSpanT3=0.0;
 double timeSpanT4=0.0;
 double timeSpanT5=0.0;
 //unsigned int upause=0;
-double timeDiff(struct timespec *start, struct timespec *end) 
+/*double timeDiff(struct timespec *start, struct timespec *end) 
 {
 	return (double)(end->tv_sec - start->tv_sec ) +
 	(double)(end->tv_nsec - start->tv_nsec) * oobillion;
@@ -68,22 +69,29 @@ void timeCopy(struct timespec *dest, struct timespec *source)
 	memcpy(dest, source, sizeof(struct timespec));
 }
 //-----------------------------------------------------------------------------
-
+*/
 int xres=1250, yres=900;
 int keys[65536];
 int joy[65536];
 int axis[65536];
 GLuint texture[10];
 int people = 0;
-Ppmimage *personImage1 = NULL;
-Ppmimage *personImage2 = NULL;
-GLuint personTexture1;
-GLuint personTexture2;
-//GLuint silhouetteTexture;
-Person person;
 
-//ALuint alGunBuffer;
-//ALuint alGunSource;
+int titleScreen = 1;
+Ppmimage *personImage1 = NULL;
+GLuint personTexture1;
+
+Ppmimage *titleBackground = NULL;
+GLuint titleTexture;
+
+Ppmimage *boulders = NULL;
+GLuint boulderTexture;
+
+Ppmimage *logo = NULL;
+GLuint logoTexture;
+
+Person person;
+int enterPressed = 0;
 
 //function prototypes
 void initXWindows(void);
@@ -142,7 +150,18 @@ int main(void)
 			physics(&game);
 			physicsCountdown -= physicsRate;
 		}
-		render(&game);
+		if (titleScreen) {
+			glBindTexture(GL_TEXTURE_2D, titleTexture);
+			if (keys[XK_Return]) {
+				enterPressed = keys[XK_Return];
+			}
+			titleScreen = renderTitleScreen(titleTexture, logoTexture, boulderTexture, 
+					logo, boulders, enterPressed);
+		}
+		else {
+			glClearColor(0.8, 0.8, 0.8, 1.0);
+			render(&game);
+		}
 		glXSwapBuffers(dpy, win);
 	}
 	cleanupXWindows();
@@ -205,6 +224,8 @@ void reshape_window(int width, int height)
 {
 	//window has been resized.
 	setup_screen_res(width, height);
+	resolution(width, height);
+
 	//
 	glViewport(0, 0, (GLint)width, (GLint)height);
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
@@ -238,10 +259,69 @@ void init_opengl(void)
 	
 	//personImage1 = ppm6GetImage((char*)"images/red.ppm");
 	//personImage2 = ppm6GetImage((char*)"images/sprite.ppm");
+	//string characterSelected = "red";
+	//personImage1 = characterSelection(characterSelected);
+	//job_opengl(personImage1, personTexture1);
+	//job_opengl(personImage2, personTexture2);
+
+
+
 	string characterSelected = "red";
 	personImage1 = characterSelection(characterSelected);
-	job_opengl(personImage1, personTexture1);
-	//job_opengl(personImage2, personTexture2);
+
+	titleBackground = ppm6GetImage((char*)"images/titleBackground.ppm");
+	boulders = ppm6GetImage((char*)"images/boulder.ppm");
+	logo = ppm6GetImage((char*)"images/logo.ppm");
+	glGenTextures(1, &personTexture1);
+	glGenTextures(1, &titleTexture);
+	glGenTextures(1, &boulderTexture);
+	glGenTextures(1, &logoTexture);
+
+	//Character Texture
+	float w = personImage1->width;
+	float h = personImage1->height;
+
+	glBindTexture(GL_TEXTURE_2D, personTexture1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *personData = buildAlphaData(personImage1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, personData);
+
+	free(personData);
+
+	//Title Screen Background Texture
+	w = titleBackground->width;
+	h = titleBackground->height;
+	glBindTexture(GL_TEXTURE_2D, titleTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *titleBackgroundData = buildAlphaData(titleBackground);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, titleBackgroundData);
+	free(titleBackgroundData);
+
+	//Boulders falling texture
+	w = boulders->width;
+	h = boulders->height;
+	glBindTexture(GL_TEXTURE_2D, boulderTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *boulderData = buildAlphaData(boulders);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, boulderData);
+	free(boulderData);
+
+	//MazeWars logo texture
+	w = logo->width;
+	h = logo->height;
+	glBindTexture(GL_TEXTURE_2D, logoTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *logoData = buildAlphaData(logo);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, logoData);
+	free(logoData);
 }
 
 void check_resize(XEvent *e)
@@ -480,8 +560,8 @@ void physics(Game *g)
 	}
 }
 
-struct timespec animationStart, animationCurrent;
-double animationSpan=0.0;
+//struct timespec animationStart, animationCurrent;
+//double animationSpan=0.0;
 static int a = 0;
 void render(Game *g)
 {
@@ -516,7 +596,7 @@ void render(Game *g)
 	float w = personImage1->width/4;
  
 	if (g->Player_1.gameOver == false)
-		renderCharacter(person, g, w, personTexture1, keys); 
+		renderCharacter(person, g, w, keys, personTexture1); 
 		
 
 	
