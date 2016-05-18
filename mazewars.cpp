@@ -48,12 +48,15 @@ struct timespec timePause;
 struct timespec timeT1;
 struct timespec timeT2;
 struct timespec timeT3;
+struct timespec timeT4;
+struct timespec timeT5;
 double physicsCountdown=0.0;
 double timeSpan=0.0;
 double timeSpanT1=0.0;
 double timeSpanT2=0.0;
 double timeSpanT3=0.0;
-
+double timeSpanT4=0.0;
+double timeSpanT5=0.0;
 //unsigned int upause=0;
 double timeDiff(struct timespec *start, struct timespec *end) 
 {
@@ -378,6 +381,11 @@ void physics(Game *g)
 		Flt ydir = sin(rad);
 		g->Player_1.stats.vel[0] = xdir;
 		g->Player_1.stats.vel[1] = ydir;
+		timeSpanT5 = timeDiff(&timeT5, &timeCurrent);
+        if(timeSpanT5 > 0.3){
+			clock_gettime(CLOCK_REALTIME, &timeT5);
+			play_sounds(2);
+		}
 	} else {
 		g->Player_1.stats.vel[0] = 0;
 		g->Player_1.stats.vel[1] = 0;
@@ -390,6 +398,11 @@ void physics(Game *g)
 		Flt ydir = sin(rad);
 		g->Player_1.stats.vel[0] = -1 * xdir;
 		g->Player_1.stats.vel[1] = -1 * ydir;
+		timeSpanT5 = timeDiff(&timeT5, &timeCurrent);
+		if(timeSpanT5 > 0.3){
+			clock_gettime(CLOCK_REALTIME, &timeT5);
+			play_sounds(2);
+		}
 	}
 	if (axis[0] || axis[1] ||  axis[4] || axis[5]) {	
 		checkController(axis, g);
@@ -458,8 +471,12 @@ void physics(Game *g)
 
 	}
 	if(keys[XK_F12]){
+		timeSpanT4 = timeDiff(&timeT4, &timeCurrent);
+                if(timeSpanT4 > 0.2){
+                        clock_gettime(CLOCK_REALTIME, &timeT4);
 		g->Player_1.lives += 1;
 		g->Player_1.lives = g->Player_1.lives % 5;
+	}
 	}
 }
 
@@ -480,7 +497,8 @@ void render(Game *g)
 	if (axis[3] || axis[4])
 		renderCrosshair(axis, g, false);
 	if (joy[4] || keys[XK_b]) 
-		renderShield(g);
+		renderShield(g);	
+	shadowBox();
 	drawHUD(g->Player_1);
 	if(g->Player_1.Current_Health == 0){
 		g->Player_1.lives--;
@@ -499,6 +517,8 @@ void render(Game *g)
  
 	if (g->Player_1.gameOver == false)
 		renderCharacter(person, g, w, personTexture1, keys); 
+		
+
 	
 	for (int i=0; i<g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
