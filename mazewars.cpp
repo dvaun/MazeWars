@@ -45,9 +45,12 @@ const double physicsRate = 1.0 / 60.0;
 const double oobillion = 1.0 / 1e9;
 struct timespec timeStart, timeCurrent;
 struct timespec timePause;
+struct timespec timeT1;
 double physicsCountdown=0.0;
 double timeSpan=0.0;
+double timeSpanT=0.0;
 //unsigned int upause=0;
+
 double timeDiff(struct timespec *start, struct timespec *end) 
 {
 	return (double)(end->tv_sec - start->tv_sec ) +
@@ -428,7 +431,11 @@ void physics(Game *g)
 		Restart(&g->Player_1);
 	}
 	if(keys[XK_F8]){
-		g->Player_1.artifact[0] = !g->Player_1.artifact[0];
+		timeSpanT = timeDiff(&timeT1, &timeCurrent);
+		if(timeSpanT > 1000){
+			clock_gettime(CLOCK_REALTIME, &timeT1);
+			g->Player_1.artifact[0] = !g->Player_1.artifact[0];
+		}
 	}
 	if(keys[XK_F9]){
 		g->Player_1.artifact[1] = !g->Player_1.artifact[1];
