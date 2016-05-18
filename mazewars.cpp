@@ -390,6 +390,7 @@ void physics(Game *g)
 
 	if ((keys[XK_space] || joy[0]) && g->Player_1.Current_Ammo > 0 && 
 									  g->Player_1.Current_Health > 0) {
+		g->Player_1.stats.angle = g->gun.stats.angle;
 		//a little time between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
