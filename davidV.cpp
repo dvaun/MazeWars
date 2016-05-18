@@ -90,13 +90,13 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 	xdist = 625 + (b->stats.gpos[0] - g->Player_1.stats.gpos[0] - 1.0);
 	ydist = 450 + (b->stats.gpos[1] - g->Player_1.stats.gpos[1] - 1.0);
 	//glTranslatef(xdist,ydist, 0);
+	glColor3f(red - .2f, blue - 0.2f, green - 0.2f);
 	glBegin(GL_POINTS);
 		glVertex2f(xdist, ydist);
 		glVertex2f(xdist-1.0f, ydist);
 		glVertex2f(xdist+1.0f, ydist);
 		glVertex2f(xdist, ydist-1.0f);
 		glVertex2f(xdist, ydist+1.0f);
-	glColor3f(red - .2f, blue - 0.2f, green - 0.2f);
 		glVertex2f(xdist-1.0f, ydist-1.0f);
 		glVertex2f(xdist-1.0f, ydist+1.0f);
 		glVertex2f(xdist+1.0f, ydist-1.0f);
