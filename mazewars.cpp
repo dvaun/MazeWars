@@ -93,6 +93,9 @@ GLuint logoTexture;
 Ppmimage *enter = NULL;
 GLuint enterTexture;
 
+Ppmimage *options = NULL;
+GLuint optionsTexture;
+
 Person person;
 int enterPressed = 0;
 
@@ -274,12 +277,14 @@ void init_opengl(void)
 	boulders = ppm6GetImage((char*)"images/boulder.ppm");
 	logo = ppm6GetImage((char*)"images/logo.ppm");
 	enter = ppm6GetImage((char*)"images/enterBold.ppm");
+	options = ppm6GetImage((char*)"images/optionsBold.ppm");
 
 	glGenTextures(1, &personTexture1);
 	glGenTextures(1, &titleTexture);
 	glGenTextures(1, &boulderTexture);
 	glGenTextures(1, &logoTexture);
 	glGenTextures(1, &enterTexture);
+	glGenTextures(1, &optionsTexture);
 
 	//Character Texture
 	float w = personImage1->width;
@@ -337,6 +342,16 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, enterData);
 	free(enterData);
+
+	w = options->width;
+	h = options->height;
+	glBindTexture(GL_TEXTURE_2D, optionsTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *optionsData = buildAlphaData(enter);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, optionsData);
+	free(optionsData);
 }
 
 void check_resize(XEvent *e)
