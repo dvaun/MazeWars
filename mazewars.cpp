@@ -305,7 +305,7 @@ void init_opengl(void)
 
 	string characterSelected = "red";
 	personImage1 = characterSelection(characterSelected);
-	personImage1c = characterSelection(characterSelected);
+	personImage1c = ppm6GetImage((char*)"images/enemy.ppm");
 	
 	testImage = ppm6GetImage((char*)"images/ZombieStand.ppm");
 	

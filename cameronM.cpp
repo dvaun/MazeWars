@@ -608,7 +608,7 @@ void renderCharacterEnemy(Person personc, Game *g, float w, int keys[],
 		animationSpanc = 0.0;
 		clock_gettime(CLOCK_REALTIME, &animationStartc);
 	}
-	w /= 2;
+	//w /= 2;
 	//glBindTexture(GL_TEXTURE_2D, spriteTexture);
 	if (animationSpanc < 12.5) {
 			glTexCoord2f(0.66f, 0.0f); glVertex2f(-w, w);
