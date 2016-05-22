@@ -161,7 +161,8 @@ Ppmimage* characterSelection(std::string characterColor)
 
 struct timespec animationCurrent, animationStart;
 double animationSpan = 0.0;
-void renderCharacter(Person person, Game *g, float w, int keys[], GLuint personTexture1)
+void renderCharacter(Person person, Game *g, float w, int keys[], 
+	GLuint personTexture1)
 {
 	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 	glPushMatrix();
@@ -207,18 +208,26 @@ void resolution(int width, int height)
 	yheight = height;
 }
 
-int scroll = yheight;
+int scroll = yheight+yheight;
 struct timespec bouldersCurrent, bouldersStart;
 struct timespec totCurrent, totStart;
 struct timespec logoCurrent, logoStart;
+struct timespec enterCurrent, enterStart;
+struct timespec optionsCurrent, optionsStart;
 double bouldersSpan = 0.0;
 double logoSpan = 0.0;
+double enterSpan = 0.0;
+double optionsSpan = 0.0;
 int fallingBouldersTimer = 1;
+double scale[3] = {1.0f, 1.0f, 0};
+double scalePos[3] = {0, 0, 0};
 int pos[3] = {0, yheight, 0};
 int posLogo[3] = {0, -50, 0};
-int renderTitleScreen(GLuint titleTexture, GLuint logoTexture, 
-	GLuint boulderTexture, GLuint enterTexture, Ppmimage *logo, 
-	Ppmimage *boulders, Ppmimage *enter, int enterPressed)
+int posEnter[3] = {xwidth/2, 0, 0};
+int posOptions[3] = {xwidth/2+60, 0, 0};
+
+int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[], 
+	int enterPressed)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -226,41 +235,98 @@ int renderTitleScreen(GLuint titleTexture, GLuint logoTexture,
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	
 	//Background
-	glBindTexture(GL_TEXTURE_2D, titleTexture);
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, introTextures[0]);
+	glTranslatef(-scale[0]*625 +625, -scale[1]*354+354, 0);
+	glScalef(scale[0], scale[1], scale[2]);
 	glBegin(GL_QUADS);
-		
-	if (xwidth == 1250) {
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(0,  yheight-96);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth, yheight-96);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth, 96);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
-	} else {
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(335,  yheight-96);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f( xwidth-335, yheight-96);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f( xwidth-335, 96);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(335, 96);
-	}
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, introImages[0]->height+96);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(introImages[0]->width, 
+		introImages[0]->height+96);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(introImages[0]->width, 96);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
 
 	glEnd();
-
+	glPopMatrix();
 	//MazeWars Logo
-	if (scroll <= -750) {
+	if (scroll <= -1800) {
 		glPushMatrix();
 		glTranslatef(posLogo[0], posLogo[1], posLogo[2]);
 
-		glBindTexture(GL_TEXTURE_2D, logoTexture);
+		glBindTexture(GL_TEXTURE_2D, introTextures[2]);
 		glEnable(GL_ALPHA_TEST);
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glBegin(GL_QUADS);
 
 		glTexCoord2f(0.0f, 0.0f); glVertex2f(235, 900);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(logo->width+235, 900);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(logo->width+235, logo->height+294);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(235, logo->height+294);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(introImages[2]->width+235, 900);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(introImages[2]->width+235, 
+			introImages[2]->height+294);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(235, introImages[2]->height+294);
 		glEnd();
 		glPopMatrix();
 		glDisable(GL_ALPHA_TEST);
 
+		//Enter Maze
+		glPushMatrix();
+		glTranslatef(posEnter[0], posEnter[1], posEnter[2]);
+
+		glBindTexture(GL_TEXTURE_2D, introTextures[3]);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glBegin(GL_QUADS);
+
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2, yheight/2);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 + 
+			introImages[3]->width/2, yheight/2);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 + 
+			introImages[3]->width/2, yheight/2-introImages[3]->height/2);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2, 
+			yheight/2-introImages[3]->height/2);
+
+		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		glPopMatrix();
+
+		//Options
+		glPushMatrix();
+		glTranslatef(posOptions[0], posOptions[1], posOptions[2]);
+
+		glBindTexture(GL_TEXTURE_2D, introTextures[4]);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glBegin(GL_QUADS);
+
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2 + 25, yheight/2 - 60);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 + 25 + 
+			introImages[4]->width/2, yheight/2 - 60);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 + 25 + 
+			introImages[4]->width/2, yheight/2 - 60 - 
+			introImages[4]->height/2);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2 + 25, yheight/2 - 60 - 
+			introImages[4]->height/2);
+
+		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		glPopMatrix();
+
+		//Arrow
+		/*glBindTexture(GL_TEXTURE_2D, introTextures[5]);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glBegin(GL_QUADS);
+
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2 - 25, yheight/2);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 - 25 + 
+			introImages[5]->width, yheight/2);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 - 25 + 
+			introImages[5]->width, yheight/2 - introImages[5]->height);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2 - 25, yheight/2 - 
+			introImages[5]->height);
+		
+		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		glPopMatrix(); */
 	}
 
 	//Falling Boulders
@@ -276,67 +342,75 @@ int renderTitleScreen(GLuint titleTexture, GLuint logoTexture,
 		logoSpan = 0.0;
 		clock_gettime(CLOCK_REALTIME, &logoStart);
 	}
+	if (enterSpan > .5) {
+		enterSpan = 0.0;
+		clock_gettime(CLOCK_REALTIME, &enterStart);
+	}
+	if (optionsSpan > 1) {
+		optionsSpan = 0.0;
+		clock_gettime(CLOCK_REALTIME, &optionsStart);
+	}
+
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 
-	glBindTexture(GL_TEXTURE_2D, boulderTexture);
+	glBindTexture(GL_TEXTURE_2D, introTextures[1]);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(-50, boulders->height);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(boulders->width+50, boulders->height);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(boulders->width+50, 0);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(-50, 0);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-50, yheight+introImages[1]->height);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(introImages[1]->width+50, 
+		yheight+introImages[1]->height);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(introImages[1]->width+50, yheight);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-50, yheight);
 	glEnd();
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
-	
-	//Enter Maze
-	glPushMatrix();
-	//glTranslatef(pos[0], pos[1], pos[2]);
-
-	glBindTexture(GL_TEXTURE_2D, enterTexture);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-	glBegin(GL_QUADS);
-
-	cout << enter->height << endl;
-	cout << enter->width << endl;
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, enter->height);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(enter->width, enter->height);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(enter->width, 0);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 0);
-
-	glEnd();
-	glDisable(GL_ALPHA_TEST);
-	glPopMatrix();	
 
 	clock_gettime(CLOCK_REALTIME, &bouldersCurrent);
 	bouldersSpan += timeDiff(&bouldersStart, &bouldersCurrent);
-	//cout << bouldersSpan << endl;
 
-	if (scroll  > -boulders->height && bouldersSpan > 6) {
+	if (scroll  > -yheight*3 && bouldersSpan > 6) {
 		scroll -=100;
 		pos[1] = scroll;
-		cout << pos[1] << endl;
 	}
+
 	if (scroll == -1700) {
 		scroll = -1800;
 		clock_gettime(CLOCK_REALTIME, &totCurrent);
-		cout << timeDiff(&totStart, &totCurrent) << endl;
 	}
 
 	if (enterPressed) {
 		clock_gettime(CLOCK_REALTIME, &logoCurrent);
 		logoSpan += timeDiff(&logoStart, &logoCurrent);
-		if (posLogo[1] < 300 && logoSpan > .8) {
+		clock_gettime(CLOCK_REALTIME, &enterCurrent);
+		enterSpan += timeDiff(&enterStart, &enterCurrent);
+		clock_gettime(CLOCK_REALTIME, &optionsCurrent);
+		optionsSpan += timeDiff(&optionsStart, &optionsCurrent);
+
+		if (posLogo[1] < 6000 && logoSpan > .8) {
 			posLogo[1] += 25;
 		}
-		if (posLogo[1] == 300) {
+		
+		if (posLogo[1] > 800) {
+				scale[0] += .00375; scalePos[0] -= .00375;
+				scale[1] += .00375; scalePos[1] -= .00375;
+				cout << scale[1] << endl;
+		}
 
+		if (posLogo[1] == 1800) {
 			return 0;
 		}
+
+		if (fabs(posEnter[0]) < xwidth && enterSpan > .5) {
+			posEnter[0] -= 25;
+		}
+
+		if (posOptions[0] < xwidth && optionsSpan > 1) {
+			posOptions[0] += 25;
+		}
+
 	}
 
 	return 1;

@@ -78,23 +78,17 @@ GLuint texture[10];
 int people = 0;
 
 int titleScreen = 1;
+
 Ppmimage *personImage1 = NULL;
 GLuint personTexture1;
 
-Ppmimage *titleBackground = NULL;
-GLuint titleTexture;
-
-Ppmimage *boulders = NULL;
-GLuint boulderTexture;
-
-Ppmimage *logo = NULL;
-GLuint logoTexture;
-
-Ppmimage *enter = NULL;
-GLuint enterTexture;
-
-Ppmimage *options = NULL;
-GLuint optionsTexture;
+Ppmimage *introImages[10] = {NULL};
+GLuint introTextures[10];
+// GLuint titleTexture; //introTexture[0]
+// GLuint boulderTexture; //introTexture[1]
+// GLuint logoTexture; //introTexture[2]
+// GLuint enterTexture; //introTexture[3]
+// GLuint optionsTexture; //introTexture[4]
 
 Person person;
 int enterPressed = 0;
@@ -157,12 +151,11 @@ int main(void)
 			physicsCountdown -= physicsRate;
 		}
 		if (titleScreen) {
-			glBindTexture(GL_TEXTURE_2D, titleTexture);
+			//glBindTexture(GL_TEXTURE_2D, titleTexture);
 			if (keys[XK_Return]) {
 				enterPressed = keys[XK_Return];
 			}
-			titleScreen = renderTitleScreen(titleTexture, logoTexture, boulderTexture, 
-					enterTexture, logo, boulders, enter, enterPressed);
+			titleScreen = renderTitleScreen(introTextures, introImages, enterPressed);
 		}
 		else {
 			glClearColor(0.8, 0.8, 0.8, 1.0);
@@ -203,6 +196,7 @@ void initXWindows(void)
 	//GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
 	XSetWindowAttributes swa;
 	setup_screen_res(xres, yres);
+	resolution(xres, yres);
 	dpy = XOpenDisplay(NULL);
 	if (dpy == NULL) {
 		std::cout << "\n\tcannot connect to X server" << std::endl;
@@ -273,18 +267,20 @@ void init_opengl(void)
 	string characterSelected = "red";
 	personImage1 = characterSelection(characterSelected);
 
-	titleBackground = ppm6GetImage((char*)"images/titleBackground.ppm");
-	boulders = ppm6GetImage((char*)"images/boulder.ppm");
-	logo = ppm6GetImage((char*)"images/logo.ppm");
-	enter = ppm6GetImage((char*)"images/enterBold.ppm");
-	options = ppm6GetImage((char*)"images/optionsBold.ppm");
+	introImages[0] = ppm6GetImage((char*)"images/titleBackground.ppm");
+	introImages[1] = ppm6GetImage((char*)"images/boulder.ppm");
+	introImages[2] = ppm6GetImage((char*)"images/logo.ppm");
+	introImages[3] = ppm6GetImage((char*)"images/enterBold.ppm");
+	introImages[4] = ppm6GetImage((char*)"images/optionsBold.ppm");
+	introImages[5] = ppm6GetImage((char*)"images/Arrow.ppm");
 
 	glGenTextures(1, &personTexture1);
-	glGenTextures(1, &titleTexture);
-	glGenTextures(1, &boulderTexture);
-	glGenTextures(1, &logoTexture);
-	glGenTextures(1, &enterTexture);
-	glGenTextures(1, &optionsTexture);
+	glGenTextures(1, &introTextures[0]); //titleTexture
+	glGenTextures(1, &introTextures[1]); //boulderTexture
+	glGenTextures(1, &introTextures[2]); //logoTexture
+	glGenTextures(1, &introTextures[3]); //enterTexture
+	glGenTextures(1, &introTextures[4]); //optionsTexture
+	glGenTextures(1, &introTextures[5]); //ArrowTexture
 
 	//Character Texture
 	float w = personImage1->width;
@@ -300,58 +296,70 @@ void init_opengl(void)
 	free(personData);
 
 	//Title Screen Background Texture
-	w = titleBackground->width;
-	h = titleBackground->height;
-	glBindTexture(GL_TEXTURE_2D, titleTexture);
+	w = introImages[0]->width;
+	h = introImages[0]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *titleBackgroundData = buildAlphaData(titleBackground);
+	unsigned char *titleBackgroundData = buildAlphaData(introImages[0]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, titleBackgroundData);
 	free(titleBackgroundData);
 
-	//Boulders falling texture
-	w = boulders->width;
-	h = boulders->height;
-	glBindTexture(GL_TEXTURE_2D, boulderTexture);
+	//boulder falling texture
+	w = introImages[1]->width;
+	h = introImages[1]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[1]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *boulderData = buildAlphaData(boulders);
+	unsigned char *boulderData = buildAlphaData(introImages[1]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, boulderData);
 	free(boulderData);
 
 	//MazeWars logo texture
-	w = logo->width;
-	h = logo->height;
-	glBindTexture(GL_TEXTURE_2D, logoTexture);
+	w = introImages[2]->width;
+	h = introImages[2]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[2]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *logoData = buildAlphaData(logo);
+	unsigned char *logoData = buildAlphaData(introImages[2]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, logoData);
 	free(logoData);
 
 	//enter maze texture
-	w = enter->width;
-	h = enter->height;
-	glBindTexture(GL_TEXTURE_2D, enterTexture);
+	w = introImages[3]->width;
+	h = introImages[3]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[3]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *enterData = buildAlphaData(enter);
+	unsigned char *enterData = buildAlphaData(introImages[3]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, enterData);
 	free(enterData);
 
-	w = options->width;
-	h = options->height;
-	glBindTexture(GL_TEXTURE_2D, optionsTexture);
+	//options texture
+	w = introImages[4]->width;
+	h = introImages[4]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[4]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *optionsData = buildAlphaData(enter);
+	unsigned char *optionsData = buildAlphaData(introImages[4]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, optionsData);
 	free(optionsData);
+
+	//Arrow Texture
+	w = introImages[5]->width;
+	h = introImages[5]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[5]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *arrowData = buildAlphaData(introImages[5]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, arrowData);
+	free(arrowData);
 }
 
 void check_resize(XEvent *e)
@@ -621,8 +629,8 @@ void render(Game *g)
 		GameOver();
 		g->Player_1.gameOver = true;
 	}
-	drawHealthPack(500, 400, 0);
-	drawHealthPack(100, 800, 0);
+	//drawHealthPack(500, 400, 0);
+	//drawHealthPack(100, 800, 0);
 	float w = personImage1->width/4;
  
 	if (g->Player_1.gameOver == false)
