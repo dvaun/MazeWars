@@ -343,7 +343,7 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 			}
 		}
 
-		//Character walk in off screen
+		/*//Character walk in off screen
 		w = introImages[6]->width*2;
 		h = introImages[6]->height*2;
 		glPushMatrix();
@@ -392,7 +392,7 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 	//Character walking
 	if (characterSpan == 1) {
 
-	}
+	}*/
 
 	//Falling Boulders
 	if (fallingBouldersTimer == 1) {
