@@ -11,5 +11,5 @@ void renderCrosshair(int axis[], Game *g, bool keyboard);
 void renderShield(Game *g);
 Ppmimage* characterSelection(std::string characterSelected);
 void renderCharacter(Person person, Game *g, float w, int keys[], GLuint personTexture1); 
-int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[], int enterPressed);
+int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[], int enterPressed, int downPressed, int upPressed);
 void resolution(int width, int height);

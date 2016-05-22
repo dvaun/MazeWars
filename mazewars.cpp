@@ -103,6 +103,8 @@ GLuint winTextures[10];
 Person person;
 Person personc;
 int enterPressed = 0;
+int downPressed = 0;
+int upPressed = 0;
 
 //function prototypes
 void initXWindows(void);
@@ -163,11 +165,21 @@ int main(int argc, char *argv[])
 		}
 		if (argc == 1) {
 			if (titleScreen) {
-				//glBindTexture(GL_TEXTURE_2D, titleTexture);
 				if (keys[XK_Return]) {
 					enterPressed = keys[XK_Return];
 				}
-				titleScreen = renderTitleScreen(introTextures, introImages, enterPressed);
+				if (keys[XK_Down]) {
+					downPressed ^= keys[XK_Down];
+					upPressed = 0;
+					enterPressed = 0;
+				}
+				if (keys[XK_Up]) {
+					upPressed ^= keys[XK_Up];
+					downPressed = 0;
+					enterPressed = 0;
+				}
+				titleScreen = renderTitleScreen(introTextures, introImages, 
+								enterPressed, downPressed, upPressed);
 			} else if (winCondition) {
 	
 				renderWin(winTextures, winImages, &game);
