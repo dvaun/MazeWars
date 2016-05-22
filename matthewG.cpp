@@ -386,11 +386,11 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		glPopMatrix();
-
+	*/
 	}
 
 	//Character walking
-	if (characterSpan == 1) {
+	/*if (characterSpan == 1) {
 
 	}*/
 
