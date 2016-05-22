@@ -371,7 +371,8 @@ void check_resize(XEvent *e)
 	XConfigureEvent xce = e->xconfigure;
 	if (xce.width != xres || xce.height != yres) {
 		//Window size did change.
-		reshape_window(xce.width, xce.height);
+		//reshape_window(xce.width, xce.height);
+		XResizeWindow(dpy, win, xres, yres);
 	}
 }
 
