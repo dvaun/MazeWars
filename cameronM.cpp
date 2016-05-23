@@ -441,15 +441,16 @@ void drawHealthPack(int x, int y, int z)
 }
 void shadowBox()
 {
+    int x = (res[0]-1250)/2;
 	//topLeft
 	glBegin(GL_POLYGON);		
 		glColor3f(0, 0, 0);
 		glVertex2f(0, res[1]);
 		glVertex2f((res[0]/2), res[1]);
 		glVertex2f((res[0]/2), res[1]-75);
-		glVertex2f((res[0]/2)-150, res[1]-75);
-		glVertex2f((res[0]/2)-400, (res[1]/2)+100);
-		glVertex2f((res[0]/2)-400, (res[1]/2));
+		glVertex2f((res[0]/2)-150-x, res[1]-75);
+		glVertex2f((res[0]/2)-400-x, (res[1]/2)+100);
+		glVertex2f((res[0]/2)-400-x, (res[1]/2));
 		glVertex2f(0, (res[1]/2));
 	glEnd();
 	//bottomLeft
@@ -457,9 +458,9 @@ void shadowBox()
 		glColor3f(0, 0, 0);
 		glVertex2f(0, 0);
 		glVertex2f(0, (res[1]/2));
-		glVertex2f((res[0]/2)-400, (res[1]/2));
-		glVertex2f((res[0]/2)-400, (res[1]/2)-100);
-		glVertex2f((res[0]/2)-150, 75);
+		glVertex2f((res[0]/2)-400-x, (res[1]/2));
+		glVertex2f((res[0]/2)-400-x, (res[1]/2)-100);
+		glVertex2f((res[0]/2)-150-x, 75);
 		glVertex2f(res[0]/2, 75);
 		glVertex2f(res[0]/2, 0);
 	glEnd();		
@@ -469,9 +470,9 @@ void shadowBox()
 		glVertex2f(res[0], res[1]);		
 		glVertex2f((res[0]/2), res[1]);		
 		glVertex2f((res[0]/2), res[1]-75);		
-		glVertex2f((res[0]/2)+150, res[1]-75);		
-		glVertex2f((res[0]/2)+400, (res[1]/2)+100);		
-		glVertex2f((res[0]/2)+400, (res[1]/2));	
+		glVertex2f((res[0]/2)+150+x, res[1]-75);		
+		glVertex2f((res[0]/2)+400+x, (res[1]/2)+100);		
+		glVertex2f((res[0]/2)+400+x, (res[1]/2));	
 		glVertex2f(res[0], (res[1]/2));
 	glEnd();
 	//bottomRight	
@@ -479,9 +480,9 @@ void shadowBox()
 		glColor4f(0, 0, 0, .5);	
 		glVertex2f(res[0], 0);	
 		glVertex2f(res[0], (res[1]/2));
-		glVertex2f((res[0]/2)+400, (res[1]/2));	
-		glVertex2f((res[0]/2)+400, (res[1]/2)-100);	
-		glVertex2f((res[0]/2)+150, 75);	
+		glVertex2f((res[0]/2)+400+x, (res[1]/2));	
+		glVertex2f((res[0]/2)+400+x, (res[1]/2)-100);	
+		glVertex2f((res[0]/2)+150+x, 75);	
 		glVertex2f(res[0]/2, 75);	
 		glVertex2f(res[0]/2, 0);
 	glEnd();
