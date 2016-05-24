@@ -136,7 +136,7 @@ void renderShield(Game *g)
 	glEnable(GL_POINT_SMOOTH);
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBegin(GL_POINTS);
 	for (float a = 0.0; a <= 2*M_PI; a+=0.001) 
 		glVertex2f(radius * cos(a) + playerX, radius * sin(a) + playerY);
