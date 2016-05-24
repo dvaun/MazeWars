@@ -69,17 +69,20 @@ void load_sounds()
     alGenSources(1, &alSource[1]);
     alSourcei(alSource[1], AL_BUFFER, alBuffer[1]);
 
-	//Walk sound.
+    //Walk sound.
     alBuffer[2] = alutCreateBufferFromFile("./sound/walk.wav");
     alGenSources(1, &alSource[2]);
     alSourcei(alSource[2], AL_BUFFER, alBuffer[2]);
     
-    /*//Background sound.
-    alBuffer[2] = alutCreateBufferFromFIle("./sound/.wav");
-    alGenSources(1, &alSource[2]);
-    alSourcei(alSource[2], AL_BUFFER, alBuffer[2]);
+    //Death sound.
+    alBuffer[3] = alutCreateBufferFromFIle("./sound/3107.wav");
+    alGenSources(1, &alSource[3]);
+    alSourcei(alSource[3], AL_BUFFER, alBuffer[3]);
 
-    */
+    //Background music
+    alBuffer[4] = alutCreateBufferFromFIle("./sound/bensound-epic.wav");
+    alGenSources(1, &alSource[4]);
+    alSourcei(alSource[4], AL_BUFFER, alBuffer[4]);
 }
 
 void play_sounds(int soundOption)
