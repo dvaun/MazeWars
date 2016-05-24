@@ -122,7 +122,9 @@ struct Bullet {
 struct Monster {
 	Stats stats;
 	float gvel[2];
+	int health = 100;
 	bool alive = true;
+	bool pursuit = true;
 	Monster() {
 	    stats.spos[0] = 500;
 	    stats.spos[1] = 500;
