@@ -438,6 +438,7 @@ int check_keys(XEvent *e)
 	int quit;
 	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
+	testInput(key);
 	//
 	//This code maintains an array of key status values.
 	if (e->type == KeyRelease) {
@@ -592,6 +593,7 @@ void physics(Game *g)
                 if(timeSpanT3 > 0.2){
                         clock_gettime(CLOCK_REALTIME, &timeT3);
                         g->Player_1.artifact[2] = !g->Player_1.artifact[2];
+			g->mon[0].pursuit = !g->mon[0].pursuit;
                 }
 
 	}
