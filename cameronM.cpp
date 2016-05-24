@@ -577,15 +577,6 @@ void monsterDamagePlayer(Game *g)
 	}
 }
 void testInput(int input){
-	
-	
-	Rect r;
-	r.bot = 500;
-	r.left = 500;
-	r.center = 0;
-	ggprint8b(&r, 16, 0x00000000, "Ammo: %i", input);
-	
-	cout << input << endl;
-	
+
 }
 #endif
