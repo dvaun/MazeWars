@@ -11,11 +11,16 @@
 */
 #define PI 3.141592
 #include <ctime>
+#include <iostream>
 #include "mtime.h"
 int *res;
 struct timespec timeC1;
 struct timespec timeCurrentC;
 double timespanC1 = 0.0;
+struct timespec timeC2;
+struct timespec timeCurrentC2;
+double timespanC2 = 0.0;
+using namespace std;
 void getScreenRes(int x, int y)
 {
 	res = new int[2];
@@ -495,24 +500,92 @@ void shadowBox()
 }
 void monster(Game *g)
 {
-	g->mon[0].gvel[0] = cos(PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
-	g->mon[0].gvel[1] = sin(PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
-	clock_gettime(CLOCK_REALTIME, &timeCurrentC);
-	timespanC1 = timeDiff(&timeC1, &timeCurrentC);
-	if (timespanC1 > 2) {
-		g->mon[0].stats.vel[0] = 1;
-		g->mon[0].stats.vel[1] = 0;
-		if(timespanC1 > 4)
-		   clock_gettime(CLOCK_REALTIME, &timeC1);
+    monsterMovement(g);
+	monsterGetShot(g);
+	monsterDamagePlayer(g);
+}
+void monsterMovement(Game *g)
+{
+	//this calculates the enemys position in gamespace
+	g->mon[0].gvel[0] = cos(\
+		PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
+	g->mon[0].gvel[1] = sin(\
+		PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
+	
+	if(((g->Player_1.stats.spos[0] <= g->mon[0].stats.spos[0]+250) && (g->Player_1.stats.spos[0] > g->mon[0].stats.spos[0]-250)) && ((g->Player_1.stats.spos[1] <= g->mon[0].stats.spos[1]+250) && (g->Player_1.stats.spos[1] > g->mon[0].stats.spos[1]-250))){
+	    g->mon[0].pursuit = true;
+	}else{
+	    g->mon[0].pursuit = false;
 	}
-	else {
-		g->mon[0].stats.vel[0] = -1;
-		g->mon[0].stats.vel[1] = 0;
+
+
+	//this is the enemys default movement pattern if not in pursuit mode
+	if(!g->mon[0].pursuit){
+		clock_gettime(CLOCK_REALTIME, &timeCurrentC);
+		timespanC1 = timeDiff(&timeC1, &timeCurrentC);
+		if (timespanC1 > 2) {
+			g->mon[0].stats.vel[0] = 1;
+			g->mon[0].stats.vel[1] = 0;
+			if(timespanC1 > 4)
+			   clock_gettime(CLOCK_REALTIME, &timeC1);
+		}
+		else {
+			g->mon[0].stats.vel[0] = -1;
+			g->mon[0].stats.vel[1] = 0;
+		}
+	}else{
+	    //this is the enemys pursuit movement pattern
+		if(g->mon[0].stats.spos[0] < g->Player_1.stats.spos[0])
+		    g->mon[0].stats.vel[0] = 0.5;
+		else
+		    g->mon[0].stats.vel[0] = -0.5;
+		
+		if(g->mon[0].stats.spos[1] < g->Player_1.stats.spos[1])
+		    g->mon[0].stats.vel[1] = 0.5;
+		else
+		    g->mon[0].stats.vel[1] = -0.5;
 	}
+}
+void monsterGetShot(Game *g)
+{
+	//this checks to see if the enemy has been shot and adjusts health accordingly
 	for(int i = 0; i < MAX_BULLETS; i++){
-	    if(((g->barr[i].stats.spos[0] >= g->mon[0].stats.spos[0]-10) && (g->barr[i].stats.spos[0] <= g->mon[0].stats.spos[0]+10)) && ((g->barr[i].stats.spos[1] >= g->mon[0].stats.spos[1]-10) && (g->barr[i].stats.spos[1] <= g->mon[0].stats.spos[1]+10))){
-		   	g->mon[0].alive = false;
-		   } 
+	    if(((g->barr[i].stats.spos[0] >= g->mon[0].stats.spos[0]-12) &&\
+		(g->barr[i].stats.spos[0] <= g->mon[0].stats.spos[0]+12)) &&\
+		((g->barr[i].stats.spos[1] >= g->mon[0].stats.spos[1]-12) &&\
+		 (g->barr[i].stats.spos[1] <= g->mon[0].stats.spos[1]+12))){
+	   	g->mon[0].health -= 20;
+	   } 
 	}
+	if (g->mon[0].health <= 0) {
+	    g->mon[0].health = 0;
+	    g->mon[0].alive = false;
+	}	
+}
+void monsterDamagePlayer(Game *g)
+{
+	clock_gettime(CLOCK_REALTIME, &timeCurrentC2);
+	timespanC2 = timeDiff(&timeC2, &timeCurrentC2);
+	if(((g->Player_1.stats.spos[0] >= g->mon[0].stats.spos[0]-12) &&\
+	(g->Player_1.stats.spos[0] <= g->mon[0].stats.spos[0]+12)) &&\
+	((g->Player_1.stats.spos[1] >= g->mon[0].stats.spos[1]-12) &&\
+	(g->Player_1.stats.spos[1] <= g->mon[0].stats.spos[1]+12))){	
+		if (timespanC2 > 0.5) {
+			clock_gettime(CLOCK_REALTIME, &timeC2);
+			g->Player_1.Current_Health -= 5;
+		}
+	}
+}
+void testInput(int input){
+	
+	
+	Rect r;
+	r.bot = 500;
+	r.left = 500;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00000000, "Ammo: %i", input);
+	
+	cout << input << endl;
+	
 }
 #endif
