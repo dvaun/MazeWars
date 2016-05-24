@@ -75,12 +75,12 @@ void load_sounds()
     alSourcei(alSource[2], AL_BUFFER, alBuffer[2]);
     
     //Death sound.
-    alBuffer[3] = alutCreateBufferFromFIle("./sound/3107.wav");
+    alBuffer[3] = alutCreateBufferFromFile("./sound/3107.wav");
     alGenSources(1, &alSource[3]);
     alSourcei(alSource[3], AL_BUFFER, alBuffer[3]);
 
     //Background music
-    alBuffer[4] = alutCreateBufferFromFIle("./sound/bensound-epic.wav");
+    alBuffer[4] = alutCreateBufferFromFile("./sound/bensound-epic.wav");
     alGenSources(1, &alSource[4]);
     alSourcei(alSource[4], AL_BUFFER, alBuffer[4]);
 }
