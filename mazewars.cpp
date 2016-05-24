@@ -567,6 +567,12 @@ void physics(Game *g)
 			g->Player_1.Current_Ammo--;
 		}
 	}
+	
+	if (keys[XK_F5] && !g->Player_1.gameOver) {
+            if (g->Player_1.Current_Health > 0)
+                play_sounds(4);
+        }
+	
 	if(keys[XK_F7] && !g->Player_1.gameOver){
 		if(g->Player_1.Current_Health > 0)
 		g->Player_1.Current_Health -= 5;
@@ -629,9 +635,10 @@ void render(Game *g)
 	drawHUD(g->Player_1);
 	if(g->Player_1.Current_Health == 0){
 		g->Player_1.lives--;
-		//Play death groan upon player death
+		//Play death groan and funeral march upon player death
 		if (g->Player_1.lives == 0)
 			play_sounds(1);
+			play_sounds(3);
 		g->Player_1.Current_Health = g->Player_1.Max_Health;
 	}
 	if(g->Player_1.lives == 0){
