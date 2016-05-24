@@ -106,7 +106,7 @@ void init(Game *g);
 void physics(Game *game);
 void render(Game *game);
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	logOpen();
 	initXWindows();
@@ -150,6 +150,7 @@ int main(void)
 			physics(&game);
 			physicsCountdown -= physicsRate;
 		}
+		if(argc == 1){
 		if (titleScreen) {
 			//glBindTexture(GL_TEXTURE_2D, titleTexture);
 			if (keys[XK_Return]) {
@@ -160,6 +161,11 @@ int main(void)
 		else {
 			glClearColor(0.8, 0.8, 0.8, 1.0);
 			render(&game);
+		}
+		}
+		else{
+		    glClearColor(0.8,0.8,0.8,1.0);
+		    render(&game);
 		}
 		glXSwapBuffers(dpy, win);
 	}
@@ -641,5 +647,16 @@ void render(Game *g)
 		Bullet *b = &g->barr[i];
 		if (b != NULL)
 			drawBullet(g, b, 0.0, 0.0, 0.0);	
+	}
+	if(keys[XK_w] && g->mon[0].alive){
+		g->mon[0].gameMove(1);
+	}
+	else if(keys[XK_s] && g->mon[0].alive){
+	    g->mon[0].gameMove(0);
+	}
+	if (g->mon[0].alive) {
+		g->mon[0].move();
+		g->mon[0].draw();
+		monster(g);
 	}
 }

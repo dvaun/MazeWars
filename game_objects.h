@@ -121,8 +121,38 @@ struct Bullet {
 
 struct Monster {
 	Stats stats;
+	float gvel[2];
+	bool alive = true;
+	Monster() {
+	    stats.spos[0] = 500;
+	    stats.spos[1] = 500;
+	    alive = 1;
+	}
 	void draw() {
-
+		glColor3f(255,0,0);
+                glPushMatrix();
+                glTranslatef(stats.spos[0], stats.spos[1], 0);
+                glRotatef(stats.angle, 0.0f, 0.0f, 1.0f);
+                glBegin(GL_QUADS);
+                        glVertex2f(-10.0f, -10.0f);
+                        glVertex2f(  -10.0f,  10.0f);
+                        glVertex2f(  10.0f,  10.0f);
+                        glVertex2f(  10.0f,  -10.0f);
+                glEnd();
+                glPopMatrix();
+	}
+	void gameMove(int x) {
+	    if(x){
+		stats.spos[0] += gvel[0];
+		stats.spos[1] += gvel[1];
+	    }else{
+		stats.spos[0] -= gvel[0];
+		stats.spos[1] -= gvel[1];
+	    }
+	}
+	void move(){
+		stats.spos[0] += stats.vel[0];
+		stats.spos[1] += stats.vel[1];
 	}
 };
 
@@ -130,7 +160,7 @@ struct Game {
 	Player Player_1;
 	Weapon gun;
 	Bullet *barr;
-
+	Monster mon[5];
 	int g_xres;
 	int g_yres;
 	int nbullets;

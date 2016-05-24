@@ -9,7 +9,13 @@
 * the engine from the ship and the asteroid field, also changed the window title
 * I am drawing and handling the health bar and "HUD" 
 */
+#define PI 3.141592
+#include <ctime>
+#include "mtime.h"
 int *res;
+struct timespec timeC1;
+struct timespec timeCurrentC;
+double timespanC1 = 0.0;
 void getScreenRes(int x, int y)
 {
 	res = new int[2];
@@ -486,5 +492,27 @@ void shadowBox()
 		glVertex2f(res[0]/2, 75);	
 		glVertex2f(res[0]/2, 0);
 	glEnd();
+}
+void monster(Game *g)
+{
+	g->mon[0].gvel[0] = cos(PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
+	g->mon[0].gvel[1] = sin(PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
+	clock_gettime(CLOCK_REALTIME, &timeCurrentC);
+	timespanC1 = timeDiff(&timeC1, &timeCurrentC);
+	if (timespanC1 > 2) {
+		g->mon[0].stats.vel[0] = 1;
+		g->mon[0].stats.vel[1] = 0;
+		if(timespanC1 > 4)
+		   clock_gettime(CLOCK_REALTIME, &timeC1);
+	}
+	else {
+		g->mon[0].stats.vel[0] = -1;
+		g->mon[0].stats.vel[1] = 0;
+	}
+	for(int i = 0; i < MAX_BULLETS; i++){
+	    if(((g->barr[i].stats.spos[0] >= g->mon[0].stats.spos[0]-10) && (g->barr[i].stats.spos[0] <= g->mon[0].stats.spos[0]+10)) && ((g->barr[i].stats.spos[1] >= g->mon[0].stats.spos[1]-10) && (g->barr[i].stats.spos[1] <= g->mon[0].stats.spos[1]+10))){
+		   	g->mon[0].alive = false;
+		   } 
+	}
 }
 #endif
