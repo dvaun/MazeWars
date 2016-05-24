@@ -126,8 +126,6 @@ struct Monster {
 	bool alive = true;
 	bool pursuit = true;
 	Monster() {
-	    stats.spos[0] = 500;
-	    stats.spos[1] = 500;
 	    alive = 1;
 	}
 	void draw() {

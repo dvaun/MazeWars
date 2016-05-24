@@ -79,6 +79,13 @@ int people = 0;
 
 int titleScreen = 1;
 
+
+Ppmimage *test = NULL;
+GLuint testTexture;
+bool showtest = 1;
+
+
+
 Ppmimage *personImage1 = NULL;
 GLuint personTexture1;
 
@@ -272,14 +279,18 @@ void init_opengl(void)
 
 	string characterSelected = "red";
 	personImage1 = characterSelection(characterSelected);
-
+	
+	test = ppm6GetImage((char*)"images/ZombieStand.ppm");
+	
+	
 	introImages[0] = ppm6GetImage((char*)"images/titleBackground.ppm");
 	introImages[1] = ppm6GetImage((char*)"images/boulder.ppm");
 	introImages[2] = ppm6GetImage((char*)"images/logo.ppm");
 	introImages[3] = ppm6GetImage((char*)"images/enterBold.ppm");
 	introImages[4] = ppm6GetImage((char*)"images/optionsBold.ppm");
 	introImages[5] = ppm6GetImage((char*)"images/Arrow.ppm");
-
+	
+	glGenTextures(1, &testTexture);
 	glGenTextures(1, &personTexture1);
 	glGenTextures(1, &introTextures[0]); //titleTexture
 	glGenTextures(1, &introTextures[1]); //boulderTexture
@@ -287,6 +298,17 @@ void init_opengl(void)
 	glGenTextures(1, &introTextures[3]); //enterTexture
 	glGenTextures(1, &introTextures[4]); //optionsTexture
 	glGenTextures(1, &introTextures[5]); //ArrowTexture
+
+	float r = test->width;
+	float s = test->height;
+	
+	glBindTexture(GL_TEXTURE_2D, testTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *testData = buildAlphaData(test);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, r, s, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, testData);
+	free(testData);
 
 	//Character Texture
 	float w = personImage1->width;
@@ -389,6 +411,20 @@ void init(Game *g)
 	g->Player_1.stats.color[0] = 255;
 	g->Player_1.stats.spos[0] = 625;
 	g->Player_1.stats.spos[1] = 450;
+	g->mon[0].stats.spos[0] = 500;
+	g->mon[0].stats.spos[1] = 500;
+	
+	g->mon[1].stats.spos[0] = 600;
+	g->mon[1].stats.spos[1] = 600;
+	
+	g->mon[2].stats.spos[0] = 700;
+	g->mon[2].stats.spos[1] = 400;
+	
+	g->mon[3].stats.spos[0] = 400;
+	g->mon[3].stats.spos[1] = 300;
+	
+	g->mon[4].stats.spos[0] = 300;
+	g->mon[4].stats.spos[1] = 200;
 	printf("%f\n",g->Player_1.stats.color[0]);
 }
 
@@ -438,7 +474,6 @@ int check_keys(XEvent *e)
 	int quit;
 	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
-	testInput(key);
 	//
 	//This code maintains an array of key status values.
 	if (e->type == KeyRelease) {
@@ -567,12 +602,6 @@ void physics(Game *g)
 			g->Player_1.Current_Ammo--;
 		}
 	}
-	
-	if (keys[XK_F5] && !g->Player_1.gameOver) {
-            if (g->Player_1.Current_Health > 0)
-                play_sounds(4);
-        }
-	
 	if(keys[XK_F7] && !g->Player_1.gameOver){
 		if(g->Player_1.Current_Health > 0)
 		g->Player_1.Current_Health -= 5;
@@ -618,6 +647,12 @@ void physics(Game *g)
 static int a = 0;
 void render(Game *g)
 {
+	
+	if(showtest){
+		renderEnemy(g, test->width/4, testTexture);
+	}
+	
+	
 	glClear(GL_COLOR_BUFFER_BIT);
 	//if(animationSpan > 60/1000.0f) {	
 	//	clock_gettime(CLOCK_REALTIME, &animationStart);
@@ -631,14 +666,12 @@ void render(Game *g)
 		renderCrosshair(axis, g, false);
 	if (joy[4] || keys[XK_b]) 
 		renderShield(g);	
-	shadowBox();
-	drawHUD(g->Player_1);
+	
 	if(g->Player_1.Current_Health == 0){
 		g->Player_1.lives--;
-		//Play death groan and funeral march upon player death
+		//Play death groan upon player death
 		if (g->Player_1.lives == 0)
 			play_sounds(1);
-			play_sounds(3);
 		g->Player_1.Current_Health = g->Player_1.Max_Health;
 	}
 	if(g->Player_1.lives == 0){
@@ -657,15 +690,19 @@ void render(Game *g)
 		if (b != NULL)
 			drawBullet(g, b, 0.0, 0.0, 0.0);	
 	}
-	if(keys[XK_w] && g->mon[0].alive){
-		g->mon[0].gameMove(1);
+	for (int i = 0; i < 5; i++) {
+		if(keys[XK_w] && g->mon[i].alive){
+			g->mon[i].gameMove(1);
+		}
+		else if(keys[XK_s] && g->mon[i].alive){
+			g->mon[i].gameMove(0);
+		}
+		if (g->mon[i].alive) {
+			g->mon[i].move();
+			g->mon[i].draw();
+			monster(g, i, 1,2);
+		}
 	}
-	else if(keys[XK_s] && g->mon[0].alive){
-	    g->mon[0].gameMove(0);
-	}
-	if (g->mon[0].alive) {
-		g->mon[0].move();
-		g->mon[0].draw();
-		monster(g);
-	}
+	shadowBox();
+	drawHUD(g->Player_1);
 }

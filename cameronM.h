@@ -8,9 +8,9 @@ void drawArtifacts(Player x);
 void drawLives(int x, int y);
 void drawBackground();
 void drawHUD(Player x);
-void monsterMovement(Game *g);
-void monsterGetShot(Game *g);
-void monsterDamagePlayer(Game *g);
+void monsterMovement(Game *g, int monNum, int startx, int starty);
+void monsterGetShot(Game *g, int monNum, int startx, int starty);
+void monsterDamagePlayer(Game *g, int monNum, int startx, int starty);
 struct HealthPack{
     Vec pos;
     int size;

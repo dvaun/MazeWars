@@ -498,85 +498,138 @@ void shadowBox()
 		glVertex2f(res[0]/2, 0);
 	glEnd();
 }
-void monster(Game *g)
+void monster(Game *g, int monNum, int startx, int starty)
 {
-    monsterMovement(g);
-	monsterGetShot(g);
-	monsterDamagePlayer(g);
+    monsterMovement(g, monNum, startx, starty);
+	monsterGetShot(g, monNum, startx, starty);
+	monsterDamagePlayer(g, monNum, startx, starty);
 }
-void monsterMovement(Game *g)
+void monsterMovement(Game *g, int monNum, int startx, int starty)
 {
 	//this calculates the enemys position in gamespace
-	g->mon[0].gvel[0] = cos(\
+	g->mon[monNum].gvel[0] = cos(\
 		PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
-	g->mon[0].gvel[1] = sin(\
+	g->mon[monNum].gvel[1] = sin(\
 		PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
 	
-	if(((g->Player_1.stats.spos[0] <= g->mon[0].stats.spos[0]+250) && (g->Player_1.stats.spos[0] > g->mon[0].stats.spos[0]-250)) && ((g->Player_1.stats.spos[1] <= g->mon[0].stats.spos[1]+250) && (g->Player_1.stats.spos[1] > g->mon[0].stats.spos[1]-250))){
-	    g->mon[0].pursuit = true;
+	if(((g->Player_1.stats.spos[0] <= g->mon[monNum].stats.spos[0]+250) && (g->Player_1.stats.spos[0] > g->mon[monNum].stats.spos[0]-250)) && ((g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+250) && (g->Player_1.stats.spos[1] > g->mon[monNum].stats.spos[1]-250))){
+	    g->mon[monNum].pursuit = true;
 	}else{
-	    g->mon[0].pursuit = false;
+	    g->mon[monNum].pursuit = false;
 	}
 
 
 	//this is the enemys default movement pattern if not in pursuit mode
-	if(!g->mon[0].pursuit){
+	if(!g->mon[monNum].pursuit){
 		clock_gettime(CLOCK_REALTIME, &timeCurrentC);
 		timespanC1 = timeDiff(&timeC1, &timeCurrentC);
 		if (timespanC1 > 2) {
-			g->mon[0].stats.vel[0] = 1;
-			g->mon[0].stats.vel[1] = 0;
+			g->mon[monNum].stats.vel[0] = 1;
+			g->mon[monNum].stats.vel[1] = 0;
 			if(timespanC1 > 4)
 			   clock_gettime(CLOCK_REALTIME, &timeC1);
 		}
 		else {
-			g->mon[0].stats.vel[0] = -1;
-			g->mon[0].stats.vel[1] = 0;
+			g->mon[monNum].stats.vel[0] = -1;
+			g->mon[monNum].stats.vel[1] = 0;
 		}
 	}else{
 	    //this is the enemys pursuit movement pattern
-		if(g->mon[0].stats.spos[0] < g->Player_1.stats.spos[0])
-		    g->mon[0].stats.vel[0] = 0.5;
+		if(g->mon[monNum].stats.spos[0] < g->Player_1.stats.spos[0])
+		    g->mon[monNum].stats.vel[0] = 0.5;
 		else
-		    g->mon[0].stats.vel[0] = -0.5;
+		    g->mon[monNum].stats.vel[0] = -0.5;
 		
-		if(g->mon[0].stats.spos[1] < g->Player_1.stats.spos[1])
-		    g->mon[0].stats.vel[1] = 0.5;
+		if(g->mon[monNum].stats.spos[1] < g->Player_1.stats.spos[1])
+		    g->mon[monNum].stats.vel[1] = 0.5;
 		else
-		    g->mon[0].stats.vel[1] = -0.5;
+		    g->mon[monNum].stats.vel[1] = -0.5;
 	}
 }
-void monsterGetShot(Game *g)
+void monsterGetShot(Game *g, int monNum, int startx, int starty)
 {
 	//this checks to see if the enemy has been shot and adjusts health accordingly
 	for(int i = 0; i < MAX_BULLETS; i++){
-	    if(((g->barr[i].stats.spos[0] >= g->mon[0].stats.spos[0]-12) &&\
-		(g->barr[i].stats.spos[0] <= g->mon[0].stats.spos[0]+12)) &&\
-		((g->barr[i].stats.spos[1] >= g->mon[0].stats.spos[1]-12) &&\
-		 (g->barr[i].stats.spos[1] <= g->mon[0].stats.spos[1]+12))){
-	   	g->mon[0].health -= 20;
+	    if(((g->barr[i].stats.spos[0] >= g->mon[monNum].stats.spos[0]-12) &&\
+		(g->barr[i].stats.spos[0] <= g->mon[monNum].stats.spos[0]+12)) &&\
+		((g->barr[i].stats.spos[1] >= g->mon[monNum].stats.spos[1]-12) &&\
+		 (g->barr[i].stats.spos[1] <= g->mon[monNum].stats.spos[1]+12))){
+	   	g->mon[monNum].health -= 20;
 	   } 
 	}
-	if (g->mon[0].health <= 0) {
-	    g->mon[0].health = 0;
-	    g->mon[0].alive = false;
+	if (g->mon[monNum].health <= 0) {
+	    g->mon[monNum].health = 0;
+	    g->mon[monNum].alive = false;
 	}	
 }
-void monsterDamagePlayer(Game *g)
+void monsterDamagePlayer(Game *g, int monNum, int startx, int starty)
 {
 	clock_gettime(CLOCK_REALTIME, &timeCurrentC2);
 	timespanC2 = timeDiff(&timeC2, &timeCurrentC2);
-	if(((g->Player_1.stats.spos[0] >= g->mon[0].stats.spos[0]-12) &&\
-	(g->Player_1.stats.spos[0] <= g->mon[0].stats.spos[0]+12)) &&\
-	((g->Player_1.stats.spos[1] >= g->mon[0].stats.spos[1]-12) &&\
-	(g->Player_1.stats.spos[1] <= g->mon[0].stats.spos[1]+12))){	
+	if(((g->Player_1.stats.spos[0] >= g->mon[monNum].stats.spos[0]-12) &&\
+	(g->Player_1.stats.spos[0] <= g->mon[monNum].stats.spos[0]+12)) &&\
+	((g->Player_1.stats.spos[1] >= g->mon[monNum].stats.spos[1]-12) &&\
+	(g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+12))){	
 		if (timespanC2 > 0.5) {
 			clock_gettime(CLOCK_REALTIME, &timeC2);
 			g->Player_1.Current_Health -= 5;
 		}
 	}
 }
-void testInput(int input){
+struct timespec animationCurrentC, animationStartC;
+double animationSpanC = 0.0;
+void renderEnemy(Game *g, float w, GLuint testTexture)
+{
+	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+	glPushMatrix();
+	glTranslatef(g->mon[0].stats.spos[0], g->mon[0].stats.spos[1], g->mon[0].stats.spos[2]);	
+	glRotatef(g->Player_1.stats.angle, 0, 0, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, testTexture);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
 
+	glBegin(GL_QUADS);	
+	if (animationSpanC >= 90) {
+		animationSpanC = 0.0;
+		clock_gettime(CLOCK_REALTIME, &animationStartC);
+	}
+	w /= 2;
+	//glBindTexture(GL_TEXTURE_2D, spriteTexture);
+	if (animationSpanC < 12.5) {
+			glTexCoord2f(0.66f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
+			glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
+			glTexCoord2f(0.66f, 1.0f); glVertex2f(-w, -w);
+	}
+	else if(animationSpanC < 45)
+	{
+			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
+	}
+	else if(animationSpanC < 67.5)
+	{
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(0.33f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(0.33f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+	}
+	else
+	{
+			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
+	}
+	
+	clock_gettime(CLOCK_REALTIME, &animationCurrentC);
+	animationSpanC += timeDiff(&animationStartC, &animationCurrentC);
+	
+	//cout << animationSpan << endl;	
+
+	glEnd();
+	glDisable(GL_ALPHA_TEST);
+	glPopMatrix();
 }
 #endif

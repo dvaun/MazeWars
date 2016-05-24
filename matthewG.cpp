@@ -173,23 +173,38 @@ void renderCharacter(Person person, Game *g, float w, int keys[],
 	glAlphaFunc(GL_GREATER, 0.0f);
 
 	glBegin(GL_QUADS);	
-	if (animationSpan > 90) {
+	if (animationSpan >= 90) {
 		animationSpan = 0.0;
 		clock_gettime(CLOCK_REALTIME, &animationStart);
 	}
+	w /= 2;
 	//glBindTexture(GL_TEXTURE_2D, spriteTexture);
-	if ((keys[XK_w] || keys[XK_s]) && animationSpan < 22) {
-			glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
+	if ((keys[XK_w] || keys[XK_s]) && animationSpan < 12.5) {
+			glTexCoord2f(0.66f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
 			glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
-			glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
+			glTexCoord2f(0.66f, 1.0f); glVertex2f(-w, -w);
+	}
+	else if((keys[XK_w] || keys[XK_s]) && animationSpan < 45)
+	{
+			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
+	}
+	else if((keys[XK_w] || keys[XK_s]) && animationSpan < 67.5)
+	{
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(0.33f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(0.33f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
 	}
 	else
 	{
-			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
-			glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
-			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
 	}
 	
 	clock_gettime(CLOCK_REALTIME, &animationCurrent);
