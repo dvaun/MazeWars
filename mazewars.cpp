@@ -84,7 +84,9 @@ GLuint silhouetteTexture;
 
 bool showtest = 0;
 Ppmimage *personImage1 = NULL;
+Ppmimage *personImage1c = NULL;
 GLuint personTexture1;
+GLuint personTexture1c;
 Ppmimage *introImages[10] = {NULL};
 GLuint introTextures[10];
 // GLuint titleTexture; //introTexture[0]
@@ -94,6 +96,7 @@ GLuint introTextures[10];
 // GLuint optionsTexture; //introTexture[4]
 
 Person person;
+Person personc;
 int enterPressed = 0;
 
 //function prototypes
@@ -275,6 +278,7 @@ void init_opengl(void)
 
 	string characterSelected = "red";
 	personImage1 = characterSelection(characterSelected);
+	personImage1c = characterSelection(characterSelected);
 	
 	testImage = ppm6GetImage((char*)"images/ZombieStand.ppm");
 	
@@ -288,6 +292,7 @@ void init_opengl(void)
 	
 	glGenTextures(1, &testTexture);
 	glGenTextures(1, &personTexture1);
+	glGenTextures(1, &personTexture1c);
 	glGenTextures(1, &introTextures[0]); //titleTexture
 	glGenTextures(1, &introTextures[1]); //boulderTexture
 	glGenTextures(1, &introTextures[2]); //logoTexture
@@ -328,6 +333,20 @@ void init_opengl(void)
 			GL_UNSIGNED_BYTE, personData);
 
 	free(personData);
+	
+	//Characterc Texture
+	w = personImage1c->width;
+	h = personImage1c->height;
+
+	glBindTexture(GL_TEXTURE_2D, personTexture1c);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	
+	unsigned char *personDatac = buildAlphaData(personImage1c);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, personDatac);
+
+	free(personDatac);
 
 	//Title Screen Background Texture
 	w = introImages[0]->width;
@@ -669,9 +688,9 @@ static int a = 0;
 void render(Game *g)
 {
 	
-	if(showtest){
-		renderEnemy(g, testImage->width, testTexture);
-	}
+	//~ if(showtest){
+		//~ renderEnemy(g, testImage->width, testTexture);
+	//~ }
 	
 	
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -721,6 +740,9 @@ void render(Game *g)
 			g->mon[i].gameMove(0);
 		}
 		if (g->mon[i].alive) {
+			renderCharacterEnemy(personc, g, w, keys, personTexture1c, i); 
+			personc.pos[0] = g->mon[i].stats.spos[0];
+			personc.pos[1] = g->mon[i].stats.spos[1];
 			g->mon[i].move();
 			g->mon[i].draw();
 			monster(g, i, 1,2);
