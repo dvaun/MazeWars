@@ -518,7 +518,6 @@ void monsterMovement(Game *g, int monNum, int startx, int starty)
 	    g->mon[monNum].pursuit = false;
 	}
 
-
 	//this is the enemys default movement pattern if not in pursuit mode
 	if(!g->mon[monNum].pursuit){
 		clock_gettime(CLOCK_REALTIME, &timeCurrentC);
@@ -526,15 +525,18 @@ void monsterMovement(Game *g, int monNum, int startx, int starty)
 		if (timespanC1 > 2) {
 			g->mon[monNum].stats.vel[0] = 1;
 			g->mon[monNum].stats.vel[1] = 0;
+			g->mon[monNum].stats.angle = 270;
 			if(timespanC1 > 4)
 			   clock_gettime(CLOCK_REALTIME, &timeC1);
 		}
 		else {
 			g->mon[monNum].stats.vel[0] = -1;
 			g->mon[monNum].stats.vel[1] = 0;
+			g->mon[monNum].stats.angle = 90;
 		}
 	}else{
 	    //this is the enemys pursuit movement pattern
+	    g->mon[monNum].stats.angle = 0;
 		if(g->mon[monNum].stats.spos[0] < g->Player_1.stats.spos[0])
 		    g->mon[monNum].stats.vel[0] = 0.5;
 		else
@@ -576,40 +578,40 @@ void monsterDamagePlayer(Game *g, int monNum, int startx, int starty)
 		}
 	}
 }
-struct timespec animationCurrentC, animationStartC;
-double animationSpanC = 0.0;
-
-void renderEnemy(Game *g, float w, GLuint testTexture)
+struct timespec animationCurrentc, animationStartc;
+double animationSpanc = 0.0;
+void renderCharacterEnemy(Person personc, Game *g, float w, int keys[], 
+	GLuint personTexture1c, int i)
 {
 	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 	glPushMatrix();
-	glTranslatef(g->mon[0].stats.spos[0], g->mon[0].stats.spos[1], g->mon[0].stats.spos[2]);	
-	glRotatef(g->Player_1.stats.angle, 0, 0, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, testTexture);
+	glTranslatef(personc.pos[0], personc.pos[1], personc.pos[2]);	
+	glRotatef(g->mon[i].stats.angle, 0, 0, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, personTexture1c);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
 	glBegin(GL_QUADS);	
-	if (animationSpanC >= 90) {
-		animationSpanC = 0.0;
-		clock_gettime(CLOCK_REALTIME, &animationStartC);
+	if (animationSpanc >= 90) {
+		animationSpanc = 0.0;
+		clock_gettime(CLOCK_REALTIME, &animationStartc);
 	}
 	w /= 2;
 	//glBindTexture(GL_TEXTURE_2D, spriteTexture);
-	if (animationSpanC < 12.5) {
+	if (animationSpanc < 12.5) {
 			glTexCoord2f(0.66f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
 			glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
 			glTexCoord2f(0.66f, 1.0f); glVertex2f(-w, -w);
 	}
-	else if(animationSpanC < 45)
+	else if(animationSpanc < 45)
 	{
 			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
 			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
 			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
 	}
-	else if(animationSpanC < 67.5)
+	else if(animationSpanc < 67.5)
 	{
 			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(0.33f, 0.0f); glVertex2f( w, w);
@@ -624,8 +626,8 @@ void renderEnemy(Game *g, float w, GLuint testTexture)
 			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
 	}
 	
-	clock_gettime(CLOCK_REALTIME, &animationCurrentC);
-	animationSpanC += timeDiff(&animationStartC, &animationCurrentC);
+	clock_gettime(CLOCK_REALTIME, &animationCurrentc);
+	animationSpanc += timeDiff(&animationStartc, &animationCurrentc);
 	
 	//cout << animationSpan << endl;	
 
