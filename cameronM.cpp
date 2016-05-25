@@ -578,6 +578,7 @@ void monsterDamagePlayer(Game *g, int monNum, int startx, int starty)
 }
 struct timespec animationCurrentC, animationStartC;
 double animationSpanC = 0.0;
+
 void renderEnemy(Game *g, float w, GLuint testTexture)
 {
 	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);

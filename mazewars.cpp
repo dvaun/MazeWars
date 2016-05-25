@@ -526,6 +526,11 @@ void physics(Game *g)
 		b->stats.gpos[0] += 6*b->stats.vel[0];
 		b->stats.gpos[1] += 6*b->stats.vel[1];
 	}
+	if (keys[XK_t]) {
+		showtest ^= 1;
+		if (showtest)
+			g->mon[0].stats.spos[0] = 0.0;
+	}
 	if (keys[XK_a] && !g->Player_1.gameOver) {
 		g->Player_1.stats.angle += 4.0f;
 		if (g->Player_1.stats.angle >= 360.0f)
