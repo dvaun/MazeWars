@@ -296,32 +296,33 @@ void init_opengl(void)
 	glGenTextures(1, &introTextures[5]); //ArrowTexture
 	
 	/****testing the zombie sprite********************/
-	float r = testImage->width;
-	float s = testImage->height;
+	float w = testImage->width;
+	float h = testImage->height;
 	
 	glBindTexture(GL_TEXTURE_2D, testTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, r, s, 0, GL_RGB, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE,
 							   testImage->data);
 
-	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	
 	unsigned char *testData = buildAlphaData(testImage);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, r, s, 0, GL_RGBA, 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, testData);
 	free(testData);
 	/*************************************************/
 	
 	//Character Texture
-	float w = personImage1->width;
-	float h = personImage1->height;
+	w = personImage1->width;
+	h = personImage1->height;
 
 	glBindTexture(GL_TEXTURE_2D, personTexture1);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	
 	unsigned char *personData = buildAlphaData(personImage1);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, personData);
@@ -528,8 +529,11 @@ void physics(Game *g)
 	}
 	if (keys[XK_t]) {
 		showtest ^= 1;
-		if (showtest)
+		if (showtest) {
 			g->mon[0].stats.spos[0] = 0.0;
+			g->mon[1].stats.spos[0] = 0.0;
+			g->mon[2].stats.spos[0] = 0.0;
+		}
 	}
 	if (keys[XK_a] && !g->Player_1.gameOver) {
 		g->Player_1.stats.angle += 4.0f;
@@ -666,7 +670,7 @@ void render(Game *g)
 {
 	
 	if(showtest){
-		renderEnemy(g, testImage->width/4, testTexture);
+		renderEnemy(g, testImage->width, testTexture);
 	}
 	
 	
