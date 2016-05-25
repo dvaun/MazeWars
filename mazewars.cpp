@@ -76,19 +76,15 @@ int joy[65536];
 int axis[65536];
 GLuint texture[10];
 int people = 0;
-
 int titleScreen = 1;
 
-
-Ppmimage *test = NULL;
+Ppmimage *testImage = NULL;
 GLuint testTexture;
-bool showtest = 1;
+GLuint silhouetteTexture;
 
-
-
+bool showtest = 0;
 Ppmimage *personImage1 = NULL;
 GLuint personTexture1;
-
 Ppmimage *introImages[10] = {NULL};
 GLuint introTextures[10];
 // GLuint titleTexture; //introTexture[0]
@@ -280,7 +276,7 @@ void init_opengl(void)
 	string characterSelected = "red";
 	personImage1 = characterSelection(characterSelected);
 	
-	test = ppm6GetImage((char*)"images/ZombieStand.ppm");
+	testImage = ppm6GetImage((char*)"images/ZombieStand.ppm");
 	
 	
 	introImages[0] = ppm6GetImage((char*)"images/titleBackground.ppm");
@@ -298,18 +294,27 @@ void init_opengl(void)
 	glGenTextures(1, &introTextures[3]); //enterTexture
 	glGenTextures(1, &introTextures[4]); //optionsTexture
 	glGenTextures(1, &introTextures[5]); //ArrowTexture
-
-	float r = test->width;
-	float s = test->height;
+	
+	/****testing the zombie sprite********************/
+	float r = testImage->width;
+	float s = testImage->height;
 	
 	glBindTexture(GL_TEXTURE_2D, testTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *testData = buildAlphaData(test);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, r, s, 0, GL_RGB, GL_UNSIGNED_BYTE,
+							   testImage->data);
+
+	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	
+	unsigned char *testData = buildAlphaData(testImage);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, r, s, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, testData);
 	free(testData);
-
+	/*************************************************/
+	
 	//Character Texture
 	float w = personImage1->width;
 	float h = personImage1->height;
@@ -602,9 +607,16 @@ void physics(Game *g)
 			g->Player_1.Current_Ammo--;
 		}
 	}
+	if (keys[XK_F5]) {
+		if (g->Player_1.Current_Health > 0)
+			play_sounds(4);
+		else 
+			return;
+	}
+
 	if(keys[XK_F7] && !g->Player_1.gameOver){
 		if(g->Player_1.Current_Health > 0)
-		g->Player_1.Current_Health -= 5;
+			g->Player_1.Current_Health -= 5;
 	}
 	if(keys[XK_F6]){
 		Restart(&g->Player_1);
@@ -649,7 +661,7 @@ void render(Game *g)
 {
 	
 	if(showtest){
-		renderEnemy(g, test->width/4, testTexture);
+		renderEnemy(g, testImage->width/4, testTexture);
 	}
 	
 	
@@ -670,8 +682,10 @@ void render(Game *g)
 	if(g->Player_1.Current_Health == 0){
 		g->Player_1.lives--;
 		//Play death groan upon player death
-		if (g->Player_1.lives == 0)
+		if (g->Player_1.lives == 0) {
 			play_sounds(1);
+			play_sounds(3);
+		}
 		g->Player_1.Current_Health = g->Player_1.Max_Health;
 	}
 	if(g->Player_1.lives == 0){
