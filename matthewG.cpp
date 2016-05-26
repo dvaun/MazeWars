@@ -1,10 +1,9 @@
-/* Name: Matthew Gaitan
- * Date: April 27, 2016
- * Last Modified: May 11, 2016
- * Description: My code handles all of the character movement if a controller 
- * is being used as well as the code for the intro animation and character
- * selection.
- */
+// Name: Matthew Gaitan
+// Date: April 27, 2016
+// Last Modified: May 11, 2016
+// Description: My code handles all of the character movement if a controller 
+// is being used as well as the code for the intro animation and character
+// selection.
 
 #include "game_objects.h"
 #include "joystick.hh"
@@ -18,7 +17,7 @@ using std::cout;
 using std::endl;
 
 typedef struct crosshair {
-		float angle;
+	float angle;
 } Crosshair;
 
 Crosshair crosshair;
