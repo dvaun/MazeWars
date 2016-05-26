@@ -125,21 +125,12 @@ struct Monster {
 	int health = 100;
 	bool alive = true;
 	bool pursuit = true;
+	double spawnPos[2];
 	Monster() {
 	    alive = 1;
 	}
 	void draw() {
-		glColor3f(255,0,0);
-                glPushMatrix();
-                glTranslatef(stats.spos[0], stats.spos[1], 0);
-                glRotatef(stats.angle, 0.0f, 0.0f, 1.0f);
-                glBegin(GL_QUADS);
-                        glVertex2f(-10.0f, -10.0f);
-                        glVertex2f(  -10.0f,  10.0f);
-                        glVertex2f(  10.0f,  10.0f);
-                        glVertex2f(  10.0f,  -10.0f);
-                glEnd();
-                glPopMatrix();
+	
 	}
 	void gameMove(int x) {
 	    if(x){
