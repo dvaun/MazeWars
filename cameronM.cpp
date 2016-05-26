@@ -2,12 +2,13 @@
 #define CAMERON_CPP
 /* Name: Cameron Morrow
 * Date: May 04, 2016
-* Last Modified: May 13, 2016
+* Last Modified: May 25, 2016
 * Description: My code handles all of the weapon movement if a controller 
-* is not being used.
+* is not being used. 
 * In the mazewars.cpp I modified all of the original asteroids code to remove
 * the engine from the ship and the asteroid field, also changed the window title
 * I am drawing and handling the health bar and "HUD" 
+* I Draw and move the enemies array and deal with the pause menu and the winning conditionn ending credits scene
 */
 #define PI 3.141592
 #include <ctime>
@@ -20,6 +21,9 @@ double timespanC1 = 0.0;
 struct timespec timeC2;
 struct timespec timeCurrentC2;
 double timespanC2 = 0.0;
+struct timespec timem[5];
+struct timespec timeCurrentm[5];
+double timespanm[5];
 using namespace std;
 void getScreenRes(int x, int y)
 {
@@ -278,6 +282,8 @@ void drawArtifacts(Player x)
 }
 void drawHealth(Player x)
 {
+	if(x.Current_Health<=0)
+		x.Current_Health=0;
 	double remaining = 100-((x.Current_Health/x.Max_Health)*100);
 	//Background of health bar
 	glPushMatrix();
@@ -420,17 +426,23 @@ void GameOver()
 	r.center = 0;
 	ggprint8b(&r, 160, 0x00ff0000, "GAME OVER \n F6 TO RESTART");
 }
-void Restart(Player *x)
+void Restart(Game *x)
 {
-	x->Current_Health = 100;
-	x->Current_Ammo = 100;
-	x->lives = 4;
-	x->stats.spos[0] = 625;
-	x->stats.spos[1] = 450;
-	x->stats.gpos[0] = 500;
-	x->stats.gpos[1] = 500;
-	x->gameOver = false;
-	VecZero(x->stats.dir);
+	x->Player_1.Current_Health = 100;
+	x->Player_1.Current_Ammo = 100;
+	x->Player_1.lives = 4;
+	x->Player_1.stats.spos[0] = 625;
+	x->Player_1.stats.spos[1] = 450;
+	x->Player_1.stats.gpos[0] = 500;
+	x->Player_1.stats.gpos[1] = 500;
+	x->Player_1.gameOver = false;
+	VecZero(x->Player_1.stats.dir);
+
+
+	for(int i = 0; i<5; i++){
+		x->mon[i].stats.spos[0] = x->mon[i].spawnPos[0];
+		x->mon[i].stats.spos[1] = x->mon[i].spawnPos[1];
+	}
 }
 void drawHealthPack(int x, int y, int z)
 {
@@ -519,7 +531,7 @@ void monsterMovement(Game *g, int monNum, int startx, int starty)
 	}
 
 	//this is the enemys default movement pattern if not in pursuit mode
-	if(!g->mon[monNum].pursuit){
+	if(!g->mon[monNum].pursuit || g->Player_1.gameOver){
 		clock_gettime(CLOCK_REALTIME, &timeCurrentC);
 		timespanC1 = timeDiff(&timeC1, &timeCurrentC);
 		if (timespanC1 > 2) {
@@ -566,14 +578,14 @@ void monsterGetShot(Game *g, int monNum, int startx, int starty)
 }
 void monsterDamagePlayer(Game *g, int monNum, int startx, int starty)
 {
-	clock_gettime(CLOCK_REALTIME, &timeCurrentC2);
-	timespanC2 = timeDiff(&timeC2, &timeCurrentC2);
+	clock_gettime(CLOCK_REALTIME, &timeCurrentm[monNum]);
+	timespanm[monNum] = timeDiff(&timem[monNum], &timeCurrentm[monNum]);
 	if(((g->Player_1.stats.spos[0] >= g->mon[monNum].stats.spos[0]-12) &&\
 	(g->Player_1.stats.spos[0] <= g->mon[monNum].stats.spos[0]+12)) &&\
 	((g->Player_1.stats.spos[1] >= g->mon[monNum].stats.spos[1]-12) &&\
 	(g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+12))){	
-		if (timespanC2 > 0.5) {
-			clock_gettime(CLOCK_REALTIME, &timeC2);
+		if (timespanm[monNum] > 0.5) {
+			clock_gettime(CLOCK_REALTIME, &timem[monNum]);
 			g->Player_1.Current_Health -= 5;
 		}
 	}
@@ -634,5 +646,25 @@ void renderCharacterEnemy(Person personc, Game *g, float w, int keys[],
 	glEnd();
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
+}
+void renderWin(GLuint winTextures[], Ppmimage *winImages[],Game *g)
+{
+	glBegin(GL_POLYGON);		
+		glColor3f(0, 0, 0);
+		glVertex2f(res[0]/2 - 100, res[1]/2 - 100);
+		glVertex2f(res[0]/2 - 100, res[1]/2 + 100);
+		glVertex2f(res[0]/2 + 100, res[1]/2 + 100);
+		glVertex2f(res[0]/2 + 100, res[1]/2 - 100);
+	glEnd();
+}
+void renderPause(Game *g)
+{
+	glBegin(GL_POLYGON);		
+		glColor3f(0, 0, 0);
+		glVertex2f(res[0]/2 - 100, res[1]/2 - 100);
+		glVertex2f(res[0]/2 - 100, res[1]/2 + 100);
+		glVertex2f(res[0]/2 + 100, res[1]/2 + 100);
+		glVertex2f(res[0]/2 + 100, res[1]/2 - 100);
+	glEnd();
 }
 #endif
