@@ -51,6 +51,7 @@ struct timespec timeT2;
 struct timespec timeT3;
 struct timespec timeT4;
 struct timespec timeT5;
+struct timespec timeT6;
 double physicsCountdown=0.0;
 double timeSpan=0.0;
 double timeSpanT1=0.0;
@@ -58,6 +59,7 @@ double timeSpanT2=0.0;
 double timeSpanT3=0.0;
 double timeSpanT4=0.0;
 double timeSpanT5=0.0;
+double timeSpanT6=0.0;
 //unsigned int upause=0;
 /*double timeDiff(struct timespec *start, struct timespec *end) 
 {
@@ -77,7 +79,8 @@ int axis[65536];
 GLuint texture[10];
 int people = 0;
 int titleScreen = 1;
-
+bool winCondition = false;
+bool Pause = false;
 Ppmimage *testImage = NULL;
 GLuint testTexture;
 GLuint silhouetteTexture;
@@ -89,6 +92,8 @@ GLuint personTexture1;
 GLuint personTexture1c;
 Ppmimage *introImages[10] = {NULL};
 GLuint introTextures[10];
+Ppmimage *winImages[10] = {NULL};
+GLuint winTextures[10];
 // GLuint titleTexture; //introTexture[0]
 // GLuint boulderTexture; //introTexture[1]
 // GLuint logoTexture; //introTexture[2]
@@ -156,20 +161,30 @@ int main(int argc, char *argv[])
 			physics(&game);
 			physicsCountdown -= physicsRate;
 		}
-		if(argc == 1){
-		if (titleScreen) {
-			//glBindTexture(GL_TEXTURE_2D, titleTexture);
-			if (keys[XK_Return]) {
-				enterPressed = keys[XK_Return];
+		if (argc == 1) {
+			if (titleScreen) {
+				//glBindTexture(GL_TEXTURE_2D, titleTexture);
+				if (keys[XK_Return]) {
+					enterPressed = keys[XK_Return];
+				}
+				titleScreen = renderTitleScreen(introTextures, introImages, enterPressed);
+			} else if (winCondition) {
+	
+				renderWin(winTextures, winImages, &game);
+
+			} else {
+				glClearColor(0.8, 0.8, 0.8, 1.0);
+				render(&game);
 			}
-			titleScreen = renderTitleScreen(introTextures, introImages, enterPressed);
-		}
-		else {
-			glClearColor(0.8, 0.8, 0.8, 1.0);
-			render(&game);
-		}
-		}
-		else{
+		}  else if (winCondition) {
+	
+			renderWin(winTextures, winImages, &game);
+
+		}  else if (Pause) {
+	
+			renderPause(&game);
+
+		} else {
 		    glClearColor(0.8,0.8,0.8,1.0);
 		    render(&game);
 		}
@@ -436,20 +451,31 @@ void init(Game *g)
 	g->Player_1.stats.color[0] = 255;
 	g->Player_1.stats.spos[0] = 625;
 	g->Player_1.stats.spos[1] = 450;
+	
 	g->mon[0].stats.spos[0] = 500;
 	g->mon[0].stats.spos[1] = 500;
+	g->mon[0].spawnPos[0] = 500;
+	g->mon[0].spawnPos[1] = 500;
 	
 	g->mon[1].stats.spos[0] = 600;
 	g->mon[1].stats.spos[1] = 600;
+	g->mon[1].spawnPos[0] = 600;
+	g->mon[1].spawnPos[1] = 600;
 	
 	g->mon[2].stats.spos[0] = 700;
 	g->mon[2].stats.spos[1] = 400;
+	g->mon[2].spawnPos[0] = 700;
+	g->mon[2].spawnPos[1] = 400;
 	
 	g->mon[3].stats.spos[0] = 400;
 	g->mon[3].stats.spos[1] = 300;
+	g->mon[3].spawnPos[0] = 400;
+	g->mon[3].spawnPos[1] = 300;
 	
 	g->mon[4].stats.spos[0] = 300;
 	g->mon[4].stats.spos[1] = 200;
+	g->mon[4].spawnPos[0] = 300;
+	g->mon[4].spawnPos[1] = 200;
 	printf("%f\n",g->Player_1.stats.color[0]);
 }
 
@@ -554,7 +580,14 @@ void physics(Game *g)
 			g->mon[2].stats.spos[0] = 0.0;
 		}
 	}
-	if (keys[XK_a] && !g->Player_1.gameOver) {
+	if(keys[XK_p]){
+		timeSpanT6 = timeDiff(&timeT6, &timeCurrent);
+                if(timeSpanT6 > 0.2){
+                        clock_gettime(CLOCK_REALTIME, &timeT6);
+			Pause = !Pause;
+		}
+	}
+	if (keys[XK_a] && !g->Player_1.gameOver && !Pause) {
 		g->Player_1.stats.angle += 4.0f;
 		if (g->Player_1.stats.angle >= 360.0f)
 		g->Player_1.stats.angle -= 360.0f;
@@ -562,12 +595,12 @@ void physics(Game *g)
 		person.pos[0] =	g->Player_1.stats.spos[0];
 		person.pos[1] = g->Player_1.stats.spos[1];
 	}
-	if (keys[XK_d] && !g->Player_1.gameOver) {
+	if (keys[XK_d] && !g->Player_1.gameOver && !Pause) {
 		g->Player_1.stats.angle -= 4.0f;
 		if (g->Player_1.stats.angle < 0.0f)
 		g->Player_1.stats.angle += 360.0f;
 	}
-	if (keys[XK_w] && !g->Player_1.gameOver) {
+	if (keys[XK_w] && !g->Player_1.gameOver && !Pause) {
 		//convert Player_1.stats.angle to radians
 		Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
@@ -584,7 +617,7 @@ void physics(Game *g)
 		g->Player_1.stats.vel[0] = 0;
 		g->Player_1.stats.vel[1] = 0;
 	}
-	if (keys[XK_s] && !g->Player_1.gameOver) {
+	if (keys[XK_s] && !g->Player_1.gameOver && !Pause) {
 		//convert Player_1.stats.angle to radians
 		Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
@@ -603,7 +636,7 @@ void physics(Game *g)
 	}
 
 	if ((keys[XK_space] || joy[0]) && g->Player_1.Current_Ammo > 0 && 
-									  g->Player_1.Current_Health > 0) {
+									  g->Player_1.Current_Health > 0 && !Pause) {
 		g->Player_1.stats.angle = g->gun.stats.angle;
 		//a little time between each bullet
 		struct timespec bt;
@@ -635,35 +668,35 @@ void physics(Game *g)
 			g->Player_1.Current_Ammo--;
 		}
 	}
-	if (keys[XK_F5]) {
+	if (keys[XK_F5] && !Pause) {
 		if (g->Player_1.Current_Health > 0)
 			play_sounds(4);
 		else 
 			return;
 	}
 
-	if(keys[XK_F7] && !g->Player_1.gameOver){
+	if(keys[XK_F7] && !g->Player_1.gameOver && !Pause){
 		if(g->Player_1.Current_Health > 0)
 			g->Player_1.Current_Health -= 5;
 	}
-	if(keys[XK_F6]){
-		Restart(&g->Player_1);
+	if(keys[XK_F6] && !Pause){
+		Restart(g);
 	}
-	if(keys[XK_F8]){
+	if(keys[XK_F8] && !Pause){
 		timeSpanT1 = timeDiff(&timeT1, &timeCurrent);
 		if(timeSpanT1 > 0.2){
 			clock_gettime(CLOCK_REALTIME, &timeT1);
 			g->Player_1.artifact[0] = !g->Player_1.artifact[0];
 		}
 	}
-	if(keys[XK_F9]){
+	if(keys[XK_F9] && !Pause){
 		timeSpanT2 = timeDiff(&timeT2, &timeCurrent);
                 if(timeSpanT2 > 0.2){
                         clock_gettime(CLOCK_REALTIME, &timeT2);
                         g->Player_1.artifact[1] = !g->Player_1.artifact[1];
                 }
 	}
-	if(keys[XK_F10]){
+	if(keys[XK_F10] && !Pause){
 		timeSpanT3 = timeDiff(&timeT3, &timeCurrent);
                 if(timeSpanT3 > 0.2){
                         clock_gettime(CLOCK_REALTIME, &timeT3);
@@ -672,13 +705,13 @@ void physics(Game *g)
                 }
 
 	}
-	if(keys[XK_F12]){
+	if(keys[XK_F12] && !Pause){
 		timeSpanT4 = timeDiff(&timeT4, &timeCurrent);
                 if(timeSpanT4 > 0.2){
                         clock_gettime(CLOCK_REALTIME, &timeT4);
-		g->Player_1.lives += 1;
-		g->Player_1.lives = g->Player_1.lives % 5;
-	}
+			g->Player_1.lives += 1;
+			g->Player_1.lives = g->Player_1.lives % 5;
+		}
 	}
 }
 
@@ -733,13 +766,13 @@ void render(Game *g)
 			drawBullet(g, b, 0.0, 0.0, 0.0);	
 	}
 	for (int i = 0; i < 5; i++) {
-		if(keys[XK_w] && g->mon[i].alive){
+		if(keys[XK_w] && g->mon[i].alive && !Pause && !g->Player_1.gameOver){
 			g->mon[i].gameMove(1);
 		}
 		else if(keys[XK_s] && g->mon[i].alive){
 			g->mon[i].gameMove(0);
 		}
-		if (g->mon[i].alive) {
+		if (g->mon[i].alive && !Pause) {
 			renderCharacterEnemy(personc, g, w, keys, personTexture1c, i); 
 			personc.pos[0] = g->mon[i].stats.spos[0];
 			personc.pos[1] = g->mon[i].stats.spos[1];
