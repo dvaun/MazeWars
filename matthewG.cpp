@@ -173,17 +173,17 @@ void renderCharacter(Person person, Game *g, float w, int keys[],
 	}
 
 	if ((keys[XK_w] || keys[XK_s]) && animationSpan < 22) {
-			glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
-			glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
-			glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
+		glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
+		glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
 	}
 	else
 	{
-			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
-			glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
-			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+		glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+		glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
 	}
 	
 	clock_gettime(CLOCK_REALTIME, &animationCurrent);
@@ -460,9 +460,9 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		}
 		
 		if (posLogo[1] > 800) {
-				scale[0] += .00375; scalePos[0] -= .00375;
-				scale[1] += .00375; scalePos[1] -= .00375;
-				cout << scale[1] << endl;
+			scale[0] += .00375; scalePos[0] -= .00375;
+			scale[1] += .00375; scalePos[1] -= .00375;
+			cout << scale[1] << endl;
 		}
 
 		if (posLogo[1] == 1800) {
