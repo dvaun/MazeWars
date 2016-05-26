@@ -143,7 +143,8 @@ void assign_gblock(gblock &block, Stats &stats, int type, int row, int col)
 	block.assigned = 1;
 	stats.gpos[0] = row * 50.0;
 	stats.gpos[1] = col * 50.0;
-	printf("Block[%d][%d] located at x(%f) y(%f)\n",row,col,block.stats.gpos[0],block.stats.gpos[1]);
+	printf("Block[%d][%d] located at x(%f) y(%f)\n",
+			row,col,block.stats.gpos[0],block.stats.gpos[1]);
 }
 
 gblock return_gblock(gblock block, int type, int row, int col)
@@ -152,7 +153,8 @@ gblock return_gblock(gblock block, int type, int row, int col)
 	block.assigned = 1;
 	block.stats.gpos[0] = row * 50.0;
 	block.stats.gpos[1] = col * 50.0;
-	printf("Block[%d][%d] located at x(%f) y(%f)\n",row,col,block.stats.gpos[0],block.stats.gpos[1]);
+	printf("Block[%d][%d] located at x(%f) y(%f)\n",
+			row,col,block.stats.gpos[0],block.stats.gpos[1]);
 	return block;
 }
 
@@ -180,16 +182,17 @@ Game init_game(Game g, gblock_info gbi)
 
 char* getBlockTexture(gblock block)
 {
-	switch(block.type) {
-	    case 0:
-		return "images/pokecavefloor.ppm";
-		break;
-	    case 1:
-		return "images/pokecavewallleft.ppm";
-		break;
-	    default:
-		return "images/pikachu.ppm";
-		break;
+	switch(block.type)
+	{
+		case 0:
+			return "images/pokecavefloor.ppm";
+			break;
+		case 1:
+			return "images/pokecavewallleft.ppm";
+			break;
+		default:
+			return "images/pokecavefloor.ppm";
+			break;
 	}
 }
 
@@ -243,19 +246,19 @@ void begin_game(Game& game, gblock_info& gbi)
 		game.blocks[i] = new gblock[gbi.columns];
 	}
 	for (int i = 0; i < gbi.rows; i++) {
-	    for (int j = 0; j < gbi.columns; j++) {
+		for (int j = 0; j < gbi.columns; j++) {
 		set_gblock_size(game.blocks[i][j],
 			game.blocks[i][j].stats.height,
 			game.blocks[i][j].stats.width, gbi.width);
-	    }
+		}
 	}
 	create_gblock(game.blocks[5][5],1,5,5);
 	create_gblock(game.blocks[15][5],0,15,5);
 	create_gblock(game.blocks[10][5],1,10,5);
 	for (int i = 0; i < 20; i++) {
-	    create_gblock(game.blocks[20][i],0,20,i);
-	    create_gblock(game.blocks[21][i],1,21,i);
-	    create_gblock(game.blocks[22][i],0,22,i);
+		create_gblock(game.blocks[20][i],0,20,i);
+		create_gblock(game.blocks[21][i],1,21,i);
+		create_gblock(game.blocks[22][i],0,22,i);
 	}
 }
 
@@ -273,11 +276,11 @@ bool inDrawingDistanceBlock(Game *g, gblock block)
 	printf("%f ", block.stats.gpos[0] - player.stats.gpos[0] - 25);
 	printf("%f\n", block.stats.gpos[1] - player.stats.gpos[1] - 25);
 	if (abs(player.stats.gpos[0] - block.stats.gpos[0] -
-		    block.stats.width*2) < 625) {
+			block.stats.width*2) < 625) {
 		indistancex = true;
 	}
 	if (abs(player.stats.gpos[1] - block.stats.gpos[1] -
-		    block.stats.width*2) < 450) {
+			block.stats.width*2) < 450) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -291,7 +294,8 @@ bool withinDistance(Player p, gblock block, int check)
 	return (abs(p.stats.gpos[0]
 }
 */
-float getXYDistValue(float x, float y) {
+float getXYDistValue(float x, float y)
+{
 	return sqrt((x*x)+(y*y));
 }
 float getDistanceStatsVal(Game *g, Stats stats, int coord)
@@ -317,11 +321,11 @@ bool checkDistanceBlock(Game *g, gblock block, float xcheck, float ycheck)
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
 	if (abs(player.stats.gpos[0] - block.stats.gpos[0] +
-		    block.stats.width) < xcheck) {
+			block.stats.width) < xcheck) {
 		indistancex = true;
 	}
 	if (abs(player.stats.gpos[1] - block.stats.gpos[1] +
-		    block.stats.width) < ycheck) {
+			block.stats.width) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -335,11 +339,11 @@ bool checkDistanceStats(Game *g, Stats stats, float xcheck, float ycheck)
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
 	if (abs(player.stats.gpos[0] - stats.gpos[0] +
-		    stats.width) < xcheck) {
+			stats.width) < xcheck) {
 		indistancex = true;
 	}
 	if (abs(player.stats.gpos[1] - stats.gpos[1] +
-		    stats.width) < ycheck) {
+			stats.width) < ycheck) {
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
@@ -361,7 +365,7 @@ void getDistanceBlock(Game *g, gblock block, int xcheck, int ycheck)
 		indistancey = true;
 	}
 	if (indistancex && indistancey) {
-	    return Vec;
+		return Vec;
 	}
 	return -1;
 }
@@ -370,8 +374,10 @@ void drawStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
 	float xdist, ydist;
-	xdist = g->Player_1.stats.spos[0] + (stats.gpos[0] - g->Player_1.stats.gpos[0] - stats.width);
-	ydist = g->Player_1.stats.spos[1] + (stats.gpos[1] - g->Player_1.stats.gpos[1] - stats.width);
+	xdist = g->Player_1.stats.spos[0] +
+		(stats.gpos[0] - g->Player_1.stats.gpos[0] - stats.width);
+	ydist = g->Player_1.stats.spos[1] +
+		(stats.gpos[1] - g->Player_1.stats.gpos[1] - stats.width);
 	float size = stats.width;
 	glColor3f((int)stats.color[0], (int)stats.color[1],
 		(int)stats.color[2]);
@@ -426,7 +432,8 @@ void drawGBlocks(Game *g)
 	for (int i = 0; i < nrows; i++) {
 		for (int j = 0; j < ncols; j++) {
 			if (g->blocks[i][j].assigned == 1) {
-				if (checkDistanceBlock(g,g->blocks[i][j],(float)g->g_xres/2,(float)g->g_yres/2)) {
+				if (checkDistanceBlock(g,g->blocks[i][j],
+							(float)g->g_xres/2,(float)g->g_yres/2)) {
 					glColor3f(255.0, 255.0, 255.0);
 					drawBlock(g, g->blocks[i][j]);
 				}
