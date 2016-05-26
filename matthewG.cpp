@@ -2,13 +2,8 @@
  * Date: April 27, 2016
  * Last Modified: May 11, 2016
  * Description: My code handles all of the character movement if a controller 
- * is being used. In the main mazewars.cpp file, the current values for the
- * buttons as well as joysticks are added to an array and those values are
- * later passed to my checkController function. My checkController function
- * does whatever action that relates to the button or joystick being updated.
- * My code also takes a character sprite sheet passed to it (assuming two 
- * frames) and renders it on the screen swapping through the textures if there
- * is movement.
+ * is being used as well as the code for the intro animation and character
+ * selection.
  */
 
 #include "game_objects.h"
@@ -177,41 +172,24 @@ void renderCharacter(Person person, Game *g, float w, int keys[],
 		animationSpan = 0.0;
 		clock_gettime(CLOCK_REALTIME, &animationStart);
 	}
-	w /= 2;
-	//glBindTexture(GL_TEXTURE_2D, spriteTexture);
-	if ((keys[XK_w] || keys[XK_s]) && animationSpan < 12.5) {
-			glTexCoord2f(0.66f, 0.0f); glVertex2f(-w, w);
+
+	if ((keys[XK_w] || keys[XK_s]) && animationSpan < 22) {
+			glTexCoord2f(0.5f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
 			glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
-			glTexCoord2f(0.66f, 1.0f); glVertex2f(-w, -w);
-	}
-	else if((keys[XK_w] || keys[XK_s]) && animationSpan < 45)
-	{
-			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
-			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
-			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
-	}
-	else if((keys[XK_w] || keys[XK_s]) && animationSpan < 67.5)
-	{
-			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(0.33f, 0.0f); glVertex2f( w, w);
-			glTexCoord2f(0.33f, 1.0f); glVertex2f( w, -w);
-			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
+			glTexCoord2f(0.5f, 1.0f); glVertex2f(-w, -w);
 	}
 	else
 	{
-			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
-			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
-			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
-			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
+			glTexCoord2f(0.5f, 0.0f); glVertex2f( w, w);
+			glTexCoord2f(0.5f, 1.0f); glVertex2f( w, -w);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
 	}
 	
 	clock_gettime(CLOCK_REALTIME, &animationCurrent);
 	animationSpan += timeDiff(&animationStart, &animationCurrent);
 	
-	//cout << animationSpan << endl;	
-
 	glEnd();
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
@@ -229,10 +207,12 @@ struct timespec totCurrent, totStart;
 struct timespec logoCurrent, logoStart;
 struct timespec enterCurrent, enterStart;
 struct timespec optionsCurrent, optionsStart;
+struct timespec characterCurrent, characterStart;
 double bouldersSpan = 0.0;
 double logoSpan = 0.0;
 double enterSpan = 0.0;
 double optionsSpan = 0.0;
+double characterSpan = 0.0;
 int fallingBouldersTimer = 1;
 double scale[3] = {1.0f, 1.0f, 0};
 double scalePos[3] = {0, 0, 0};
@@ -240,31 +220,38 @@ int pos[3] = {0, yheight, 0};
 int posLogo[3] = {0, -50, 0};
 int posEnter[3] = {xwidth/2, 0, 0};
 int posOptions[3] = {xwidth/2+60, 0, 0};
+int arrow[3] = {0, 0, 0};
+int character[3] = {0, 0, 0};
 
 int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[], 
-	int enterPressed)
+	int enterPressed, int downPressed, int upPressed)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//set background to black to give cenematic feel
+	//set background to black to give cinematic feel
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	
 	//Background
+	float w = introImages[0]->width;
+	float h = introImages[0]->height;
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, introTextures[0]);
 	glTranslatef(-scale[0]*625 +625, -scale[1]*354+354, 0);
 	glScalef(scale[0], scale[1], scale[2]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, introImages[0]->height+96);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(introImages[0]->width, 
-		introImages[0]->height+96);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(introImages[0]->width, 96);
+
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h + 96);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h + 96);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
 	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
 
 	glEnd();
 	glPopMatrix();
 	//MazeWars Logo
 	if (scroll <= -1800) {
+		w = introImages[2]->width;
+		h = introImages[2]->height;
+
 		glPushMatrix();
 		glTranslatef(posLogo[0], posLogo[1], posLogo[2]);
 
@@ -274,15 +261,17 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		glBegin(GL_QUADS);
 
 		glTexCoord2f(0.0f, 0.0f); glVertex2f(235, 900);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(introImages[2]->width+235, 900);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(introImages[2]->width+235, 
-			introImages[2]->height+294);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(235, introImages[2]->height+294);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(w + 235, 900);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(w + 235, h + 294);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(235, h + 294);
+
 		glEnd();
 		glPopMatrix();
 		glDisable(GL_ALPHA_TEST);
 
 		//Enter Maze
+		w = 315 + introImages[3]->width/2;
+		h = introImages[3]->height/2;
 		glPushMatrix();
 		glTranslatef(posEnter[0], posEnter[1], posEnter[2]);
 
@@ -291,19 +280,18 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glBegin(GL_QUADS);
 
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2, yheight/2);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 + 
-			introImages[3]->width/2, yheight/2);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 + 
-			introImages[3]->width/2, yheight/2-introImages[3]->height/2);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2, 
-			yheight/2-introImages[3]->height/2);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(315 + xwidth/2, yheight/2);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 + w, yheight/2);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 + w, yheight/2 - h);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(315 + xwidth/2, yheight/2 - h);
 
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		glPopMatrix();
 
 		//Options
+		w = 275 + introImages[4]->width/2;
+		h = -60 - introImages[4]->height/2;
 		glPushMatrix();
 		glTranslatef(posOptions[0], posOptions[1], posOptions[2]);
 
@@ -312,36 +300,98 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glBegin(GL_QUADS);
 
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2 + 25, yheight/2 - 60);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 + 25 + 
-			introImages[4]->width/2, yheight/2 - 60);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 + 25 + 
-			introImages[4]->width/2, yheight/2 - 60 - 
-			introImages[4]->height/2);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2 + 25, yheight/2 - 60 - 
-			introImages[4]->height/2);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2 + 275, yheight/2 - 60);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 + w, yheight/2 - 60);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 + w, yheight/2 + h);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2 + 275, yheight/2 + h);
 
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		glPopMatrix();
 
 		//Arrow
-		/*glBindTexture(GL_TEXTURE_2D, introTextures[5]);
+		w = 250 + introImages[5]->width/1.5;
+		h = -5 + introImages[5]->height/1.5;
+		glPushMatrix();
+		glTranslatef(arrow[0], arrow[1], arrow[2]);
+
+		glBindTexture(GL_TEXTURE_2D, introTextures[5]);
 		glEnable(GL_ALPHA_TEST);
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glBegin(GL_QUADS);
 
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2 - 25, yheight/2);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 - 25 + 
-			introImages[5]->width, yheight/2);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 - 25 + 
-			introImages[5]->width, yheight/2 - introImages[5]->height);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2 - 25, yheight/2 - 
-			introImages[5]->height);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(xwidth/2 + 250, yheight/2 + 5);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(xwidth/2 + w, yheight/2 + 5);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(xwidth/2 + w, yheight/2 - h);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(xwidth/2 + 250, yheight/2 - h);
 		
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
-		glPopMatrix(); */
+		glPopMatrix();
+
+		//Arrow movement
+		if (downPressed) {
+			if (arrow[0] == 0) {
+				arrow[0] = 20;
+				arrow[1] = -60;
+			}
+		}
+		else if (upPressed) {
+			if (arrow[0] == 20) {
+				arrow[0] = 0;
+				arrow[1] = 0;
+			}
+		}
+
+		//Character walk in off screen
+		w = introImages[6]->width*2;
+		h = introImages[6]->height*2;
+		glPushMatrix();
+		glTranslatef(character[0], character[1], character[2]);
+
+		glBindTexture(GL_TEXTURE_2D, introTextures[6]);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+
+		if (characterSpan >= 30) {
+			characterSpan = 0.0;
+			clock_gettime(CLOCK_REALTIME, &characterStart);
+		}
+
+		glBegin(GL_QUADS);
+		if (characterSpan < 10) {
+			glTexCoord2f(0.00f, 0.0f); glVertex2f(0, h);
+			glTexCoord2f(0.25f, 0.0f); glVertex2f(w/4, h);
+			glTexCoord2f(0.25f, 1.0f); glVertex2f(w/4, 0);
+			glTexCoord2f(0.00f, 1.0f); glVertex2f(0, 0);
+		}
+		else if (characterSpan < 20) {
+			glTexCoord2f(0.25f, 0.0f); glVertex2f(0, h);
+			glTexCoord2f(0.50f, 0.0f); glVertex2f(w/4, h);
+			glTexCoord2f(0.50f, 1.0f); glVertex2f(w/4, 0);
+			glTexCoord2f(0.25f, 1.0f); glVertex2f(0, 0);
+			character[0]++;
+
+		}
+		else if (characterSpan < 30) {
+			glTexCoord2f(0.50f, 0.0f); glVertex2f(0, h);
+			glTexCoord2f(0.75f, 0.0f); glVertex2f(w/4, h);
+			glTexCoord2f(0.75f, 1.0f); glVertex2f(w/4, 0);
+			glTexCoord2f(0.50f, 1.0f); glVertex2f(0, 0);
+		}
+	
+		clock_gettime(CLOCK_REALTIME, &characterCurrent);
+		characterSpan += timeDiff(&characterStart, &characterCurrent);
+	
+		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		glPopMatrix();
+
+	}
+
+	//Character walking
+	if (characterSpan == 1) {
+
 	}
 
 	//Falling Boulders
@@ -366,6 +416,8 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		clock_gettime(CLOCK_REALTIME, &optionsStart);
 	}
 
+	w = 50 + introImages[1]->width;
+	h = introImages[1]->height;
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 
@@ -374,11 +426,11 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(-50, yheight+introImages[1]->height);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(introImages[1]->width+50, 
-		yheight+introImages[1]->height);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(introImages[1]->width+50, yheight);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-50, yheight + h);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, yheight + h);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, yheight);
 	glTexCoord2f(0.0f, 1.0f); glVertex2f(-50, yheight);
+
 	glEnd();
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
@@ -396,7 +448,7 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		clock_gettime(CLOCK_REALTIME, &totCurrent);
 	}
 
-	if (enterPressed) {
+	if (enterPressed && arrow[0] == 0) {
 		clock_gettime(CLOCK_REALTIME, &logoCurrent);
 		logoSpan += timeDiff(&logoStart, &logoCurrent);
 		clock_gettime(CLOCK_REALTIME, &enterCurrent);
@@ -427,6 +479,5 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 		}
 
 	}
-
 	return 1;
 }
