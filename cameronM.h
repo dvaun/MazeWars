@@ -1,13 +1,13 @@
 #ifndef CAMERON_H
 #define CAMERON_H
-void drawHealth(Player x);
+void drawHealth(Player *x);
 void drawAmmo(Player x);
 void drawDiamondBack(int x);
 void drawDiamond(int x);
 void drawArtifacts(Player x);
 void drawLives(int x, int y);
 void drawBackground();
-void drawHUD(Player x);
+void drawHUD(Player *x);
 void monsterMovement(Game *g, int monNum, int startx, int starty);
 void monsterGetShot(Game *g, int monNum, int startx, int starty);
 void monsterDamagePlayer(Game *g, int monNum, int startx, int starty);

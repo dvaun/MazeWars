@@ -59,13 +59,13 @@ void pointPlayer(Game *g, int savex, int savey)
 		g->gun.stats.angle += 360.0f;
 	}
 }
-void drawHUD(Player x)
+void drawHUD(Player *x)
 {
 	drawBackground();
 	drawHealth(x);
-	drawAmmo(x);
-	drawArtifacts(x);
-	switch (x.lives) {
+	drawAmmo(*x);
+	drawArtifacts(*x);
+	switch (x->lives) {
 		case 4:
 			drawLives(10, 0);
 		case 3:
@@ -280,11 +280,11 @@ void drawArtifacts(Player x)
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00ffffff, "Artifacts:");
 }
-void drawHealth(Player x)
+void drawHealth(Player *x)
 {
-	if(x.Current_Health<=0)
-		x.Current_Health=0;
-	double remaining = 100-((x.Current_Health/x.Max_Health)*100);
+	if(x->Current_Health < 0)
+		x->Current_Health = 0;
+	double remaining = 100-((x->Current_Health/x->Max_Health)*100);
 	//Background of health bar
 	glPushMatrix();
 	glTranslatef(res[0]-150, 85, 0);
@@ -312,8 +312,8 @@ void drawHealth(Player x)
 	glEnd();
 	glPopMatrix();
 
-	int test = 10-x.Current_Health;
-	if (x.lives > 0) {
+	int test = 10-x->Current_Health;
+	if (x->lives > 0) {
 		glColor3ub(164, 20, 20);
 		glPushMatrix();
 		glTranslatef((res[0]-150)-remaining, 85, 0);
@@ -431,10 +431,10 @@ void Restart(Game *x)
 	x->Player_1.Current_Health = 100;
 	x->Player_1.Current_Ammo = 100;
 	x->Player_1.lives = 4;
-	x->Player_1.stats.spos[0] = 625;
-	x->Player_1.stats.spos[1] = 450;
-	x->Player_1.stats.gpos[0] = 500;
-	x->Player_1.stats.gpos[1] = 500;
+	x->Player_1.stats.spos[0] = res[0]/2;
+	x->Player_1.stats.spos[1] = res[1]/2;
+	x->Player_1.stats.gpos[0] = res[0]/2;
+	x->Player_1.stats.gpos[1] = res[1]/2;
 	x->Player_1.gameOver = false;
 	VecZero(x->Player_1.stats.dir);
 
@@ -444,8 +444,12 @@ void Restart(Game *x)
 		x->mon[i].stats.spos[1] = x->mon[i].spawnPos[1];
 	}
 }
-void drawHealthPack(int x, int y, int z)
+void drawHealthPack(int x, int y, int z, Game *g)
 {
+	x += cos(\
+		PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
+	y += sin(\
+		PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
 	glColor3ub(0, 255, 0);
 	glPushMatrix();
 	glTranslatef(x, y, z);

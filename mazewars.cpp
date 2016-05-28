@@ -754,9 +754,9 @@ void render(Game *g)
 	
 	if(g->Player_1.Current_Health == 0){
 		g->Player_1.lives--;
+		play_sounds(1);
 		//Play death groan upon player death
 		if (g->Player_1.lives == 0) {
-			play_sounds(1);
 			play_sounds(3);
 		}
 		g->Player_1.Current_Health = g->Player_1.Max_Health;
@@ -765,8 +765,8 @@ void render(Game *g)
 		GameOver();
 		g->Player_1.gameOver = true;
 	}
-	//drawHealthPack(500, 400, 0);
-	//drawHealthPack(100, 800, 0);
+	drawHealthPack(500, 400, 0, g);
+	drawHealthPack(100, 800, 0, g);
 	float w = personImage1->width/4;
  
 	if (g->Player_1.gameOver == false)
@@ -794,5 +794,5 @@ void render(Game *g)
 		}
 	}
 	shadowBox();
-	drawHUD(g->Player_1);
+	drawHUD(&g->Player_1);
 }
