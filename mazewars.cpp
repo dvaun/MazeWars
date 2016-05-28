@@ -79,6 +79,7 @@ int axis[65536];
 GLuint texture[10];
 int people = 0;
 int titleScreen = 1;
+int parallax = 1;
 bool winCondition = false;
 bool Pause = false;
 Ppmimage *testImage = NULL;
@@ -180,19 +181,23 @@ int main(int argc, char *argv[])
 				}
 				titleScreen = renderTitleScreen(introTextures, introImages, 
 								enterPressed, downPressed, upPressed);
-			} else if (winCondition) {
-	
-				renderWin(winTextures, winImages, &game);
-
-			} else {
+			} 
+			else if (winCondition) {
+				//test
+				renderWinCondition(introTextures, introImages,
+					enterPressed, downPressed, upPressed);
+			} 
+			else {
 				glClearColor(0.8, 0.8, 0.8, 1.0);
 				render(&game);
 			}
-		}  else if (winCondition) {
-	
-			renderWin(winTextures, winImages, &game);
-
-		}  else if (Pause) {
+		}  
+		else if (winCondition) {
+			//test
+			renderWinCondition(introTextures, introImages, 
+				enterPressed, downPressed, upPressed);
+		}  
+		else if (Pause) {
 	
 			renderPause(&game);
 
@@ -599,7 +604,7 @@ void physics(Game *g)
 			Pause = !Pause;
 		}
 	}
-	if (keys[XK_a] && !g->Player_1.gameOver && !Pause) {
+	if (keys[XK_a] && !g->Player_1.gameOver && !Pause && !winCondition) {
 		g->Player_1.stats.angle += 4.0f;
 		if (g->Player_1.stats.angle >= 360.0f)
 		g->Player_1.stats.angle -= 360.0f;
@@ -607,12 +612,12 @@ void physics(Game *g)
 		person.pos[0] =	g->Player_1.stats.spos[0];
 		person.pos[1] = g->Player_1.stats.spos[1];
 	}
-	if (keys[XK_d] && !g->Player_1.gameOver && !Pause) {
+	if (keys[XK_d] && !g->Player_1.gameOver && !Pause && !winCondition) {
 		g->Player_1.stats.angle -= 4.0f;
 		if (g->Player_1.stats.angle < 0.0f)
 		g->Player_1.stats.angle += 360.0f;
 	}
-	if (keys[XK_w] && !g->Player_1.gameOver && !Pause) {
+	if (keys[XK_w] && !g->Player_1.gameOver && !Pause && !winCondition) {
 		//convert Player_1.stats.angle to radians
 		Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
@@ -629,7 +634,7 @@ void physics(Game *g)
 		g->Player_1.stats.vel[0] = 0;
 		g->Player_1.stats.vel[1] = 0;
 	}
-	if (keys[XK_s] && !g->Player_1.gameOver && !Pause) {
+	if (keys[XK_s] && !g->Player_1.gameOver && !Pause && !winCondition) {
 		//convert Player_1.stats.angle to radians
 		Flt rad = ((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f;
 		//convert angle to a vector
@@ -648,7 +653,7 @@ void physics(Game *g)
 	}
 
 	if ((keys[XK_space] || joy[0]) && g->Player_1.Current_Ammo > 0 && 
-									  g->Player_1.Current_Health > 0 && !Pause) {
+		  g->Player_1.Current_Health > 0 && !Pause && !winCondition) {
 		g->Player_1.stats.angle = g->gun.stats.angle;
 		//a little time between each bullet
 		struct timespec bt;
@@ -680,7 +685,7 @@ void physics(Game *g)
 			g->Player_1.Current_Ammo--;
 		}
 	}
-	if (keys[XK_F5] && !Pause) {
+	if (keys[XK_F5] && !Pause && !winCondition) {
 		if (g->Player_1.Current_Health > 0)
 			play_sounds(4);
 		else 
@@ -724,6 +729,11 @@ void physics(Game *g)
 			g->Player_1.lives += 1;
 			g->Player_1.lives = g->Player_1.lives % 5;
 		}
+	}
+	if (g->Player_1.artifact[0] && g->Player_1.artifact[1] && g->Player_1.artifact[2] && !g->Player_1.gameOver) {
+		if(g->Player_1.Current_Health > 0)
+		    winCondition = true;
+	    
 	}
 }
 

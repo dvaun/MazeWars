@@ -202,6 +202,7 @@ void resolution(int width, int height)
 	yheight = height;
 }
 
+
 int scroll = yheight+yheight;
 struct timespec bouldersCurrent, bouldersStart;
 struct timespec totCurrent, totStart;
@@ -224,6 +225,7 @@ int posOptions[3] = {xwidth/2+60, 0, 0};
 int arrow[3] = {0, 0, 0};
 int character[3] = {0, 0, 0};
 
+
 int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[], 
 	int enterPressed, int downPressed, int upPressed)
 {
@@ -239,8 +241,8 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 	glBindTexture(GL_TEXTURE_2D, introTextures[0]);
 	glTranslatef(-scale[0]*625 +625, -scale[1]*354+354, 0);
 	glScalef(scale[0], scale[1], scale[2]);
+	
 	glBegin(GL_QUADS);
-
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h + 96);
 	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h + 96);
 	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);

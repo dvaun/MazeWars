@@ -10,7 +10,7 @@
 unsigned char* buildAlphaData(Ppmimage *);
 void job_opengl(Ppmimage *personImage, GLuint personTexture);
 void job_keys(int, int &quit, Person person, int &people);
-
+int renderWinCondition(GLuint introTextures[], Ppmimage *introImages[], int enterPressed, int downPressed, int upPressed);
 
 #endif
 
