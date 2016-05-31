@@ -10,11 +10,9 @@
 #include <GL/glx.h>
 #include "ppm.h"
 #include "log.h"
-//#include "Weapon.h"
-//#include "Power_up.h"
-//#include "Player.h"
 #include "joystick.hh"
 #include "game.h"
+#include "cameronM.h"
 #include "matthewG.h"
 #include "roseP.h"
 #include "jobG.h"
@@ -22,8 +20,6 @@
 #include "defs.h"
 #include "person.h"
 #include "fonts/fonts.h"
-#include "cameronM.h"
-#include "cameronM.cpp"
 #include </usr/include/AL/alut.h>
 #include "mtime.h"
 
@@ -43,7 +39,6 @@ GLXContext glc;
 //-----------------------------------------------------------------------------
 //Setup timers
 const double physicsRate = 1.0 / 60.0;
-//const double oobillion = 1.0 / 1e9;
 struct timespec timeStart, timeCurrent;
 struct timespec timePause;
 struct timespec timeT1;
@@ -60,18 +55,7 @@ double timeSpanT3=0.0;
 double timeSpanT4=0.0;
 double timeSpanT5=0.0;
 double timeSpanT6=0.0;
-//unsigned int upause=0;
-/*double timeDiff(struct timespec *start, struct timespec *end) 
-{
-	return (double)(end->tv_sec - start->tv_sec ) +
-	(double)(end->tv_nsec - start->tv_nsec) * oobillion;
-}
-void timeCopy(struct timespec *dest, struct timespec *source) 
-{
-	memcpy(dest, source, sizeof(struct timespec));
-}
-//-----------------------------------------------------------------------------
-*/
+
 int xres=1250, yres=900;
 int keys[65536];
 int joy[65536];
@@ -85,6 +69,7 @@ bool Pause = false;
 Ppmimage *testImage = NULL;
 GLuint testTexture;
 GLuint silhouetteTexture;
+bool QUIT = 0;
 
 bool showtest = 0;
 Ppmimage *personImage1 = NULL;
@@ -113,8 +98,6 @@ void init_opengl(void);
 void cleanupXWindows(void);
 void check_resize(XEvent *e);
 void check_mouse(XEvent *e, Game *game);
-void pointPlayer(Game *g, int savex, int savey);
-//void getJoystickEvent(JoystickEvent event);
 int check_keys(XEvent *e);
 void init(Game *g);
 void physics(Game *game);
@@ -181,11 +164,15 @@ int main(int argc, char *argv[])
 				}
 				titleScreen = renderTitleScreen(introTextures, introImages, 
 								enterPressed, downPressed, upPressed);
-			} 
-			else if (winCondition) {
+			} else if (Pause) {
+	
+			QUIT = PAUSE(&game, keys);
+			if (QUIT)
+				return(0);
+
+		} else if (winCondition) {
 				//test
-				renderWinCondition(introTextures, introImages,
-					enterPressed, downPressed, upPressed);
+					endCredits(&game, keys);
 			} 
 			else {
 				glClearColor(0.8, 0.8, 0.8, 1.0);
@@ -194,12 +181,13 @@ int main(int argc, char *argv[])
 		}  
 		else if (winCondition) {
 			//test
-			renderWinCondition(introTextures, introImages, 
-				enterPressed, downPressed, upPressed);
+				endCredits(&game, keys);
 		}  
 		else if (Pause) {
 	
-			renderPause(&game);
+			QUIT = PAUSE(&game, keys);
+			if (QUIT)
+				return(0);
 
 		} else {
 		    glClearColor(0.8,0.8,0.8,1.0);
@@ -445,6 +433,8 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, arrowData);
 	free(arrowData);
+	
+	loadEndCreditsTextures();
 }
 
 void check_resize(XEvent *e)
@@ -574,13 +564,13 @@ void physics(Game *g)
 
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
-	for (int i=0; i<g->nbullets; i++) {
+	for (int i = 0; i < g->nbullets; i++) {
 		Bullet *b = &g->barr[i];
 		//How long has bullet been alive?
 		double ts = timeDiff(&b->time, &bt);
 		if (ts > 0.5f) {
 			//Delete bullet here.
-			for(int k = i; k < g->nbullets-1; k++){
+			for (int k = i; k < g->nbullets-1; k++) {
 				g->barr[k] = g->barr[k+1];
 			}
 			g->nbullets--;
@@ -589,15 +579,7 @@ void physics(Game *g)
 		b->stats.gpos[0] += 6*b->stats.vel[0];
 		b->stats.gpos[1] += 6*b->stats.vel[1];
 	}
-	if (keys[XK_t]) {
-		showtest ^= 1;
-		if (showtest) {
-			g->mon[0].stats.spos[0] = 0.0;
-			g->mon[1].stats.spos[0] = 0.0;
-			g->mon[2].stats.spos[0] = 0.0;
-		}
-	}
-	if(keys[XK_p]){
+	if (keys[XK_p]) {
 		timeSpanT6 = timeDiff(&timeT6, &timeCurrent);
                 if(timeSpanT6 > 0.2){
                         clock_gettime(CLOCK_REALTIME, &timeT6);
@@ -626,7 +608,7 @@ void physics(Game *g)
 		g->Player_1.stats.vel[0] = xdir;
 		g->Player_1.stats.vel[1] = ydir;
 		timeSpanT5 = timeDiff(&timeT5, &timeCurrent);
-        if(timeSpanT5 > 0.3){
+        if (timeSpanT5 > 0.3) {
 			clock_gettime(CLOCK_REALTIME, &timeT5);
 			play_sounds(2);
 		}
@@ -643,7 +625,7 @@ void physics(Game *g)
 		g->Player_1.stats.vel[0] = -1 * xdir;
 		g->Player_1.stats.vel[1] = -1 * ydir;
 		timeSpanT5 = timeDiff(&timeT5, &timeCurrent);
-		if(timeSpanT5 > 0.3){
+		if (timeSpanT5 > 0.3) {
 			clock_gettime(CLOCK_REALTIME, &timeT5);
 			play_sounds(2);
 		}
@@ -692,46 +674,46 @@ void physics(Game *g)
 			return;
 	}
 
-	if(keys[XK_F7] && !g->Player_1.gameOver && !Pause){
-		if(g->Player_1.Current_Health > 0)
+	if (keys[XK_F7] && !g->Player_1.gameOver && !Pause) {
+		if (g->Player_1.Current_Health > 0)
 			g->Player_1.Current_Health -= 5;
 	}
-	if(keys[XK_F6] && !Pause){
+	if (keys[XK_F6] && !Pause) {
 		Restart(g);
 	}
-	if(keys[XK_F8] && !Pause){
+	if (keys[XK_F8] && !Pause) {
 		timeSpanT1 = timeDiff(&timeT1, &timeCurrent);
-		if(timeSpanT1 > 0.2){
+		if (timeSpanT1 > 0.2) {
 			clock_gettime(CLOCK_REALTIME, &timeT1);
 			g->Player_1.artifact[0] = !g->Player_1.artifact[0];
 		}
 	}
-	if(keys[XK_F9] && !Pause){
+	if(keys[XK_F9] && !Pause) {
 		timeSpanT2 = timeDiff(&timeT2, &timeCurrent);
-                if(timeSpanT2 > 0.2){
+                if (timeSpanT2 > 0.2) {
                         clock_gettime(CLOCK_REALTIME, &timeT2);
                         g->Player_1.artifact[1] = !g->Player_1.artifact[1];
                 }
 	}
-	if(keys[XK_F10] && !Pause){
+	if (keys[XK_F10] && !Pause) {
 		timeSpanT3 = timeDiff(&timeT3, &timeCurrent);
-                if(timeSpanT3 > 0.2){
+                if (timeSpanT3 > 0.2) {
                         clock_gettime(CLOCK_REALTIME, &timeT3);
                         g->Player_1.artifact[2] = !g->Player_1.artifact[2];
 			g->mon[0].pursuit = !g->mon[0].pursuit;
                 }
 
 	}
-	if(keys[XK_F12] && !Pause){
+	if (keys[XK_F12] && !Pause) {
 		timeSpanT4 = timeDiff(&timeT4, &timeCurrent);
-                if(timeSpanT4 > 0.2){
+                if (timeSpanT4 > 0.2){
                         clock_gettime(CLOCK_REALTIME, &timeT4);
 			g->Player_1.lives += 1;
 			g->Player_1.lives = g->Player_1.lives % 5;
 		}
 	}
 	if (g->Player_1.artifact[0] && g->Player_1.artifact[1] && g->Player_1.artifact[2] && !g->Player_1.gameOver) {
-		if(g->Player_1.Current_Health > 0)
+		if (g->Player_1.Current_Health > 0)
 		    winCondition = true;
 	    
 	}
@@ -762,7 +744,7 @@ void render(Game *g)
 	if (joy[4] || keys[XK_b]) 
 		renderShield(g);	
 	
-	if(g->Player_1.Current_Health == 0){
+	if (g->Player_1.Current_Health == 0) {
 		g->Player_1.lives--;
 		play_sounds(1);
 		//Play death groan upon player death
@@ -771,7 +753,7 @@ void render(Game *g)
 		}
 		g->Player_1.Current_Health = g->Player_1.Max_Health;
 	}
-	if(g->Player_1.lives == 0){
+	if (g->Player_1.lives == 0) {
 		GameOver();
 		g->Player_1.gameOver = true;
 	}
@@ -788,10 +770,10 @@ void render(Game *g)
 			drawBullet(g, b, 0.0, 0.0, 0.0);	
 	}
 	for (int i = 0; i < 5; i++) {
-		if(keys[XK_w] && g->mon[i].alive && !Pause && !g->Player_1.gameOver){
+		if (keys[XK_w] && g->mon[i].alive && !Pause && !g->Player_1.gameOver) {
 			g->mon[i].gameMove(1);
 		}
-		else if(keys[XK_s] && g->mon[i].alive){
+		else if (keys[XK_s] && g->mon[i].alive) {
 			g->mon[i].gameMove(0);
 		}
 		if (g->mon[i].alive && !Pause) {
@@ -805,4 +787,5 @@ void render(Game *g)
 	}
 	shadowBox();
 	drawHUD(&g->Player_1);
+
 }
