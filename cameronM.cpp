@@ -13,6 +13,10 @@
 */
 #define PI 3.14159268
 #include "cameronM.h"
+extern "C" {
+	#include "fonts.h"
+}
+
 int *res;
 struct timespec timeC1;
 struct timespec timeCurrentC;
@@ -888,7 +892,7 @@ GLuint CreditsTextures[10];
 void loadEndCreditsTextures()
 {
 	CreditsImages[0] = ppm6GetImage((char*)"parallax/cloud.ppm");
-	CreditsImages[1] = ppm6GetImage((char*)"parallax/mountain.ppm");
+	CreditsImages[1] = ppm6GetImage((char*)"parallax/mount.ppm");
 	CreditsImages[2] = ppm6GetImage((char*)"parallax/trees.ppm");
 	CreditsImages[3] = ppm6GetImage((char*)"parallax/cliff.ppm");
 	CreditsImages[4] = ppm6GetImage((char*)"parallax/grass.ppm");
@@ -965,7 +969,7 @@ void loadEndCreditsTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	unsigned char *trees2Data = buildAlphaData(CreditsImages[5]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
 		GL_UNSIGNED_BYTE, trees2Data);
 	free(trees2Data);	
 }
@@ -976,11 +980,11 @@ void endCredits(Game *g, int keys[])
 	u.center = 0;
 	ggprint8b(&u, 48, 0x00FFFFFF, "");
 
-	static int mov = 0;
+	static float mov = 0;
 	if (keys[XK_Left])
-		mov--;
+		mov += 0.4;
 	if (keys[XK_Right])
-		mov++;
+		mov -= 0.4;
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_ALPHA_TEST);
@@ -992,16 +996,16 @@ void endCredits(Game *g, int keys[])
 	float h = CreditsImages[0]->height;
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[0]);
-	glTranslatef(0, 0, 0);
+	glTranslatef(mov, 0, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
 	
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
 
 	glEnd();
 	glPopMatrix();
@@ -1011,36 +1015,36 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[1]);
-	glTranslatef(0, 0, 0);
+	glTranslatef(mov*0.5, 0, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
 	glBegin(GL_QUADS);
 	
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
 
 	glEnd();
 	glPopMatrix();
-	
+        	
 	w = CreditsImages[2]->width;
 	h = CreditsImages[2]->height;
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[2]);
-	glTranslatef(0, 0, 0);
+	glTranslatef(mov*3, 0, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
-	
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);	
 
 	glEnd();
 	glPopMatrix();
@@ -1050,16 +1054,16 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[3]);
-	glTranslatef(0, 0, 0);
+	glTranslatef(mov*5, 0, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
 	
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
 
 	glEnd();
 	glPopMatrix();
@@ -1069,16 +1073,16 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[4]);
-	glTranslatef(0, 0, 0);
+	glTranslatef(mov*10, 0, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
 	
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
 
 	glEnd();
 	glPopMatrix();
