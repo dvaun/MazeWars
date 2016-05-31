@@ -2,30 +2,37 @@
 #define CAMERON_CPP
 /* Name: Cameron Morrow
 * Date: May 04, 2016
-* Last Modified: May 25, 2016
+* Last Modified: May 30, 2016
 * Description: My code handles all of the weapon movement if a controller 
 * is not being used. 
 * In the mazewars.cpp I modified all of the original asteroids code to remove
-* the engine from the ship and the asteroid field, also changed the window title
+* the engine from the ship and the asteroid field, changed the window title
 * I am drawing and handling the health bar and "HUD" 
 * I Draw and move the enemies array and deal with the pause menu and the 
 * winning condition ending credits scene
 */
-#define PI 3.141592
-#include <ctime>
-#include <iostream>
-#include "mtime.h"
+#define PI 3.14159268
+#include "cameronM.h"
 int *res;
 struct timespec timeC1;
 struct timespec timeCurrentC;
-double timespanC1 = 0.0;
+static double timespanC1 = 0.0;
 struct timespec timeC2;
 struct timespec timeCurrentC2;
-double timespanC2 = 0.0;
+static double timespanC2 = 0.0;
 struct timespec timem[5];
 struct timespec timeCurrentm[5];
-double timespanm[5];
+static double timespanm[5];
+
+struct timespec timeCurrentqr;
+struct timespec timeTq;
+static double timeSpanTq = 0.0;
+
+struct timespec timeTr;
+static double timeSpanTr = 0.0;
+
 using namespace std;
+
 void getScreenRes(int x, int y)
 {
 	res = new int[2];
@@ -245,254 +252,252 @@ void drawArtifacts(Player x)
 }
 void drawHealth(Player *x)
 {
-if(x->Current_Health < 0)
-x->Current_Health = 0;
+	if (x->Current_Health < 0)
+	x->Current_Health = 0;
 
-double remaining = 100-((x->Current_Health/x->Max_Health)*100);
+	double remaining = 100-((x->Current_Health/x->Max_Health)*100);
 
-//Background of health bar
-glPushMatrix();
-glTranslatef(res[0]-150, 85, 0);
-glColor3ub(100, 100, 100);
+	//Background of health bar
+	glPushMatrix();
+	glTranslatef(res[0]-150, 85, 0);
+	glColor3ub(100, 100, 100);
 
-glBegin(GL_POLYGON);
-glVertex2i(-90, -15);
-//glColor3ub(240, 110, 110);
-glVertex2i(-100, -5);
+	glBegin(GL_POLYGON);
+		glVertex2i(-90, -15);
+		glVertex2i(-100, -5);
 
-//glColor3ub(240, 110, 110);
-glVertex2i(-100, 5);
-//glColor3ub(230, 20, 20);
-glVertex2i(-90, 15);
+		glVertex2i(-100, 5);
+		glVertex2i(-90, 15);
 
-//glColor3ub(230, 20, 20);
-glVertex2i(90, 15);
-//glColor3ub(240, 110, 110);
-glVertex2i(100, 5);
+		glVertex2i(90, 15);
+		glVertex2i(100, 5);
 
-//glColor3ub(240, 110, 110);
-glVertex2i(100, -5);
-//glColor3ub(230, 20, 20);
-glVertex2i(90, -15);
-glEnd();
+		glVertex2i(100, -5);
+		glVertex2i(90, -15);
+	glEnd();
 
-glPopMatrix();
+	glPopMatrix();
 
-int test = 10-x->Current_Health;
-if (x->lives > 0) {
-glColor3ub(164, 20, 20);
-glPushMatrix();
-glTranslatef((res[0]-150)-remaining, 85, 0);
-glBegin(GL_POLYGON);
-if (100-remaining > 10) {
-glVertex2i(-(90 - remaining), -15);
-glVertex2i(-(100 - remaining), -5);
-glVertex2i(-(100 - remaining), 5);
-glVertex2i(-(90 - remaining), 15);
-glVertex2i((90 - remaining), 15);
-glVertex2i((100 - remaining), 5);
-glVertex2i((100 - remaining), -5);
-glVertex2i((90 - remaining), -15);
-} else {
-glVertex2i(-(90 - remaining + test), -15 + (test));
-glVertex2i(-(100 - remaining), -5);
-glVertex2i(-(100 - remaining), 5);
-glVertex2i(-(90 - remaining + test), 15 - (test));
-glVertex2i((90 - remaining + test), 15 - (test));
-glVertex2i((100 - remaining), 5);
-glVertex2i((100 - remaining), -5);
-glVertex2i((90 - remaining + test), -15 + (test));
-}
-glEnd();
-glPopMatrix();
-}
-Rect r;
-r.bot = 80;
-r.left = res[0] - 240;
-r.center = 0;
-ggprint8b(&r, 16, 0x00ffffff, "Health:");
+	int test = 10-x->Current_Health;
+	
+	if (x->lives > 0) {
+		
+		glColor3ub(164, 20, 20);
+		glPushMatrix();
+		glTranslatef((res[0]-150)-remaining, 85, 0);
+		
+		glBegin(GL_POLYGON);
+			if (100-remaining > 10) {
+				glVertex2i(-(90 - remaining), -15);
+				glVertex2i(-(100 - remaining), -5);
+				glVertex2i(-(100 - remaining), 5);
+				glVertex2i(-(90 - remaining), 15);
+				glVertex2i((90 - remaining), 15);
+				glVertex2i((100 - remaining), 5);
+				glVertex2i((100 - remaining), -5);
+				glVertex2i((90 - remaining), -15);
+			} else {
+				glVertex2i(-(90 - remaining + test), -15 + (test));
+				glVertex2i(-(100 - remaining), -5);
+				glVertex2i(-(100 - remaining), 5);
+				glVertex2i(-(90 - remaining + test), 15 - (test));
+				glVertex2i((90 - remaining + test), 15 - (test));
+				glVertex2i((100 - remaining), 5);
+				glVertex2i((100 - remaining), -5);
+				glVertex2i((90 - remaining + test), -15 + (test));
+			}
+		glEnd();
+		
+		glPopMatrix();
+	}
+	Rect r;
+	r.bot = 80;
+	r.left = res[0] - 240;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00ffffff, "Health:");
 }
 void drawAmmo(Player x)
 {
-double remaining = 100-((x.Current_Ammo/x.Max_Ammo)*100);
+	double remaining = 100-((x.Current_Ammo/x.Max_Ammo)*100);
 
-//Background of ammo bar
-glColor3ub(100, 100, 100);
-glPushMatrix();
-glTranslatef(res[0]-150, 120, 0);
+	//Background of ammo bar
+	glColor3ub(100, 100, 100);
+	glPushMatrix();
+	glTranslatef(res[0]-150, 120, 0);
 
-glBegin(GL_POLYGON);
-glVertex2i(-90, -15);
-glVertex2i(-100, -5);
+	glBegin(GL_POLYGON);
+		glVertex2i(-90, -15);
+		glVertex2i(-100, -5);
 
-glVertex2i(-100, 5);
-glVertex2i(-90, 15);
+		glVertex2i(-100, 5);
+		glVertex2i(-90, 15);
 
-glVertex2i(90, 15);
-glVertex2i(100, 5);
+		glVertex2i(90, 15);
+		glVertex2i(100, 5);
 
-glVertex2i(100, -5);
-glVertex2i(90, -15);
-glEnd();
+		glVertex2i(100, -5);
+		glVertex2i(90, -15);
+	glEnd();
 
-glPopMatrix();
+	glPopMatrix();
 
-int test = 10-x.Current_Ammo;
-if (100-remaining > 0) {
-glColor3ub(30, 20, 150);
-glPushMatrix();
-glTranslatef((res[0]-150)-remaining, 120, 0);
+	int test = 10-x.Current_Ammo;
+	if (100-remaining > 0) {
+		glColor3ub(30, 20, 150);
+		glPushMatrix();
+		glTranslatef((res[0]-150)-remaining, 120, 0);
 
-glBegin(GL_POLYGON);
-if (100-remaining > 10) {
-glVertex2i(-(90 - remaining), -15);
-glVertex2i(-(100 - remaining), -5);
-glVertex2i(-(100 - remaining), 5);
-glVertex2i(-(90 - remaining), 15);
-glVertex2i((90 - remaining), 15);
-glVertex2i((100 - remaining), 5);
-glVertex2i((100 - remaining), -5);
-glVertex2i((90 - remaining), -15);
-} else {
-glVertex2i(-(90 - remaining + test), -15 + (test));
-glVertex2i(-(100 - remaining), -5);
-glVertex2i(-(100 - remaining), 5);
-glVertex2i(-(90 - remaining + test), 15 - (test));
-glVertex2i((90 - remaining + test), 15 - (test));
-glVertex2i((100 - remaining), 5);
-glVertex2i((100 - remaining), -5);
-glVertex2i((90 - remaining + test), -15 + (test));
-}
-glEnd();
-glPopMatrix();
-}
-Rect r;
-r.bot = 115;
-r.left = res[0] - 240;
-r.center = 0;
-ggprint8b(&r, 16, 0x00ffffff, "Ammo:");
+		glBegin(GL_POLYGON);
+			if (100-remaining > 10) {
+				glVertex2i(-(90 - remaining), -15);
+				glVertex2i(-(100 - remaining), -5);
+				glVertex2i(-(100 - remaining), 5);
+				glVertex2i(-(90 - remaining), 15);
+				glVertex2i((90 - remaining), 15);
+				glVertex2i((100 - remaining), 5);
+				glVertex2i((100 - remaining), -5);
+				glVertex2i((90 - remaining), -15);
+			} else {
+				glVertex2i(-(90 - remaining + test), -15 + (test));
+				glVertex2i(-(100 - remaining), -5);
+				glVertex2i(-(100 - remaining), 5);
+				glVertex2i(-(90 - remaining + test), 15 - (test));
+				glVertex2i((90 - remaining + test), 15 - (test));
+				glVertex2i((100 - remaining), 5);
+				glVertex2i((100 - remaining), -5);
+				glVertex2i((90 - remaining + test), -15 + (test));
+			}
+		glEnd();
+		
+		glPopMatrix();
+	}
+	Rect r;
+	r.bot = 115;
+	r.left = res[0] - 240;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00ffffff, "Ammo:");
 }
 void drawLives(int x, int y)
 {
-glColor3ub(255, 0, 0);
-glPushMatrix();
-glTranslatef(res[0], 60, 0);
+	glColor3ub(255, 0, 0);
+	glPushMatrix();
+	glTranslatef(res[0], 60, 0);
 
-glBegin(GL_POLYGON);
-glVertex2i(-320+x, 45+y);
-glVertex2i(-330+x, 60+y);
-glVertex2i(-325+x, 65+y);
-glVertex2i(-320+x, 60+y);
-glVertex2i(-315+x, 65+y);
-glVertex2i(-310+x, 60+y);
-glEnd();
+	glBegin(GL_POLYGON);
+		glVertex2i(-320+x, 45+y);
+		glVertex2i(-330+x, 60+y);
+		glVertex2i(-325+x, 65+y);
+		glVertex2i(-320+x, 60+y);
+		glVertex2i(-315+x, 65+y);
+		glVertex2i(-310+x, 60+y);
+	glEnd();
 
-glPopMatrix();
+	glPopMatrix();
 }
 void GameOver()
 {
-Rect r;
-r.bot = 500;
-r.left = 600;
-r.center = 0;
-ggprint8b(&r, 160, 0x00ff0000, "GAME OVER \n F6 TO RESTART");
+	Rect r;
+	r.bot = 500;
+	r.left = 600;
+	r.center = 0;
+	ggprint8b(&r, 160, 0x00ff0000, "GAME OVER \n F6 TO RESTART");
 }
 void Restart(Game *x)
 {
-x->Player_1.Current_Health = 100;
-x->Player_1.Current_Ammo = 100;
-x->Player_1.lives = 4;
-x->Player_1.stats.spos[0] = res[0]/2;
-x->Player_1.stats.spos[1] = res[1]/2;
-x->Player_1.stats.gpos[0] = res[0]/2;
-x->Player_1.stats.gpos[1] = res[1]/2;
-x->Player_1.gameOver = false;
-VecZero(x->Player_1.stats.dir);
+	x->Player_1.Current_Health = 100;
+	x->Player_1.Current_Ammo = 100;
+	x->Player_1.lives = 4;
+	x->Player_1.stats.spos[0] = res[0]/2;
+	x->Player_1.stats.spos[1] = res[1]/2;
+	x->Player_1.stats.gpos[0] = res[0]/2;
+	x->Player_1.stats.gpos[1] = res[1]/2;
+	x->Player_1.gameOver = false;
+	VecZero(x->Player_1.stats.dir);
 
-for (int i = 0; i<5; i++) {
-x->mon[i].stats.spos[0] = x->mon[i].spawnPos[0];
-x->mon[i].stats.spos[1] = x->mon[i].spawnPos[1];
-}
+	for (int i = 0; i<5; i++) {
+		x->mon[i].stats.spos[0] = x->mon[i].spawnPos[0];
+		x->mon[i].stats.spos[1] = x->mon[i].spawnPos[1];
+	}
 }
 void drawHealthPack(int x, int y, int z, Game *g)
 {
-x += cos(\
-PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
-y += sin(\
-PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
+	x += cos(\
+	PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
+	y += sin(\
+	PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
 
-glColor3ub(0, 255, 0);
-glPushMatrix();
-glTranslatef(x, y, z);
+	glColor3ub(0, 255, 0);
+	glPushMatrix();
+	glTranslatef(x, y, z);
 
-glBegin(GL_QUADS);
-glVertex2i(-20, -8);
-glVertex2i(-20, 8);
-glVertex2i(20, 8);
-glVertex2i(20, -8);
-glEnd();
+	glBegin(GL_QUADS);
+		glVertex2i(-20, -8);
+		glVertex2i(-20, 8);
+		glVertex2i(20, 8);
+		glVertex2i(20, -8);
+	glEnd();
 
-glPopMatrix();
+	glPopMatrix();
 
-Rect r;
-r.bot = y-5;
-r.left = x-17;
-r.center = 0;
-ggprint8b(&r, 16, 0x00000000, "Health");
+	Rect r;
+	r.bot = y-5;
+	r.left = x-17;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00000000, "Health");
 }
 void shadowBox()
 {
-int x = (res[0]-1250)/2;
-//topLeft
-glBegin(GL_POLYGON);		
-glColor3f(0, 0, 0);
-glVertex2f(0, res[1]);
-glVertex2f((res[0]/2), res[1]);
-glVertex2f((res[0]/2), res[1]-75);
-glVertex2f((res[0]/2)-150-x, res[1]-75);
-glVertex2f((res[0]/2)-400-x, (res[1]/2)+100);
-glVertex2f((res[0]/2)-400-x, (res[1]/2));
-glVertex2f(0, (res[1]/2));
-glEnd();
-//bottomLeft
-glBegin(GL_POLYGON);	
-glColor3f(0, 0, 0);
-glVertex2f(0, 0);
-glVertex2f(0, (res[1]/2));
-glVertex2f((res[0]/2)-400-x, (res[1]/2));
-glVertex2f((res[0]/2)-400-x, (res[1]/2)-100);
-glVertex2f((res[0]/2)-150-x, 75);
-glVertex2f(res[0]/2, 75);
-glVertex2f(res[0]/2, 0);
-glEnd();		
-//topRight	
-glBegin(GL_POLYGON);		
-glColor3f(0, 0, 0);		
-glVertex2f(res[0], res[1]);		
-glVertex2f((res[0]/2), res[1]);		
-glVertex2f((res[0]/2), res[1]-75);		
-glVertex2f((res[0]/2)+150+x, res[1]-75);		
-glVertex2f((res[0]/2)+400+x, (res[1]/2)+100);		
-glVertex2f((res[0]/2)+400+x, (res[1]/2));	
-glVertex2f(res[0], (res[1]/2));
-glEnd();
-//bottomRight	
-glBegin(GL_POLYGON);	
-glColor4f(0, 0, 0, .5);	
-glVertex2f(res[0], 0);	
-glVertex2f(res[0], (res[1]/2));
-glVertex2f((res[0]/2)+400+x, (res[1]/2));	
-glVertex2f((res[0]/2)+400+x, (res[1]/2)-100);	
-glVertex2f((res[0]/2)+150+x, 75);	
-glVertex2f(res[0]/2, 75);	
-glVertex2f(res[0]/2, 0);
-glEnd();glPushMatrix();
+	int x = (res[0]-1250)/2;
+	//topLeft
+	glBegin(GL_POLYGON);		
+		glColor3f(0, 0, 0);
+		glVertex2f(0, res[1]);
+		glVertex2f((res[0]/2), res[1]);
+		glVertex2f((res[0]/2), res[1]-75);
+		glVertex2f((res[0]/2)-150-x, res[1]-75);
+		glVertex2f((res[0]/2)-400-x, (res[1]/2)+100);
+		glVertex2f((res[0]/2)-400-x, (res[1]/2));
+		glVertex2f(0, (res[1]/2));
+	glEnd();
+	//bottomLeft
+	glBegin(GL_POLYGON);	
+		glColor3f(0, 0, 0);
+		glVertex2f(0, 0);
+		glVertex2f(0, (res[1]/2));
+		glVertex2f((res[0]/2)-400-x, (res[1]/2));
+		glVertex2f((res[0]/2)-400-x, (res[1]/2)-100);
+		glVertex2f((res[0]/2)-150-x, 75);
+		glVertex2f(res[0]/2, 75);
+		glVertex2f(res[0]/2, 0);
+	glEnd();		
+	//topRight	
+	glBegin(GL_POLYGON);		
+		glColor3f(0, 0, 0);		
+		glVertex2f(res[0], res[1]);		
+		glVertex2f((res[0]/2), res[1]);		
+		glVertex2f((res[0]/2), res[1]-75);		
+		glVertex2f((res[0]/2)+150+x, res[1]-75);		
+		glVertex2f((res[0]/2)+400+x, (res[1]/2)+100);		
+		glVertex2f((res[0]/2)+400+x, (res[1]/2));	
+		glVertex2f(res[0], (res[1]/2));
+	glEnd();
+	//bottomRight	
+	glBegin(GL_POLYGON);	
+		glColor4f(0, 0, 0, .5);	
+		glVertex2f(res[0], 0);	
+		glVertex2f(res[0], (res[1]/2));
+		glVertex2f((res[0]/2)+400+x, (res[1]/2));	
+		glVertex2f((res[0]/2)+400+x, (res[1]/2)-100);	
+		glVertex2f((res[0]/2)+150+x, 75);	
+		glVertex2f(res[0]/2, 75);	
+		glVertex2f(res[0]/2, 0);
+	glEnd();glPushMatrix();
 }
 void monster(Game *g, int monNum, int startx, int starty)
 {
-monsterMovement(g, monNum, startx, starty);
-monsterGetShot(g, monNum, startx, starty);
-monsterDamagePlayer(g, monNum, startx, starty);
+	monsterMovement(g, monNum, startx, starty);
+	monsterGetShot(g, monNum, startx, starty);
+	monsterDamagePlayer(g, monNum, startx, starty);
 }
 void monsterMovement(Game *g, int monNum, int startx, int starty)
 {
@@ -502,37 +507,40 @@ void monsterMovement(Game *g, int monNum, int startx, int starty)
 	g->mon[monNum].gvel[1] = sin(\
 	PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
 
-	if(((g->Player_1.stats.spos[0] <= g->mon[monNum].stats.spos[0]+250) && (g->Player_1.stats.spos[0] > g->mon[monNum].stats.spos[0]-250)) && ((g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+250) && (g->Player_1.stats.spos[1] > g->mon[monNum].stats.spos[1]-250))){
-	g->mon[monNum].pursuit = true;
-	}else{
-	g->mon[monNum].pursuit = false;
+	if (((g->Player_1.stats.spos[0] <= g->mon[monNum].stats.spos[0]+250) \
+	&& (g->Player_1.stats.spos[0] > g->mon[monNum].stats.spos[0]-250)) \
+	&& ((g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+250) \
+	&& (g->Player_1.stats.spos[1] > g->mon[monNum].stats.spos[1]-250))) {
+		g->mon[monNum].pursuit = true;
+	} else {
+		g->mon[monNum].pursuit = false;
 	}
 
 	//this is the enemys default movement pattern if not in pursuit mode
-	if(!g->mon[monNum].pursuit || g->Player_1.gameOver){
+	if (!g->mon[monNum].pursuit || g->Player_1.gameOver) {
 		clock_gettime(CLOCK_REALTIME, &timeCurrentC);
 		timespanC1 = timeDiff(&timeC1, &timeCurrentC);
 		if (timespanC1 > 2) {
 			g->mon[monNum].stats.vel[0] = 1;
 			g->mon[monNum].stats.vel[1] = 0;
 			g->mon[monNum].stats.angle = 270;
-			if(timespanC1 > 4)
+			if (timespanC1 > 4)
 				clock_gettime(CLOCK_REALTIME, &timeC1);
 		} else {
 			g->mon[monNum].stats.vel[0] = -1;
 			g->mon[monNum].stats.vel[1] = 0;
 			g->mon[monNum].stats.angle = 90;
 		}
-	}else{
+	} else {
 		//this is the enemys pursuit movement pattern
 		g->mon[monNum].stats.angle = 0;
 		
-		if(g->mon[monNum].stats.spos[0] < g->Player_1.stats.spos[0])
+		if (g->mon[monNum].stats.spos[0] < g->Player_1.stats.spos[0])
 			g->mon[monNum].stats.vel[0] = 0.5;
 		else
 			g->mon[monNum].stats.vel[0] = -0.5;
 
-		if(g->mon[monNum].stats.spos[1] < g->Player_1.stats.spos[1])
+		if (g->mon[monNum].stats.spos[1] < g->Player_1.stats.spos[1])
 			g->mon[monNum].stats.vel[1] = 0.5;
 		else
 			g->mon[monNum].stats.vel[1] = -0.5;
@@ -540,12 +548,12 @@ void monsterMovement(Game *g, int monNum, int startx, int starty)
 }
 void monsterGetShot(Game *g, int monNum, int startx, int starty)
 {
-	//this checks to see if the enemy has been shot and adjusts health accordingly
-	for(int i = 0; i < MAX_BULLETS; i++){
-		if(((g->barr[i].stats.spos[0] >= g->mon[monNum].stats.spos[0]-12) &&\
+	//this checks to see if the enemy has been shot and adjusts health 
+	for (int i = 0; i < MAX_BULLETS; i++) {
+		if (((g->barr[i].stats.spos[0] >= g->mon[monNum].stats.spos[0]-12) &&\
 		(g->barr[i].stats.spos[0] <= g->mon[monNum].stats.spos[0]+12)) &&\
 		((g->barr[i].stats.spos[1] >= g->mon[monNum].stats.spos[1]-12) &&\
-		(g->barr[i].stats.spos[1] <= g->mon[monNum].stats.spos[1]+12))){
+		(g->barr[i].stats.spos[1] <= g->mon[monNum].stats.spos[1]+12))) {
 			g->mon[monNum].health -= 20;
 		} 
 	}
@@ -558,18 +566,20 @@ void monsterDamagePlayer(Game *g, int monNum, int startx, int starty)
 {
 	clock_gettime(CLOCK_REALTIME, &timeCurrentm[monNum]);
 	timespanm[monNum] = timeDiff(&timem[monNum], &timeCurrentm[monNum]);
-	if(((g->Player_1.stats.spos[0] >= g->mon[monNum].stats.spos[0]-12) &&\
+	if (((g->Player_1.stats.spos[0] >= g->mon[monNum].stats.spos[0]-12) &&\
 	(g->Player_1.stats.spos[0] <= g->mon[monNum].stats.spos[0]+12)) &&\
 	((g->Player_1.stats.spos[1] >= g->mon[monNum].stats.spos[1]-12) &&\
-	(g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+12))){	
+	(g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+12))) {	
 		if (timespanm[monNum] > 0.5) {
 			clock_gettime(CLOCK_REALTIME, &timem[monNum]);
 			g->Player_1.Current_Health -= 5;
 		}
 	}
 }
+
 struct timespec animationCurrentc, animationStartc;
 double animationSpanc = 0.0;
+
 void renderCharacterEnemy(Person personc, Game *g, float w, int keys[], 
 GLuint personTexture1c, int i)
 {
@@ -593,14 +603,14 @@ GLuint personTexture1c, int i)
 			glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
 			glTexCoord2f(0.66f, 1.0f); glVertex2f(-w, -w);
 		}
-		else if(animationSpanc < 45)
+		else if (animationSpanc < 45)
 		{
 			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
 			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
 			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
 		}
-		else if(animationSpanc < 67.5)
+		else if (animationSpanc < 67.5)
 		{
 			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(0.33f, 0.0f); glVertex2f( w, w);
@@ -622,7 +632,154 @@ GLuint personTexture1c, int i)
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
 }
-void renderPause(Game *g)
+int PAUSE(Game *g, int keys[])
+{
+	static int kchkr = 0;
+	clock_gettime(CLOCK_REALTIME, &timeCurrentqr);
+	if (keys[XK_Up]) {
+		timeSpanTq = timeDiff(&timeTq, &timeCurrentqr);
+		if (timeSpanTq > 0.2){
+			clock_gettime(CLOCK_REALTIME, &timeTq);
+			kchkr--;
+		}
+	}
+	if (keys[XK_Down]) {
+		timeSpanTr = timeDiff(&timeTr, &timeCurrentqr);
+		if (timeSpanTr > 0.2){
+			clock_gettime(CLOCK_REALTIME, &timeTr);
+			kchkr++;
+		}
+	}
+	kchkr = kchkr%3;
+	if (kchkr < 0)
+		kchkr = 2;
+	renderPauseBackground();
+	renderPauseButtons(kchkr);
+	kchkr = kchkr%3;
+	
+	if (keys[XK_Return] && kchkr == 2){
+		return 1;
+	}
+	return 0;
+}
+void renderPauseButtons(int x)
+{
+	glPushMatrix();
+	glTranslatef((res[0]/2), (res[1]/2) + 100 - 15, 0);
+	glColor3ub(100, 100, 100);
+
+	glBegin(GL_POLYGON);
+		glVertex2i(-90, -15);
+		glVertex2i(-100, -5);
+
+		glVertex2i(-100, 5);
+		glVertex2i(-90, 15);
+
+		glVertex2i(90, 15);
+		glVertex2i(100, 5);
+
+		glVertex2i(100, -5);
+		glVertex2i(90, -15);
+	glEnd();
+
+	glPopMatrix();
+	Rect r;
+	r.bot = res[1]/2 + 75;
+	r.left = res[0]/2 - 40;
+	r.center = 0;
+	ggprint16(&r, 48, 0x00000000, "PAUSED");
+	
+	glPushMatrix();
+	glTranslatef((res[0]/2), (res[1]/2)- 15, 0);
+	
+	//change color based on selected or not
+	if (x == 0)
+		glColor3ub(160, 160, 160);
+	else
+		glColor3ub(100, 100, 100);
+
+	glBegin(GL_POLYGON);
+		glVertex2i(-90, -15);
+		glVertex2i(-100, -5);
+
+		glVertex2i(-100, 5);
+		glVertex2i(-90, 15);
+
+		glVertex2i(90, 15);
+		glVertex2i(100, 5);
+
+		glVertex2i(100, -5);
+		glVertex2i(90, -15);
+	glEnd();
+
+	glPopMatrix();
+	Rect s;
+	s.bot = res[1]/2 - 20;
+	s.left = res[0]/2 - 15;
+	s.center = 0;
+	ggprint8b(&s, 48, 0x00000000, "Save");
+	
+	glPushMatrix();
+	glTranslatef((res[0]/2), (res[1]/2) - 50 - 15, 0);
+	
+	//change color based on selected or not
+	if (x == 1)
+		glColor3ub(160, 160, 160);
+	else
+		glColor3ub(100, 100, 100);
+
+	glBegin(GL_POLYGON);
+		glVertex2i(-90, -15);
+		glVertex2i(-100, -5);
+
+		glVertex2i(-100, 5);
+		glVertex2i(-90, 15);
+
+		glVertex2i(90, 15);
+		glVertex2i(100, 5);
+
+		glVertex2i(100, -5);
+		glVertex2i(90, -15);
+	glEnd();
+
+	glPopMatrix();
+	Rect t;
+	t.bot = res[1]/2 - 70;
+	t.left = res[0]/2 - 20;
+	t.center = 0;
+	ggprint8b(&t, 48 , 0x00000000, "Restart");
+	
+	glPushMatrix();
+	glTranslatef((res[0]/2), (res[1]/2) - 100 - 15, 0);
+	
+	//change color based on selected or not
+	if (x == 2)
+		glColor3ub(160, 160, 160);
+	else
+		glColor3ub(100, 100, 100);
+
+	glBegin(GL_POLYGON);
+		glVertex2i(-90, -15);
+		glVertex2i(-100, -5);
+
+		glVertex2i(-100, 5);
+		glVertex2i(-90, 15);
+
+		glVertex2i(90, 15);
+		glVertex2i(100, 5);
+
+		glVertex2i(100, -5);
+		glVertex2i(90, -15);
+	glEnd();
+
+	glPopMatrix();
+	Rect u;
+	u.bot = res[1]/2 - 120;
+	u.left = res[0]/2 - 15;
+	u.center = 0;
+	ggprint8b(&u, 48, 0x00000000, "Exit");
+}
+void renderPauseBackground()
 {	
 	glPushMatrix();
 	glTranslatef((res[0]/2), res[1]/2, 0);
@@ -721,5 +878,210 @@ void renderPause(Game *g)
 	glEnd();
 
 	glPopMatrix();
+}
+
+
+Ppmimage *CreditsImages[10] = {NULL};
+GLuint CreditsTextures[10];
+
+
+void loadEndCreditsTextures()
+{
+	CreditsImages[0] = ppm6GetImage((char*)"parallax/cloud.ppm");
+	CreditsImages[1] = ppm6GetImage((char*)"parallax/mountain.ppm");
+	CreditsImages[2] = ppm6GetImage((char*)"parallax/trees.ppm");
+	CreditsImages[3] = ppm6GetImage((char*)"parallax/cliff.ppm");
+	CreditsImages[4] = ppm6GetImage((char*)"parallax/grass.ppm");
+	CreditsImages[5] = ppm6GetImage((char*)"parallax/trees2.ppm");
+	
+	glGenTextures(1, &CreditsTextures[0]); //CloudsTexture
+	glGenTextures(1, &CreditsTextures[1]); //MountainsTexture
+	glGenTextures(1, &CreditsTextures[2]); //TreesTexture
+	glGenTextures(1, &CreditsTextures[3]); //CliffTexture
+	glGenTextures(1, &CreditsTextures[4]); //GrassTexture
+	glGenTextures(1, &CreditsTextures[5]); //Trees2Texture
+	
+	float h, w;
+	
+	//clouds Texture
+	w = CreditsImages[0]->width;
+	h = CreditsImages[0]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *cloudData = buildAlphaData(CreditsImages[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, cloudData);
+	free(cloudData);
+
+	//mountains texture
+	w = CreditsImages[1]->width;
+	h = CreditsImages[1]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[1]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *mountainData = buildAlphaData(CreditsImages[1]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, mountainData);
+	free(mountainData);
+
+	//trees background texture
+	w = CreditsImages[2]->width;
+	h = CreditsImages[2]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[2]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *treesData = buildAlphaData(CreditsImages[2]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, treesData);
+	free(treesData);
+
+	//cliff texture
+	w = CreditsImages[3]->width;
+	h = CreditsImages[3]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[3]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *cliffData = buildAlphaData(CreditsImages[3]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, cliffData);
+	free(cliffData);
+
+	//grass texture
+	w = CreditsImages[4]->width;
+	h = CreditsImages[4]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[4]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *grassData = buildAlphaData(CreditsImages[4]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, grassData);
+	free(grassData);
+
+	//trees foreground Texture
+	w = CreditsImages[5]->width;
+	h = CreditsImages[5]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[5]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *trees2Data = buildAlphaData(CreditsImages[5]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, trees2Data);
+	free(trees2Data);	
+}
+void endCredits(Game *g, int keys[])
+{	Rect u;
+	u.bot = -res[1]/2;
+	u.left = -res[0]/2;
+	u.center = 0;
+	ggprint8b(&u, 48, 0x00FFFFFF, "");
+
+	static int mov = 0;
+	if (keys[XK_Left])
+		mov--;
+	if (keys[XK_Right])
+		mov++;
+	
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	//set background to black to give cinematic feel
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	
+	float w = CreditsImages[0]->width;
+	float h = CreditsImages[0]->height;
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[0]);
+	glTranslatef(0, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+
+	glEnd();
+	glPopMatrix();
+	
+	w = CreditsImages[1]->width;
+	h = CreditsImages[1]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[1]);
+	glTranslatef(0, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+
+	glEnd();
+	glPopMatrix();
+	
+	w = CreditsImages[2]->width;
+	h = CreditsImages[2]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[2]);
+	glTranslatef(0, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+
+	glEnd();
+	glPopMatrix();
+	
+	w = CreditsImages[3]->width;
+	h = CreditsImages[3]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[3]);
+	glTranslatef(0, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+
+	glEnd();
+	glPopMatrix();
+	
+	w = CreditsImages[4]->width;
+	h = CreditsImages[4]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[4]);
+	glTranslatef(0, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 96);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 96);
+
+	glEnd();
+	glPopMatrix();
+	
 }
 #endif
