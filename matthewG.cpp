@@ -13,6 +13,8 @@
 #include <GL/glx.h>
 #include <iostream>
 #include <string>
+#include "roseP.h"
+
 using std::cout;
 using std::endl;
 
@@ -224,6 +226,7 @@ int posEnter[3] = {xwidth/2, 0, 0};
 int posOptions[3] = {xwidth/2+60, 0, 0};
 int arrow[3] = {0, 0, 0};
 int character[3] = {0, 0, 0};
+int boulderSound = 0;
 
 
 int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[], 
@@ -423,6 +426,12 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 	h = introImages[1]->height;
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
+
+	if (boulderSound == 0) {
+                 cout << "calling play sounds" << endl;
+                 play_sounds(5);
+                 boulderSound = 1;
+	}
 
 	glBindTexture(GL_TEXTURE_2D, introTextures[1]);
 	glEnable(GL_ALPHA_TEST);

@@ -7,5 +7,7 @@ void init_sounds();
 void release_sounds();
 void load_sounds();
 void play_sounds(int soundOption);
+void bubblez(int radius, float red, float green, float blue);
+void pressR(Game *g);
 
 #endif

@@ -3,16 +3,19 @@
 
 // Name: Rose Phannavong
 // Written: 27 April 2016
-// Modified: 15 May 2016
+// Modified: 30 May 2016
 // Description: The code will be implementing sound/music for the game.
-// Sound affects when the player uses the weapon.
 
+#include <iostream>
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <GL/glx.h>
+#include <stdlib.h>
 #include </usr/include/AL/alut.h>
-
+#include <cmath>
+#include "game_objects.h"
 ALuint alSource[10];
 ALuint alBuffer[10];
 
@@ -79,10 +82,21 @@ void load_sounds()
     alGenSources(1, &alSource[3]);
     alSourcei(alSource[3], AL_BUFFER, alBuffer[3]);
 
-    //Background music
+    //Background Pause music.
     alBuffer[4] = alutCreateBufferFromFile("./sound/bensound-epic.wav");
     alGenSources(1, &alSource[4]);
     alSourcei(alSource[4], AL_BUFFER, alBuffer[4]);
+
+    //Falling boulders sound.
+    alBuffer[5] = alutCreateBufferFromFile("./sound/Rock_Slide-000.wav");
+    alGenSources(1, &alSource[5]);
+    alSourcei(alSource[5], AL_BUFFER, alBuffer[5]);
+    
+    //Background music.
+    alBuffer[6] = alutCreateBufferFromFile("./sound/parabolix_cavern.wav");
+    alGenSources(1, &alSource[6]);
+    alSourcei(alSource[6], AL_BUFFER, alBuffer[6]);
+ 
 }
 
 void play_sounds(int soundOption)
@@ -97,6 +111,63 @@ void play_sounds(int soundOption)
         printf("Error: Setting Source\n");
     }
     alSourcePlay(alSource[soundOption]);
+}
+
+void bubblez(int radius, int x, int y, float red, float green, float blue)
+{
+    static int num = 0;
+    std::cout << "circle num: " << num++ << std::endl;
+    glColor3f(red, green, blue);
+    glEnable(GL_POINT_SMOOTH);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBegin(GL_POINTS);
+
+    //Randomly get a quadrant.
+    int quadrant = rand() % 4 + 1;
+    switch (quadrant) {
+        case(1):
+            x += rand() % 150;
+            y += rand() % 150;
+            break;
+        case(2):
+            x -= rand() % 150;
+            y += rand() % 150;
+            break;
+        case(3):
+            x -= rand() % 150;
+            y -= rand() % 150;
+            break;
+        case(4):
+            x += rand() % 150;
+            y -= rand() % 150;
+            break;
+    }
+    for (float i = 0.0; i < 360.0; i+=1.0) {
+         glVertex2f(radius * cos(i) + x, radius * sin(i) + y);
+    } 
+    glEnd();
+    //glDisable(GL_BLEND);
+    glDisable(GL_POINT_SMOOTH);
+}
+
+void pressR(Game *g)
+{
+    //Special keystroke for bubbles.
+    std::cout << "R pressed" << std::endl;
+    srand(NULL);
+    int x = g->Player_1.stats.spos[0];
+    int y = g->Player_1.stats.spos[1];
+
+    int numBubbles = 10;
+    for (int i = 0; i < numBubbles; i++) {
+	int radius = rand() % 20 + 10;
+	float red = rand() * 10;
+	float green = rand() * 15;
+	float blue = rand() * 20;
+        bubblez(radius, x, y, red, green, blue);
+    }
 }
 
 #endif

@@ -738,7 +738,9 @@ void render(Game *g)
 	//Draw the Player_1
 	//if(g->Player_1.Current_Health > 0 && !g->Player_1.gameOver)
 	//	drawOType(g->Player_1, g);
-	
+
+	play_sounds(6);
+		
 	if (axis[3] || axis[4])
 		renderCrosshair(axis, g, false);
 	if (joy[4] || keys[XK_b]) 
@@ -787,5 +789,10 @@ void render(Game *g)
 	}
 	shadowBox();
 	drawHUD(&g->Player_1);
+
+	//Keystroke for R
+	if (keys[XK_r]) {
+                 pressR(g);
+         }
 
 }
