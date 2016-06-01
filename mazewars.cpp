@@ -637,8 +637,8 @@ void physics(Game *g)
 		if (g->Player_1.stats.angle >= 360.0f)
 		g->Player_1.stats.angle -= 360.0f;
 
-		person.pos[0] =	g->Player_1.stats.spos[0];
-		person.pos[1] = g->Player_1.stats.spos[1];
+		//person.pos[0] =	g->Player_1.stats.spos[0];
+		//person.pos[1] = g->Player_1.stats.spos[1];
 	}
 	if (keys[XK_d] && !g->Player_1.gameOver && !Pause && !winCondition) {
 		g->Player_1.stats.angle -= 4.0f;
