@@ -505,7 +505,7 @@ void init(Game *g)
 	g->Player_1.stats.spos[0] = 625;
 	g->Player_1.stats.spos[1] = 450;
 	
-	g->mon[0].stats.gpos[0] = 500;
+	/*g->mon[0].stats.gpos[0] = 500;
 	g->mon[0].stats.gpos[1] = 500;
 	g->mon[0].spawnPos[0] = 500;
 	g->mon[0].spawnPos[1] = 500;
@@ -528,7 +528,7 @@ void init(Game *g)
 	g->mon[4].stats.gpos[0] = 300;
 	g->mon[4].stats.gpos[1] = 200;
 	g->mon[4].spawnPos[0] = 300;
-	g->mon[4].spawnPos[1] = 200;
+	g->mon[4].spawnPos[1] = 200;*/
 	printf("%f\n",g->Player_1.stats.color[0]);
 }
 
@@ -820,6 +820,7 @@ void render(Game *g)
 		if (b != NULL)
 			drawBullet(g, b, 0.0, 0.0, 0.0);	
 	}
+	/*
 	for (int i = 0; i < 5; i++) {
 		if (keys[XK_w] && g->mon[i].alive && !Pause && !g->Player_1.gameOver) {
 			g->mon[i].gameMove(1);
@@ -835,7 +836,7 @@ void render(Game *g)
 			g->mon[i].draw();
 			monster(g, i, 1,2);
 		}
-	}
+	}*/
 	shadowBox();
 	drawHUD(&g->Player_1);
 

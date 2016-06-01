@@ -121,6 +121,7 @@ struct Bullet {
 
 struct Monster {
 	Stats stats;
+	int mode; 	// 0 = passive, 1 = walking, 2 = running, 3 = attacking, 4 = dying
 	float gvel[2];
 	int health = 100;
 	bool alive = true;

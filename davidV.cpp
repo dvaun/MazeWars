@@ -311,6 +311,101 @@ void getBlockTexCoords(int type, float &x1, float &x2, float &y1, float &y2) {
 	}
 }
 
+template <typedef C>
+void calculateEnemy(C c, Game *g)
+{
+	if (checkPlayerDistanceOType(c, g, g->g_xres/2, g->g_yres/2)) {
+		if (checkPlayerDistanceOType(c, g, 300, 300)) {
+			c.pursuit = true;
+		}
+	}
+}
+
+void getEnemyTexCoords(C &c, int type, float &x1, float &x2,
+							float &y1, float &y2)
+{
+	float yc = type * 160;
+	float mode = c.mode * 32;
+	y1 = yc + mode + 32;
+	y2 = yc + mode;
+	if (c.stats.animationSpan >= 100) {
+		c.stats.animationSpan = 0.0;
+		clock_gettime(CLOCK_REALTIME, &c.stats.animationStart);
+	} else {
+		if (c.stats.animationSpan < 10.0) {
+			x1 = 32/320;
+			x2 = 0;
+		} else if (c.stats.animationSpan < 20.0) {
+			x1 = 64/320;
+			x2 = 32/320;
+		} else if (c.stats.animationSpan < 30.0) {
+			x1 = 96/320;
+			x2 = 64/320;
+		} else if (c.stats.animationSpan < 40.0) {
+			x1 = 128/320;
+			x2 = 96/320;
+		} else if (c.stats.animationSpan < 50.0) {
+			x1 = 160/320;
+			x2 = 128/320;
+		} else if (c.stats.animationSpan < 60.0) {
+			x1 = 192/320;
+			x2 = 160/320;
+		} else if (c.stats.animationSpan < 70.0) {
+			x1 = 224/320;
+			x2 = 192/320;
+		} else if (c.stats.animationSpan < 80.0) {
+			x1 = 256/320;
+			x2 = 224/320;
+		} else if (c.stats.animationSpan < 90.0) {
+			x1 = 288/320;
+			x2 = 256/320;
+		} else if (c.stats.animationSpan < 100.0) {
+			x1 = 1;
+			x2 = 288/320;
+		}
+	}
+
+	clock_gettime(CLOCK_REALTIME, &c.stats.animationCurrent);
+	c.stats.animationSpan += timeDiff(&c.stats.animationStart,
+								&c.stats.animationCurrent);
+}
+
+template <typedef C>
+void renderEnemy(C c, Game *g)
+{
+	if (checkPlayerDistanceOType(c, g, g->g_xres/2, g->g_yres/2)) {
+		int type = c.stats.type;
+		float xdist, ydist;
+		xdist = g->g_xres/2 + (c.stats.gpos[0] - player.stats.gpos[0] -
+				c.stats.width);
+		ydist = g->g_yres/2 + (c.stats.gpos[1] - player.stats.gpos[1] -
+				c.stats.width);
+		float size = c.stats.width;
+		float cx1, cx2, cy1, cy2;
+		getEnemyTexCoords(type, cx1, cx2, cy1, cy2);
+		if (c.stats.vel[0] > 0) {}
+		else { cx1 = cx1 * -1; cx2 = cx2 * -1; }
+		glPushMatrix();
+		glTranslatef(xdist, ydist, 0.0f);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, g->enemyTextures);
+		glBegin(GL_QUADS);
+			glTexCoord2f(cx2, cy1); glVertex2f(-size, -size);
+			glTexCoord2f(cx2, cy2); glVertex2f(-size, size);
+			glTexCoord2f(cx1, cy2); glVertex2f(size, size);
+			glTexCoord2f(cx1, cy1); glVertex2f(size, -size);
+			/*glTexCoord2f(cx2, cy2); glVertex2f(-size, -size);
+			glTexCoord2d(cx1, cy2); glVertex2f(-size, size);
+			glTexCoord2d(cx1, cy1); glVertex2f(size, size);
+			glTexCoord2f(cx2, cy1); glVertex2f(size, -size);*/
+		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glPopMatrix();	
+	}
+}
+
 void init_textures(Game &game) {
 	Ppmimage *blockSpriteSheet;
        	blockSpriteSheet = ppm6GetImage((char*)"images/wallTexture64.ppm");
@@ -1651,7 +1746,7 @@ vector<vector<Block> > newParsedMap(DSpecs specs, int tolerance,
 int parseToTreasureBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
 	Block block)
 {
-
+	int count = 0;
 }
 
 int parseToBlockTextures(vector<vector<Block> > &dungeon,
