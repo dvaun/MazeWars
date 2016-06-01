@@ -18,7 +18,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <cmath>
+#include <ctime>
 #include <cstring>
+#include <fstream>
+#include <stdlib.h>
+#include <vector>
 
 /*
 void drawSquare(Stats *stats, int red, int blue, int green)
@@ -458,6 +462,1027 @@ void init_blocks(Game *g, gblock_info gbi)
 	g->game_info.rows = gbi.rows;
 	g->game_info.columns = gbi.columns;
 }
+/****************************************
+Trying to port over my dungeon-generator
+this block: array_functions.cpp
+*/
+
+using namespace std;
+
+void generateRules(DRules& rules, DSpecs& specs, DInit& init)
+{
+	/*
+	*	@descr: Variables which will hold our generated data
+	*	@param rows
+	*	the number of rows generated for the 2d array
+	*	@param cols
+	*	the number of columns generated for the 2d array
+	*	@param odd_blocks
+	*	set to 0 if an even number of blocks are generated
+	*	for the min distance, 1 if odd. 
+	*	@param gensize
+	*	size of rows/cols generated. literally blocks_to_travel/2
+	*	@param blocks_to_travel
+	*	this is the possible range of blocks that could be traveled
+	*	by the player/object. Although it's essentially a constant
+	*	range for each time type, it provides a good base for the
+	*	random generation of rows and columns to start from.
+	*	@param rows_cols_diff
+	*	this is used to provide "dynamic" generation to the columns
+	*	ie if blocks_to_travel = 45, rows = 23, then cols generates
+	*	off of the range 23-67.
+	*	this lets the maps change and become fun
+	*/
+	struct timespec rtime;
+	bool randomizingDone;
+
+	int rows;			
+	int cols;
+	int rows_cols_diff;
+	int gensize;
+	int odd_blocks;
+
+	double travel_speed;
+	int min_blocks_traveled;
+	int max_blocks_traveled;
+	int blocks_to_travel;
+	
+	unsigned int num_halls;
+	unsigned int num_turns;
+	int total_dist;
+	// First, determine the game length type
+	int type = specs.game_time_considered;
+	/*int min_secs, max_secs;
+	switch (type) {
+		case 0:
+			// 3-6 mins
+			min_secs = 180;
+			max_secs = 360;
+			srandByTime(rtime);
+			break;
+
+		case 1:
+			// 6-12 mins
+			min_secs = 360;
+			max_secs = 720;
+			srandByTime(rtime);
+			break;
+
+		case 2:
+			// 12-25 mins
+			min_secs = 720;
+			max_secs = 1500;
+			srandByTime(rtime);
+			break;
+
+		case 3:
+			// 25-45 mins
+			min_secs = 1500;
+			max_secs = 2700;
+			srandByTime(rtime);
+			break;
+
+		default:
+			min_secs = 180;
+			max_secs = 1500;
+			srandByTime(rtime);
+			break;
+	}
+	// Next, determine how far the player travels
+	// per second compared to block length/size*/
+	travel_speed = specs.player_speed / (double) specs.BLOCK_LENGTH;
+	/*min_blocks_traveled = ceil((double) min_secs*travel_speed);
+	max_blocks_traveled = ceil((double) max_secs*travel_speed);
+	blocks_to_travel = abs(min_blocks_traveled - max_blocks_traveled);
+	rules.MINDIST = min_blocks_traveled;
+	rules.MAXDIST = max_blocks_traveled * 3;
+	// Check if odd or even
+	if (blocks_to_travel % 2 == 1) {
+		gensize = (blocks_to_travel - 1) / 2;
+		odd_blocks = 1;
+	} else {
+		gensize = blocks_to_travel / 2;
+		odd_blocks = 0;
+	}
+	// Now, generate the number of columns and rows
+	// randomly. This makes dynamic maps of various sizes
+	//
+	srandByTime(rtime);
+	rows = rand()%(gensize + 1) + min_blocks_traveled;
+	rows_cols_diff = abs(gensize - rows);
+	// Redo the seed
+	srandByTime(rtime);
+	cols = rand()%(gensize + odd_blocks + 1)
+				+ min_blocks_traveled;
+	specs.rows = rows;
+	specs.cols = cols;
+	total_dist = rows + cols;
+	//
+	// Now randomize the initial starting/ending points*/
+
+	// Calculate hallway length min/max from #rows/columns
+	specs.rows = 100;
+	specs.cols = 100;
+	initGamePositions(init, specs, rtime);
+	rules.MIN_HALL_VER_LENGTH = (int) 1/travel_speed;
+	rules.MAX_HALL_VER_LENGTH = (int) 7/travel_speed;
+	rules.MIN_HALL_HOR_LENGTH = (int) 1/travel_speed;
+	rules.MAX_HALL_HOR_LENGTH = (int) 7/travel_speed;
+	/*while(!randomizingDone) {
+		srandByTime(rtime);
+		int PATH_LENGTH = rand()%(rules.MAXDIST - rules.MINDIST) +
+		    rules.MINDIST;
+		int AVG_HALL_LENGTH = PATH_LENGTH / 
+		    ((rules.MAX_HALL_VER_LENGTH + rules.MAX_HALL_HOR_LENGTH)/2);
+		//num_halls = PATH_LENGTH / AVG_HALL_LENGTH;
+		//num_turns = num_halls - 1;
+		if ((num_halls * AVG_HALL_LENGTH) > PATH_LENGTH) {
+		    continue;
+		} else {randomizingDone = true;}
+	}*/
+	//rules.num_halls = num_halls;
+	//rules.num_turns = num_turns;
+	printf("rows %d cols %d\n", specs.rows, specs.cols);
+}
+
+void initialize_values(DSpecs specs, DInit init, vector<vector<Block> > &dungeon)
+{
+	dungeon.resize(specs.rows);
+	for (int i = 0; i < specs.rows; i++) {
+		dungeon.resize(specs.cols);
+		for (int j = 0; j < specs.cols; j++) {
+			dungeon[i][j].maintype = 0;
+			dungeon[i][j].subtype = 0;
+			dungeon[i][j].path = 0;
+			dungeon[i][j].blockc.tread = 0;
+			dungeon[i][j].blockc.direction = 0;
+			dungeon[i][j].blockc.col = j;
+			dungeon[i][j].blockc.row = i;
+		}
+	}
+}
+
+void srandByTime(struct timespec& rtime)
+{
+	clock_gettime(CLOCK_REALTIME, &rtime);
+	srand(rtime.tv_nsec);
+}
+
+/*
+ * @desc
+ * this function randomizes the starting points of the 2d array
+ * based off of the nanosecond time, and the choice of either the
+ * random column or row # generated
+ */
+void initGamePositions(DInit& init, DSpecs& specs, struct timespec rtime)
+{
+	/*
+	bool done = false;
+	srandByTime(rtime);
+	if ((int)(rtime.tv_nsec * 1e17) % 2 == 0) {
+		init.startrow = rand()%(specs.rows - 1);
+		init.endcol = rand()%(specs.cols - 1);
+		if (init.startrow % 2 == 0) {
+			init.startcol = specs.cols - 1;
+			init.endrow = 0;
+			done = true;
+		} else {
+			init.startcol = 0;
+			init.endrow = specs.rows - 1;
+			done = true;
+		}
+	} else if (!done) {
+		init.startcol = rand()%(specs.cols - 1);
+		init.endrow = rand()%(specs.rows - 1);
+		if (init.startcol % 2 == 0) {
+			init.startrow = specs.rows - 1;
+			init.endcol = 0;
+			done = true;
+		} else {
+			init.startrow = 0;
+			init.endcol = specs.cols - 1;
+			done = true;
+		}
+	}
+	if (abs(init.startrow - init.endrow) < 5 &&
+				abs(init.startcol - init.endcol) < 5 && done) {
+		printf("recalculating initial positions...\n");
+		initGamePositions(init, specs, rtime);
+	}
+	*/
+	if (specs.cols % 2 == 0) {
+		init.startcol = specs.cols / 2;
+		if (specs.rows % 2 == 0) {
+			init.startrow = specs.rows / 2;
+		} else {
+			init.startrow = 1 + specs.rows / 2;
+		}
+	} else {
+		init.startcol = 1 + specs.cols / 2;
+		if (specs.rows % 2 == 0) {
+			init.startrow = specs.rows / 2;
+		} else {
+			init.startrow = 1 + specs.rows / 2;
+		}
+	}
+}
+
+#endif
+/***************
+end array_functions.cpp
+now block.cpp
+*/
+
+/*
+ * Author: David Vaughan
+ * Purpose: 2D Array generator
+ * Code: This is the constructor for the "BlockConstructor", which defines each
+ * point in the 2d array and keeps track of their relative position in the array.
+ * It will allow block "types" to be assigned to each point in the array, which 
+ * keeps organization in place.
+ */
+
+BlockConstructor::BlockConstructor() {
+}
+
+BlockConstructor::~BlockConstructor() {
+}
+
+void BlockConstructor::operator=(BlockConstructor blockc) {
+	tread = blockc.tread;
+	direction = blockc.direction;
+	col = blockc.col;
+	row = blockc.row;
+}
+
+void BlockConstructor::operator=(BlockConstructor *blockc) {
+	tread = blockc->tread;
+	direction = blockc->direction;
+	col = blockc->col;
+	row = blockc->row;
+}
+
+/*
+ * operations with class "Block"
+ */
+
+Block::Block() {
+	north = NULL;
+	east = NULL;
+	south = NULL;
+	west = NULL;
+	northeast = NULL;
+	northwest = NULL;
+	southeast = NULL;
+	southwest = NULL;
+	/*north = new Block;
+	east = new Block;
+	south = new Block;
+	west = new Block;
+	northeast = new Block;
+	northwest = new Block;
+	southeast = new Block;
+	southwest = new Block;*/
+	maintype = 0;
+	subtype = 0;
+	path = 0;
+}
+
+Block::~Block() {
+	if (checkVoid(north)) delete north;
+	if (checkVoid(east)) delete east;
+	if (checkVoid(south)) delete south;
+	if (checkVoid(west)) delete west;
+	if (checkVoid(northeast)) delete northeast;
+	if (checkVoid(northwest)) delete northwest;
+	if (checkVoid(southeast)) delete southeast;
+	if (checkVoid(southwest)) delete southwest;
+}
+
+void Block::operator=(Block block) {
+	if (checkVoid(block.north)) {
+	    blockc = block.blockc;
+	    if (checkVoid(block.north)) north = block.north;
+	    if (checkVoid(block.east)) east = block.east;
+	    if (checkVoid(block.south)) south = block.south;
+	    if (checkVoid(block.west)) west = block.west;
+	    if (checkVoid(block.northeast)) northeast = block.northeast;
+	    if (checkVoid(block.northwest)) northwest = block.northwest;
+	    if (checkVoid(block.southeast)) southeast = block.southeast;
+	    if (checkVoid(block.southwest)) southwest = block.southwest;
+	}
+	maintype = block.maintype;
+	subtype = block.subtype;
+	path = block.path;
+}
+
+void Block::operator=(Block *block) {
+	if (checkVoid(block)) {
+	    blockc = block->blockc;
+	    if (checkVoid(block->north)) north = block->north;
+	    if (checkVoid(block->east)) east = block->east;
+	    if (checkVoid(block->south)) south = block->south;
+	    if (checkVoid(block->west)) west = block->west;
+	    if (checkVoid(block->northeast)) northeast = block->northeast;
+	    if (checkVoid(block->northwest)) northwest = block->northwest;
+	    if (checkVoid(block->southeast)) southeast = block->southeast;
+	    if (checkVoid(block->southwest)) southwest = block->southwest;
+	}
+	maintype = block->maintype;
+	subtype = block->subtype;
+	path = block->path;
+}
+
+void DFork::init() {
+	attempted_turns[0] = 0;
+	attempted_turns[1] = 0;
+	attempted_turns[2] = 0;
+	attempted_turns[3] = 0;	
+}
+
+#endif
+
+/************
+end block.cpp
+now events.cpp
+*/
+
+
+bool mayHitWall(int direction, int row, int col, DSpecs specs, DRules rules)
+{
+	switch(direction) {
+		case 0:
+			if (row  == 0) return true;
+			if (row - rules.MAX_HALL_VER_LENGTH < 0) return true;
+			return false;
+		case 1:
+			if (col == specs.cols - 1) return true;
+			if (col + rules.MAX_HALL_HOR_LENGTH > specs.cols - 1) return true;
+			return false;
+		case 2:
+			if (row >= specs.rows - 1) return true;
+			if (row + rules.MAX_HALL_VER_LENGTH > specs.rows - 1) return true;
+			return false;
+		case 3:
+			if (col == 0) return true;
+			if (col - rules.MAX_HALL_HOR_LENGTH < 0) return true;
+			return false;
+	}
+}
+
+int calc_hall_length(DSpecs specs, int direction,
+			Block &current, int max_l, int min_l)
+{
+	struct timespec rtime;
+	int HALL_LENGTH;
+
+	srandByTime(rtime); // get random seed
+	HALL_LENGTH = rand()%(max_l - min_l) + min_l;
+	switch(direction) {
+		case 0:	// if north
+			if (current.blockc.row - HALL_LENGTH < 1) {
+				calc_hall_length(specs, direction,
+						current, max_l, min_l);
+				break;
+			} else {
+				break;
+			}
+		case 1: // if east
+			if (current.blockc.col + HALL_LENGTH > specs.cols - 1) {
+				calc_hall_length(specs, direction,
+						current, max_l, min_l);
+				break;
+			} else {
+				break;
+			}
+		case 2: // if south
+			if (current.blockc.row + HALL_LENGTH > specs.rows - 1) {
+				calc_hall_length(specs, direction,
+						current, max_l, min_l);
+				break;
+			} else {
+				break;
+			}
+		case 3: // if west
+			if (current.blockc.col - HALL_LENGTH < 1) {
+				calc_hall_length(specs, direction,
+						current, max_l, min_l);
+				break;
+			} else {
+				break;
+			}	
+	}
+	//printf("Hall_length = %d\n", HALL_LENGTH);
+	return HALL_LENGTH;
+}
+
+Block DbuildHall(DRules rules, DSpecs specs,
+		int direction, int row, int col,
+		vector<vector<Block> > &dungeon, DCounter &counter)
+{
+//	int current.blockc.row = current.blockc.row;
+//	int col = current.blockc.col;
+	// If block is sitting on the wall, return the current block
+	// and essentially cycle back to the event cast in buildPath(...)
+	if (!mayHitWall(direction, row,
+					col, specs, rules)) {
+		DCounter blockcounter;
+		struct timespec rtime;
+		int max_l;
+		int min_l;
+		int HALL_LENGTH;
+		bool calculating_hlength = true;
+		
+		//set hall bounds based on direction
+		if (direction == 0 || direction == 2) {
+			max_l = rules.MAX_HALL_VER_LENGTH;
+			min_l = rules.MIN_HALL_VER_LENGTH; 
+		} else {
+		    max_l = rules.MAX_HALL_HOR_LENGTH;
+		    min_l = rules.MIN_HALL_HOR_LENGTH;
+		}
+		Block current;
+		Block next;
+		next = new Block;
+		current.blockc.row = row;
+		current.blockc.col = col;
+		HALL_LENGTH = calc_hall_length(specs, direction, current, max_l, min_l);
+
+		//Now it's time to start "setting" the pathway
+		blockcounter.finalcount = HALL_LENGTH;
+		for (int i = 0; i < blockcounter.finalcount; i++) {
+			next = returnBuildBlock(1, row, col, dungeon, direction);
+			//printf("2) s_row = %d s_col = %d\n",row, col);
+			switch(direction) {
+				case 0:
+					row = row - 1;
+					continue;
+				case 1:
+					col = col + 1;
+					continue;
+				case 2:
+					row = row + 1;
+					continue;
+				case 3:
+					col = col - 1;
+					continue;
+			}
+			//printf("3) s_row = %d s_col = %d\n",row, col);
+		}
+		Block end;
+		end.blockc.row = row;
+		end.blockc.col = col;
+		end.blockc.direction = direction;
+
+//		monitor.prev_fork_hallway = 1;
+//		monitor.prev_fork_turned = 0;
+
+		counter.counter = counter.counter + 1;
+		return end;
+	}
+}
+
+void DbuildTurn(DRules rules, DSpecs specs,
+		int row, int col, vector<vector<Block> > &dungeon)
+{/*
+	if (row == specs.rows - 1 || row == 0) {
+		if (col == specs.cols - 1 || col = 0) {
+
+		}
+	}*/
+}
+
+// this has taken me FOREVER to do
+// gaining a lot of good experience, though
+
+/********
+end events.cpp
+now main.cpp (converting "main" to be titled generator)
+*/
+
+int generator()
+{
+	DSpecs specs;
+	DInit init;
+	DRules rules;
+	specs.BLOCK_LENGTH = 64;
+	specs.player_speed = 16;
+	specs.game_time_considered = 0;
+	generateRules(rules, specs, init);
+	Block block;
+	vector<Block> dungeonCols(specs.cols, block);
+	vector<vector<Block> > dungeon(specs.rows, dungeonCols);
+	initialize_values(specs, init, dungeon);
+	pathingInit(rules, init, specs, dungeon);
+	//dungeon[init.startrow][init.startcol].maintype = 1;
+	//dungeon[init.endrow][init.endcol].maintype = 2;
+	for (int i = 0; i < specs.rows; i++) {
+		for (int j = 0; j < specs.cols; j++) {
+			printf("%d",dungeon[i][j].maintype);
+		}
+		printf("\n");
+	}
+	printf("Min/max ver-hall length: %d || %d\n",
+		rules.MIN_HALL_VER_LENGTH, rules.MAX_HALL_VER_LENGTH);
+	printf("Min/max hor-hall length: %d || %d\n",
+		rules.MIN_HALL_HOR_LENGTH, rules.MAX_HALL_HOR_LENGTH);
+	return 0;
+
+}
+
+/*******
+end main.cpp
+now pathing_functions.cpp
+*/
+
+
+void pathingInit(DRules rules, DInit init, DSpecs specs,
+			vector<vector<Block> > &dungeon)
+{
+	struct timespec rtime;
+	initStartBlocks(rules, init, specs, dungeon, rtime);
+	initPath(rules, init, specs, dungeon);
+}
+
+void initStartBlocks(DRules rules, DInit init, DSpecs specs,
+			vector<vector<Block> >& dungeon, struct timespec rtime)
+{
+	// needed for probability check
+	double prob;
+	// reduce writelength
+	Block start;
+	start.maintype = 3;
+	start.subtype = 999;
+	start.path = 1;
+	// Set internal constructor to row/col number
+	start.blockc.row = init.startrow;
+	start.blockc.col = init.startcol;
+	// Set initial block direction
+	int bpos[2];
+	int next_to_wall;
+	bpos[0] = init.startrow;
+	bpos[1] = init.startcol;
+	// if start block is on west side
+	/*
+	if (bpos[1] < 1) {
+		//if endblock is below, dir=north or east; if not, then east/south
+		if (bpos[0] - init.endrow < 0) {
+			// if there's enough distance to build a hallway north,
+			// then dir = north
+			if (bpos[0] - rules.MAX_HALL_VER_LENGTH > 0) {
+				start.blockc.direction = 0;
+			} else {
+				start.blockc.direction = 1;
+			}
+		} else {
+			if (bpos[0] + rules.MAX_HALL_VER_LENGTH < specs.rows) {
+				start.blockc.direction = 2;
+			} else {
+				start.blockc.direction = 1;
+			}
+		}
+	} else if (bpos[1] == specs.cols - 1) {
+		if (bpos[0] - init.endrow < 0) {
+			// if there's enough distance to build a hallway north,
+			// then dir = north
+			if (bpos[0] - rules.MAX_HALL_VER_LENGTH > 0) {
+				start.blockc.direction = 0;
+			} else {
+				start.blockc.direction = 3;
+			}
+		} else {
+			if (bpos[0] + rules.MAX_HALL_VER_LENGTH < specs.rows) {
+				start.blockc.direction = 2;
+			} else {
+				start.blockc.direction = 3;
+			}
+		}
+	} else if (bpos[0] == 0) {
+		// if on right side of startblock
+		if (bpos[1] - init.endcol < 0) {
+			if (bpos[1] - rules.MAX_HALL_HOR_LENGTH > 0) {
+				start.blockc.direction = 3;
+			} else {
+				start.blockc.direction = 2;
+			}
+		} else {
+			if (bpos[1] + rules.MAX_HALL_HOR_LENGTH < specs.cols) {
+				start.blockc.direction = 1;
+			} else {
+				start.blockc.direction = 2;
+			}
+		}
+	} else {
+		if (bpos[1] - init.endcol < 0) {
+			if (bpos[1] - rules.MAX_HALL_HOR_LENGTH > 0) {
+				start.blockc.direction = 3;
+			} else {
+				start.blockc.direction = 0;
+			}
+		} else {
+			if (bpos[1] + rules.MAX_HALL_HOR_LENGTH < specs.cols) {
+				start.blockc.direction = 1;
+			} else {
+				start.blockc.direction = 0;
+			}
+		}
+	}*/
+	//
+	start.blockc.direction = DrandomDirection();
+
+	/*Block end;
+	end.maintype = 2;
+	end.subtype = 998;
+	end.path = 1;
+	end.blockc.direction = 1;
+	end.blockc.row = init.endrow;
+	end.blockc.col = init.endcol;*/
+	dungeon[init.startrow][init.startcol] = start;
+	dungeon[init.startrow][init.startcol].blockc = start.blockc;
+	//dungeon[init.endrow][init.endcol] = end;
+	printf("Pointing %d\n", start.blockc.direction);
+	printf("Starting at %d %d\n", start.blockc.row, start.blockc.col);
+	//buildBlock(1, dungeon[init.startrow][init.startcol],
+	//		dungeon, start.blockc.direction);
+}
+
+/*
+ *
+ *
+ *	Block building functions. One returns, one is void
+ *
+ *
+ */
+
+Block returnBuildBlock(int maintype, int &s_row, int &s_col,
+		vector<vector<Block> > &dungeon, int direction)
+{
+	switch(direction) {
+		case 0:
+			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
+			dungeon[s_row-1][s_col].maintype = maintype;
+			dungeon[s_row-1][s_col].blockc.direction = direction;
+			dungeon[s_row-1][s_col].blockc.row = s_row-1;
+			dungeon[s_row-1][s_col].blockc.col = s_col;
+			dungeon[s_row-1][s_col].path = 1;
+			dungeon[s_row-1][s_col].south = &dungeon[s_row][s_col];
+			dungeon[s_row][s_col].north = &dungeon[s_row-1][s_col];
+			return dungeon[s_row-1][s_col];
+			//break;
+		case 1:
+			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
+			dungeon[s_row][s_col+1].maintype = maintype;
+			dungeon[s_row][s_col+1].blockc.direction = direction;
+			dungeon[s_row][s_col+1].blockc.row = s_row;
+			dungeon[s_row][s_col+1].blockc.col = s_col+1;
+			dungeon[s_row][s_col+1].path = 1;
+			dungeon[s_row][s_col+1].west = &dungeon[s_row][s_col];
+			dungeon[s_row][s_col].east = &dungeon[s_row][s_col+1];
+			return dungeon[s_row][s_col+1];
+			//break;
+		case 2:
+			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
+			dungeon[s_row + 1][s_col].maintype = maintype;
+			dungeon[s_row + 1][s_col].blockc.direction = direction;
+			dungeon[s_row + 1][s_col].blockc.row = s_row + 1;
+			dungeon[s_row + 1][s_col].blockc.col = s_col;
+			dungeon[s_row + 1][s_col].path = 1;
+			dungeon[s_row + 1][s_col].north = &dungeon[s_row][s_col];
+			dungeon[s_row][s_col].south = &dungeon[s_row + 1][s_col];
+			return dungeon[s_row + 1][s_col];
+			//break;
+		case 3:
+			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
+			dungeon[s_row][s_col-1].maintype = maintype;
+			dungeon[s_row][s_col-1].blockc.direction = direction;
+			dungeon[s_row][s_col-1].blockc.row = s_row;
+			dungeon[s_row][s_col-1].blockc.col = s_col-1;
+			dungeon[s_row][s_col-1].path = 1;
+			dungeon[s_row][s_col-1].east = &dungeon[s_row][s_col];
+			dungeon[s_row][s_col].west = &dungeon[s_row][s_col-1];
+			return dungeon[s_row][s_col-1];
+			//break;
+	}
+
+}
+
+void buildBlock(int maintype, Block &src, 
+		vector<vector<Block> > &dungeon, int direction)
+{
+	int row = src.blockc.row;
+	int col = src.blockc.col;
+	switch(direction) {
+		case 0:
+			dungeon[row - 1][col].maintype = maintype;
+			dungeon[row - 1][col].path = 1;
+			dungeon[row - 1][col].south = &src;
+			dungeon[row - 1][col].blockc.direction = direction;
+			src.north = &dungeon[row - 1][col];
+			break;
+		case 1:
+			dungeon[row][col + 1].maintype = maintype;
+			dungeon[row][col + 1].path = 1;
+			dungeon[row][col + 1].west = &src;
+			dungeon[row][col + 1].blockc.direction = direction;
+			src.east = &dungeon[row][col + 1];
+			break;
+		case 2:
+			dungeon[row + 1][col].maintype = maintype;
+			dungeon[row + 1][col].path = 1;
+			dungeon[row + 1][col].north = &src;
+			dungeon[row + 1][col].blockc.direction = direction;
+			src.south = &dungeon[row + 1][col];
+			break;
+		case 3:
+			dungeon[row][col - 1].maintype = maintype;
+			dungeon[row][col - 1].path = 1;
+			dungeon[row][col - 1].east = &src;
+			dungeon[row][col - 1].blockc.direction = direction;
+			src.west = &dungeon[row][col - 1];
+			break;
+	}
+}
+
+/*
+ *
+ *	End of block building functions
+ *
+ *
+ */
+
+
+void initPath(DRules rules, DInit init, DSpecs specs,
+		vector<vector<Block> > &dungeon)
+{
+	DCounter event_counters[99];
+	//DBuildMonitor monitor;
+	Block test = dungeon[init.startrow][init.startcol];
+
+	Block event = DbuildHall(rules, specs, test.blockc.direction,
+		test.blockc.row, test.blockc.col, dungeon, event_counters[2]);
+
+	DFork turn = getNewFork(event);
+	for (int i = 0; i < (specs.rows + specs.cols)*sqrt(specs.cols); i++) {
+		test.blockc.row = turn.forkpos[0];
+		test.blockc.col = turn.forkpos[1];
+		test.blockc.direction = DrandomDirection(test.blockc.direction);
+		event = DbuildHall(rules, specs, test.blockc.direction, test.blockc.row,
+			test.blockc.col, dungeon, event_counters[2]);
+		turn = getNewFork(event);
+	}
+	int tolerance = 8;
+
+	Block block;
+	vector<Block> dungeonCols(specs.cols, block);
+	vector<vector<Block> > newdungeon(specs.rows, dungeonCols);
+
+	for (int i = 0; i < 10; i++) {
+		newdungeon = newParsedMap(specs, tolerance, dungeon);
+		dungeon = newdungeon;
+	}
+}
+
+void buildPath(DRules rules, DSpecs specs,
+		DCounter *&event_counters, vector<vector<Block> > &dungeon)
+{
+	//getEvent(event_counters[], 
+}
+
+void startEvent(int event, DRules rules, DSpecs specs,
+    	vector<vector<Block> > &dungeon, DCounter *&event_counters)
+{
+
+}
+
+int getEvent(DRules rules, DInit init, DSpecs specs, Block current)
+{
+	int row = current.blockc.row;
+	int col = current.blockc.col;
+	
+}
+
+int DrandomDirection(int prevdirection)
+{
+	struct timespec rtime;
+	int direction;
+	while(true) {
+		srandByTime(rtime);
+		double probability = (rand()%100);
+		if (probability < 25) {
+			direction = 0;
+		} else if (probability < 50) {
+			direction = 1;
+		} else if (probability < 75) {
+			direction = 2;
+		} else {
+			direction = 3;
+		}
+		if (direction == prevdirection) continue;
+		break;
+	}
+	return direction;
+}
+
+int DrandomDirection()
+{
+	struct timespec rtime;
+	srandByTime(rtime);
+	double probability = (rand()%100);
+	if (probability < 25) {
+		return 0;
+	} else if (probability < 50) {
+		return 1;
+	} else if (probability < 75) {
+		return 2;
+	} else {
+		return 3;
+	}
+}
+
+int DnewDirection(DSpecs specs, DRules rules, Block &block)
+{
+	int skip_direction = (block.blockc.direction + 2) % 4;
+	int used_directions[4];
+	used_directions[skip_direction] = 1;
+	int directions[3];
+	int i = 0;
+		for (int j = 0; j < 4; j++) {
+				if (used_directions[j] == 1) continue;
+				used_directions[j] = 1;
+				directions[i] = j;
+				i++;
+				break;
+			
+		}
+		struct timespec rtime;
+		srandByTime(rtime);
+		double probability = rand()%RAND_MAX;
+		if (probability < 33) { return directions[0]; }
+		else if (probability < 66) { return directions[1]; }
+		else { return directions[2]; }
+}
+
+/*
+ *
+ *	Utility functions for block building
+ */
+
+DFork getNewFork(Block block)
+{
+	DFork fork;
+	fork.init();
+	switch(block.blockc.direction) {
+		case 0:
+			fork.attempted_turns[2] = 1;
+			break;
+		case 1:
+			fork.attempted_turns[3] = 1;
+			break;
+		case 2:
+			fork.attempted_turns[0] = 1;
+			break;
+		case 3:
+			fork.attempted_turns[1] = 1;
+			break;
+	}
+	fork.forkpos[0] = block.blockc.row;
+	fork.forkpos[1] = block.blockc.col;
+
+	return fork;
+}
+
+void setDisabledTurn(DFork &fork, Block block)
+{
+	switch(block.blockc.direction) {
+		case 0:
+			fork.attempted_turns[2] = 1;
+			break;
+		case 1:
+			fork.attempted_turns[3] = 1;
+			break;
+		case 2:
+			fork.attempted_turns[0] = 1;
+			break;
+		case 3:
+			fork.attempted_turns[1] = 1;
+			break;
+	}
+	fork.forkpos[0] = block.blockc.row;
+	fork.forkpos[1] = block.blockc.col;
+}
+
+void setDisabledTurn(DFork &fork, Block block, int direction)
+{
+	switch(direction) {
+		case 0:
+			fork.attempted_turns[0] = 1;
+			break;
+		case 1:
+			fork.attempted_turns[1] = 1;
+			break;
+		case 2:
+			fork.attempted_turns[2] = 1;
+			break;
+		case 3:
+			fork.attempted_turns[3] = 1;
+			break;
+	}
+	fork.forkpos[0] = block.blockc.row;
+	fork.forkpos[1] = block.blockc.col;
+}
+
+bool checkAttemptedTurn(DFork fork, int direction)
+{
+	switch(direction) {
+		case 0:
+			if (fork.attempted_turns[2] == 1) return true;
+			return false;
+		case 1:
+			if (fork.attempted_turns[3] == 1) return true;
+			return false;
+		case 2:
+			if (fork.attempted_turns[0] == 1) return true;
+			return false;
+		case 3:
+			if (fork.attempted_turns[1] == 1) return true;
+			return false;
+	}
+}
+
+void connectForks(DFork &prev, DFork &next)
+{
+	prev.next = &next;
+	next.prev = &prev;
+}
+/** Parsing the map **/
+
+int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
+		Block block)
+{
+	int count = 0;
+	for (int i = -1; i < 2; i++) {
+		for (int j = -1; j < 2; j++) {
+			int block_x = block.blockc.col+i;
+			int block_y = block.blockc.row+j;
+
+			if (i == 0 && j == 0) { continue; }
+			else if (block_x < 0 || block_y < 0 ||
+					block_x > specs.cols - 1 || block_y > specs.rows - 1) {
+				count = count + 1;
+			} else if (dungeon[block_y][block_x].maintype == 1) {
+				count = count + 1;
+			}
+		}
+	}
+	return count;
+}
+
+vector<vector<Block> > newParsedMap(DSpecs specs, int tolerance,
+									vector<vector<Block> > &dungeon)
+{
+	Block block;
+	vector<Block> dungeonCols(specs.cols, block);
+	vector<vector<Block> > newdungeon(specs.rows, dungeonCols);
+	for (int i = 0; i < specs.rows - 1; i++) {
+		for (int j = 0; j < specs.cols - 1; j++) {
+			//printf("parsedmap\n");
+			int nbs = parseSurroundingBlocks(specs, dungeon, dungeon[i][j]);
+			if (dungeon[i][j].maintype == 1) {
+				if (nbs < tolerance) {
+					newdungeon[i][j].maintype = 0;
+				} else {
+					newdungeon[i][j].maintype = 1;
+				}
+			} else {
+				if (nbs > tolerance + 2) {
+					newdungeon[i][j].maintype = 1;
+				} else {
+					newdungeon[i][j].maintype = 0;
+				}
+			}
+		}
+	}
+	/*for (int i = 0; i < specs.rows - 1; i++) {
+		for (int j = 0; j < specs.cols - 1; j++) {
+			int nbs = parseSurroundingBlocks(specs, dungeon, dungeon[i][j]);
+			if (dungeon[i][j].maintype == 1) {
+				if (nbs < 3) {
+					newdungeon[i][j].maintype = 8;
+				}
+			}
+		}
+	}*/
+	return newdungeon;
+}
+
+int parseToTreasureBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
+		Block block)
+{
+	
+}
+
+#endif
+
 
 //
 //
