@@ -1072,7 +1072,7 @@ void endCredits(Game *g, int keys[])
 		mov += 0.3;
 	if (keys[XK_Right] && mov > -1271)
 		mov -= 0.3;
-	if (keys[XK_space]) {
+	if (keys[XK_space] && !jmp) {
 		jmp = 1;
 	}
 	if (jmp) {
@@ -1080,7 +1080,8 @@ void endCredits(Game *g, int keys[])
 	} else if (jmpspd > 0) {
 		jmpspd-=2;
 	}
-	if (jmpspd >= 10) {
+	if (jmpspd >= 200) {
+		jmpspd = 200;
 		jmp = 0;
 	}
 	
