@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 				render(&game);
 			}
 		}  */
-		else if (winCondition) {
+		if (winCondition) {
 			//test
 				endCredits(&game, keys);
 		}  
