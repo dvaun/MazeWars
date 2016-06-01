@@ -786,7 +786,7 @@ void render(Game *g)
 	//	drawOType(g->Player_1, g);
 
 	play_sounds(6);
-	render_maze(g, mazeTexture, mazeImage);
+	//render_maze(g, mazeTexture, mazeImage);
 
 		
 	if (axis[3] || axis[4])
