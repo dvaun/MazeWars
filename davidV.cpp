@@ -334,8 +334,8 @@ void init_textures(Game &game) {
 
 	glGenTextures(1, &game.enemyTextures);
 
-	int w = enemySpriteSheet->width;
-	int h = enemySpriteSheet->height;
+	w = enemySpriteSheet->width;
+	h = enemySpriteSheet->height;
 	unsigned char *enemyData = buildAlphaData(enemySpriteSheet);
 	glBindTexture(GL_TEXTURE_2D, game.enemyTextures);
 		glTexParameteri(GL_TEXTURE_2D,
