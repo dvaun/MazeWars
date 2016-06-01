@@ -20,11 +20,11 @@ struct Stats {
 	Vec vel;
 	Vec gpos;
 	Vec color;
-    //Ppmimage* texture;
+    Ppmimage* texture;
     GLuint obj_texture;
 	const char* image;
 	Stats() {
-    //    texture = new Ppmimage;
+        texture = new Ppmimage;
 		angle = 0;
 		width = 0;
 		height = 0;
