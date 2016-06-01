@@ -372,7 +372,7 @@ void getEnemyTexCoords(C &c, int type, float &x1, float &x2,
 }
 
 template <typedef C>
-void renderEnemy(C c, Game *g)
+void renderEnemy(C &c, Game *g)
 {
 	if (checkPlayerDistanceOType(c, g, g->g_xres/2, g->g_yres/2)) {
 		int type = c.stats.type;
