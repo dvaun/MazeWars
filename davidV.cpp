@@ -377,13 +377,13 @@ void renderEnemy(C &c, Game *g)
 	if (checkPlayerDistanceOType(c, g, g->g_xres/2, g->g_yres/2)) {
 		int type = c.stats.type;
 		float xdist, ydist;
-		xdist = g->g_xres/2 + (c.stats.gpos[0] - player.stats.gpos[0] -
+		xdist = g->g_xres/2 + (c.stats.gpos[0] - g->Player_1.stats.gpos[0] -
 				c.stats.width);
-		ydist = g->g_yres/2 + (c.stats.gpos[1] - player.stats.gpos[1] -
+		ydist = g->g_yres/2 + (c.stats.gpos[1] - g->Player_1.stats.gpos[1] -
 				c.stats.width);
 		float size = c.stats.width;
 		float cx1, cx2, cy1, cy2;
-		getEnemyTexCoords(type, cx1, cx2, cy1, cy2);
+		getEnemyTexCoords(c, type, cx1, cx2, cy1, cy2);
 		if (c.stats.vel[0] > 0) {}
 		else { cx1 = cx1 * -1; cx2 = cx2 * -1; }
 		glPushMatrix();
