@@ -725,11 +725,11 @@ void drawGBlocks(Game *g)
 				if (checkDistanceBlock(g,g->blocks[i][j],
 					(float)g->g_xres/2,(float)g->g_yres/2)) {
 					glColor3f(255.0, 255.0, 255.0);
-				drawBlock(g, g->blocks[i][j]);
+					drawBlock(g, g->blocks[i][j]);
+				}
 			}
 		}
 	}
-}
 }
 
 
