@@ -13,10 +13,7 @@
 */
 #define PI 3.14159268
 #include "cameronM.h"
-<<<<<<< HEAD
-=======
 #include <iostream>
->>>>>>> 4167bd8e500b08d2f887ca3f5d646c0fd8ccfebf
 
 int *res;
 struct timespec timeC1;
@@ -987,7 +984,6 @@ void loadEndCreditsTextures()
 	unsigned char *trees2Data = buildAlphaData(CreditsImages[5]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, trees2Data);
-<<<<<<< HEAD
 	free(trees2Data);	
 
 	//Cameron	
@@ -1044,20 +1040,16 @@ void loadEndCreditsTextures()
 		GL_UNSIGNED_BYTE, rosData);
 	free(rosData);	
 
-=======
-	free(trees2Data);
-	
 	//Dude Texture
-	w = CreditsImages[6]->width;
-	h = CreditsImages[6]->height;
-	glBindTexture(GL_TEXTURE_2D, CreditsTextures[5]);
+	w = CreditsImages[11]->width;
+	h = CreditsImages[11]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[11]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	unsigned char *dudeData = buildAlphaData(CreditsImages[6]);
+	unsigned char *dudeData = buildAlphaData(CreditsImages[11]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, dudeData);
 	free(dudeData);	
->>>>>>> 4167bd8e500b08d2f887ca3f5d646c0fd8ccfebf
 }
 void endCredits(Game *g, int keys[])
 {	Rect u;
@@ -1148,11 +1140,11 @@ void endCredits(Game *g, int keys[])
 	glEnd();
 	glPopMatrix();
 	/************DUDE*********************/
-	w = CreditsImages[6]->width;
-	h = CreditsImages[6]->height;
+	w = CreditsImages[11]->width;
+	h = CreditsImages[11]->height;
 	
 	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, CreditsTextures[6]);
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[11]);
 	glTranslatef(0, jmpspd, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
