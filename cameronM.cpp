@@ -883,8 +883,8 @@ void renderPauseBackground()
 }
 
 
-Ppmimage *CreditsImages[10] = {NULL};
-GLuint CreditsTextures[10];
+Ppmimage *CreditsImages[12] = {NULL};
+GLuint CreditsTextures[12];
 
 
 void loadEndCreditsTextures()
@@ -895,7 +895,7 @@ void loadEndCreditsTextures()
 	CreditsImages[3] = ppm6GetImage((char*)"parallax/cliff.ppm");
 	CreditsImages[4] = ppm6GetImage((char*)"parallax/grass.ppm");
 	CreditsImages[5] = ppm6GetImage((char*)"parallax/trees2.ppm");
-	CreditsImages[6] = ppm6GetImage((char*)"parallax/Dude.ppm");
+	CreditsImages[11] = ppm6GetImage((char*)"parallax/Dude.ppm");
 	
 	CreditsImages[6] = ppm6GetImage((char*)"images/CAM.ppm");
 	CreditsImages[7] = ppm6GetImage((char*)"images/DAVID.ppm");	
@@ -910,7 +910,7 @@ void loadEndCreditsTextures()
 	glGenTextures(1, &CreditsTextures[3]); //CliffTexture
 	glGenTextures(1, &CreditsTextures[4]); //GrassTexture
 	glGenTextures(1, &CreditsTextures[5]); //Trees2Texture
-	glGenTextures(1, &CreditsTextures[6]); //DudeTexture
+	glGenTextures(1, &CreditsTextures[11]); //DudeTexture
 	
 	glGenTextures(1, &CreditsTextures[6]); //CAM
 	glGenTextures(1, &CreditsTextures[7]); //DAVE
