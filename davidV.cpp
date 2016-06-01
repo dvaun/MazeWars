@@ -1797,7 +1797,7 @@ int parseToBlockTextures(vector<vector<Block> > &dungeon,
 			if (dungeon[row-1][col].maintype == 0) type += 1;
 			if (dungeon[row][col+1].maintype == 0) type += 8;
 			if (dungeon[row+1][col].maintype == 0) type += 4;
-		} else if (col < spcs.cols - 1) {
+		} else if (col < specs.cols - 1) {
 			if (dungeon[row-1][col].maintype == 0) type += 1;
 			if (dungeon[row][col+1].maintype == 0) type += 8;
 			if (dungeon[row+1][col].maintype == 0) type += 4;
