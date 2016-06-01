@@ -23,6 +23,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <vector>
+#include "davidV.h"
 
 /*
 void drawSquare(Stats *stats, int red, int blue, int green)
@@ -687,7 +688,7 @@ void initGamePositions(DInit& init, DSpecs& specs, struct timespec rtime)
 	}
 }
 
-#endif
+
 /***************
 end array_functions.cpp
 now block.cpp
@@ -800,7 +801,7 @@ void DFork::init() {
 	attempted_turns[3] = 0;	
 }
 
-#endif
+
 
 /************
 end block.cpp
@@ -1481,7 +1482,7 @@ int parseToTreasureBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
 	
 }
 
-#endif
+
 
 
 //
