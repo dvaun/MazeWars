@@ -195,4 +195,79 @@ void pressR(Game *g)
     }
 }
 
+void render_maze(Game *g, GLuint mazeTexture, Ppmimage *mazeImage) {
+    int w = mazeImage->width*4;
+    int h = mazeImage->height*4;
+
+    Player player = g->Player_1;
+    float xdist, ydist;
+    xdist = -1000 - player.stats.gpos[0];// + w);
+    ydist = 280 - player.stats.gpos[1]; // h);
+    //std::cout << "xdist: " << xdist << std::endl;
+    //std::cout << "ydist: " << ydist << std::endl;
+    
+    glBindTexture(GL_TEXTURE_2D, mazeTexture);
+    glPushMatrix();
+    glTranslatef(xdist, ydist, 0);
+
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(0, h);
+    glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h);
+    glTexCoord2f(1.0f, 1.0f); glVertex2f(w, 0);
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(0, 0);
+
+    glEnd();
+    glPopMatrix();
+}
+
+int maze[24][24] = {{1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1},
+                {1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1},
+                {1,0,1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,1},
+                {1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1},
+                {1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,0,1},
+                {1,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1},
+                {1,0,1,1,1,0,1,0,1,0,0,0,1,1,1,0,0,1,0,1,1,1,0,1},
+                {1,0,0,0,0,0,1,0,1,1,1,1,1,0,0,0,1,1,0,1,0,0,0,1},
+                {1,0,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,1,0,1,1,1,0,1},
+                {1,0,1,0,0,0,1,0,1,0,1,1,1,1,1,1,0,1,0,1,0,0,0,1},
+                {1,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,1,1,1},
+                {1,0,1,1,1,1,1,1,1,0,1,0,1,0,1,1,1,0,1,1,0,0,0,1},
+                {1,0,1,0,0,0,0,0,1,0,1,0,1,0,0,0,1,0,0,1,1,1,0,1},
+                {1,0,1,0,1,1,1,0,1,0,1,1,1,1,1,0,1,1,1,1,0,0,0,1},
+                {1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1},
+                {1,1,1,1,1,0,1,1,1,0,1,0,1,0,1,1,1,0,1,0,1,1,0,1},
+                {1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,0,1},
+                {1,0,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,1,1,1},
+                {1,0,1,0,1,0,0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,0,1},
+                {1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,0,1,0,0,1},
+                {1,0,1,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,1,0,0,0,0,1},
+                {1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,0,1},
+                {1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1},
+                {1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1}};
+
+int maze_collision(Game *g) {
+    //for (int row = 0; row < 24; row++) {
+    //    for (int col = 0; col < 24; col++) {
+    //        if (maze[row][col] == 1) {
+    //std::cout << g->Player_1.sats.gpos[1] << std::endl;
+    int wallY = fabs(floor((280 - g->Player_1.stats.gpos[1]-80)/128 - 2));
+    int wallX = fabs(floor(-1000 - g->Player_1.stats.gpos[0]-100)/128 - 4);
+    int x = g->Player_1.stats.gpos[0]+26;
+    int y = g->Player_1.stats.gpos[1]+164;
+    //std::cout << x << std::endl;
+    //std::cout << y << std::endl;
+
+    //std::cout << (int)((float)x/128.0)+12 << std::endl;
+    //std::cout << (int)(((float)y/128.0) - .4) << std::endl;
+    int cX = ((float)x/128.0)+12;
+    int cY = ((float)y/128.0 - .4);
+    //x is from 520 down to -something
+    if (cY < 24 && cY < 24 && maze[cX][cY] == 0) {
+        //std::cout << "y: " << y << std::endl;        
+    }
+
+}
+
 #endif

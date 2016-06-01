@@ -80,6 +80,8 @@ Ppmimage *introImages[10] = {NULL};
 GLuint introTextures[10];
 Ppmimage *winImages[10] = {NULL};
 GLuint winTextures[10];
+Ppmimage *mazeImage = {NULL};
+GLuint mazeTexture;
 // GLuint titleTexture; //introTexture[0]
 // GLuint boulderTexture; //introTexture[1]
 // GLuint logoTexture; //introTexture[2]
@@ -312,6 +314,8 @@ void init_opengl(void)
 	introImages[6] = ppm6GetImage((char*)"images/sign.ppm");
 	introImages[7] = ppm6GetImage((char*)"images/Arrow.ppm");
 	
+	mazeImage = ppm6GetImage((char*)"images/maze1.ppm");
+
 	glGenTextures(1, &testTexture);
 	glGenTextures(1, &personTexture1);
 	glGenTextures(1, &personTexture1c);
@@ -322,6 +326,9 @@ void init_opengl(void)
 	glGenTextures(1, &introTextures[4]); //optionsTexture
 	glGenTextures(1, &introTextures[5]); //ArrowTexture
 	glGenTextures(1, &introTextures[6]); //signTexture
+
+	glGenTextures(1, &mazeTexture);
+
 	
 	/****testing the zombie sprite********************/
 	float w = testImage->width;
@@ -458,6 +465,17 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, arrow2Data);
 	free(arrow2Data);
+
+	//maze texture
+	w = mazeImage->width;
+	h = mazeImage->height;
+	glBindTexture(GL_TEXTURE_2D, mazeTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *mazeData = buildAlphaData(mazeImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, mazeData);
+	free(mazeData);	
 
 
 	loadEndCreditsTextures();
@@ -757,6 +775,7 @@ void render(Game *g)
 	
 	
 	glClear(GL_COLOR_BUFFER_BIT);
+	
 	//if(animationSpan > 60/1000.0f) {	
 	//	clock_gettime(CLOCK_REALTIME, &animationStart);
 	//}
@@ -766,6 +785,8 @@ void render(Game *g)
 	//	drawOType(g->Player_1, g);
 
 	play_sounds(6);
+	render_maze(g, mazeTexture, mazeImage);
+
 		
 	if (axis[3] || axis[4])
 		renderCrosshair(axis, g, false);
@@ -785,8 +806,8 @@ void render(Game *g)
 		GameOver();
 		g->Player_1.gameOver = true;
 	}
-	drawHealthPack(500, 400, 0, g);
-	drawHealthPack(100, 800, 0, g);
+	//drawHealthPack(500, 400, 0, g);
+	//drawHealthPack(100, 800, 0, g);
 	float w = personImage1->width/4;
  
 	if (g->Player_1.gameOver == false)

@@ -9,5 +9,7 @@ void load_sounds();
 void play_sounds(int soundOption);
 void bubblez(int radius, float red, float green, float blue);
 void pressR(Game *g);
+void render_maze(Game *g, GLuint mazeTexture, Ppmimage *mazeImage);
+void maze_collision(Game *g);
 
 #endif
