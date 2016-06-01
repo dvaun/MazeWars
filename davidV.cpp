@@ -706,15 +706,19 @@ void drawBlock(Game *g, gblock block)
 	glTranslatef(xdist, ydist, 0.0f);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
-	glBindTexture(GL_TEXTURE_2D, block.stats.obj_texture);
+	glBindTexture(GL_TEXTURE_2D, g->blockTexture);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
-	glTexCoord2d(1.0f, 0.0f); glVertex2f(-size, size);
-	glTexCoord2d(1.0f, 1.0f); glVertex2f(size, size);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(size, -size);
+		glTexCoord2f(cx2, cy1); glVertex2f(-size, -size);
+		glTexCoord2f(cx2, cy2); glVertex2f(-size, size);
+		glTexCoord2f(cx1, cy2); glVertex2f(size, size);
+		glTexCoord2f(cx1, cy1); glVertex2f(size, -size);
+		/*glTexCoord2f(cx2, cy2); glVertex2f(-size, -size);
+		glTexCoord2d(cx1, cy2); glVertex2f(-size, size);
+		glTexCoord2d(cx1, cy1); glVertex2f(size, size);
+		glTexCoord2f(cx2, cy1); glVertex2f(size, -size);*/
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_ALPHA_TEST);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
 }
 
