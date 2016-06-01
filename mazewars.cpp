@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 				glClearColor(0.8, 0.8, 0.8, 1.0);
 				render(&game);
 			}
-		}  */
+		}  
 		if (winCondition) {
 			//test
 				endCredits(&game, keys);
@@ -194,7 +194,8 @@ int main(int argc, char *argv[])
 		} else {
 		    glClearColor(0.8,0.8,0.8,1.0);
 		    render(&game);
-		}
+		}*/
+		render(&game);
 		glXSwapBuffers(dpy, win);
 	}
 	cleanupXWindows();
