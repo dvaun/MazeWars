@@ -13,9 +13,6 @@
 */
 #define PI 3.14159268
 #include "cameronM.h"
-extern "C" {
-	#include "fonts.h"
-}
 
 int *res;
 struct timespec timeC1;
@@ -898,6 +895,13 @@ void loadEndCreditsTextures()
 	CreditsImages[4] = ppm6GetImage((char*)"parallax/grass.ppm");
 	CreditsImages[5] = ppm6GetImage((char*)"parallax/trees2.ppm");
 	
+	CreditsImages[6] = ppm6GetImage((char*)"images/CAM.ppm");
+	CreditsImages[7] = ppm6GetImage((char*)"images/DAVID.ppm");	
+	CreditsImages[8] = ppm6GetImage((char*)"images/JOB.ppm");
+	CreditsImages[9] = ppm6GetImage((char*)"images/MATT.ppm");
+	CreditsImages[10] = ppm6GetImage((char*)"images/ROSE.ppm");
+	
+	
 	glGenTextures(1, &CreditsTextures[0]); //CloudsTexture
 	glGenTextures(1, &CreditsTextures[1]); //MountainsTexture
 	glGenTextures(1, &CreditsTextures[2]); //TreesTexture
@@ -905,6 +909,12 @@ void loadEndCreditsTextures()
 	glGenTextures(1, &CreditsTextures[4]); //GrassTexture
 	glGenTextures(1, &CreditsTextures[5]); //Trees2Texture
 	
+	glGenTextures(1, &CreditsTextures[6]); //CAM
+	glGenTextures(1, &CreditsTextures[7]); //DAVE
+	glGenTextures(1, &CreditsTextures[8]); //ME
+	glGenTextures(1, &CreditsTextures[9]); //MATT
+	glGenTextures(1, &CreditsTextures[10]); //flower
+
 	float h, w;
 	
 	//clouds Texture
@@ -969,9 +979,64 @@ void loadEndCreditsTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	unsigned char *trees2Data = buildAlphaData(CreditsImages[5]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, trees2Data);
 	free(trees2Data);	
+
+	//Cameron	
+	w = CreditsImages[6]->width;
+	h = CreditsImages[6]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[6]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *camData = buildAlphaData(CreditsImages[6]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, camData);
+	free(camData);	
+
+	//David
+	w = CreditsImages[7]->width;
+	h = CreditsImages[7]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[7]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *davData = buildAlphaData(CreditsImages[7]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, davData);
+	free(davData);	
+
+	//Me
+	w = CreditsImages[8]->width;
+	h = CreditsImages[8]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[8]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *jobData = buildAlphaData(CreditsImages[8]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, jobData);
+	free(jobData);
+
+	w = CreditsImages[9]->width;
+	h = CreditsImages[9]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[9]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *matData = buildAlphaData(CreditsImages[9]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, matData);
+	free(matData);		
+
+	//flower
+	w = CreditsImages[10]->width;
+	h = CreditsImages[10]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[10]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *rosData = buildAlphaData(CreditsImages[10]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, rosData);
+	free(rosData);	
+
 }
 void endCredits(Game *g, int keys[])
 {	Rect u;
@@ -991,7 +1056,7 @@ void endCredits(Game *g, int keys[])
 	glAlphaFunc(GL_GREATER, 0.0f);
 	//set background to black to give cinematic feel
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	
+	/////////////////////////////////////////////////////////////////////
 	float w = CreditsImages[0]->width;
 	float h = CreditsImages[0]->height;
 	glPushMatrix();
@@ -1009,7 +1074,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-	
+	/////////////////////////////////////////////////////////////////////
 	w = CreditsImages[1]->width;
 	h = CreditsImages[1]->height;
 	
@@ -1087,5 +1152,104 @@ void endCredits(Game *g, int keys[])
 	glEnd();
 	glPopMatrix();
 	
+	//Cam
+	w = CreditsImages[6]->width;
+	h = CreditsImages[6]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[6]);
+	glTranslatef(mov*10, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
+
+	glEnd();
+	glPopMatrix();
+	
+	//David
+	w = CreditsImages[7]->width;
+	h = CreditsImages[7]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[7]);
+	glTranslatef(mov*10, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
+
+	glEnd();
+	glPopMatrix();
+
+	//me
+	w = CreditsImages[8]->width;
+	h = CreditsImages[8]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[8]);
+	glTranslatef(mov*10, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
+
+	glEnd();
+	glPopMatrix();
+	
+	//Matt
+	w = CreditsImages[9]->width;
+	h = CreditsImages[9]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[9]);
+	glTranslatef(mov*10, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
+
+	glEnd();
+	glPopMatrix();
+
+	//flower
+	w = CreditsImages[10]->width;
+	h = CreditsImages[10]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[10]);
+	glTranslatef(mov*10, 0, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0 , h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(w, h/2+ res[1]/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(w, res[1]/2 - h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0, res[1]/2 - h/2);
+
+	glEnd();
+	glPopMatrix();
 }
 #endif

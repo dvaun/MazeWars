@@ -47,7 +47,7 @@ staticLib: fonts.o fonttex.o
 
 mazewars: mazewars.cpp ppm.c log.c defs.h fonts/fonts.h fonts/fonts.o fonts/fonttex.o
 	g++ $(CFLAGS) cameronM.cpp matthewG.cpp davidV.cpp ppm.c jobG.cpp roseP.cpp mtime.cpp fonttex.o fonts/fonts.cpp $(CPPFILES) $(LIB) log.c\
-			/usr/lib/x86_64-linux-gnu/libopenal.so /usr/lib/libalut.so\
+			/usr/lib/x86_64-linux-gnu/libopenal.so /usr/lib/x86_64-linux-gnu/libalut.so\
 			joystick.cc -Wall -std=c++11 -Wextra -w $(LFLAGS)\
 			-o MazeWars
 
