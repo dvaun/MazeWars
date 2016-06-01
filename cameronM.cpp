@@ -58,7 +58,7 @@ void pointPlayer(Game *g, int savex, int savey)
 		g->gun.stats.angle = 360.0f;
 	}
 	if (g->gun.stats.angle <= 360.0f) {
-		if (nDeg > 270){
+		if (nDeg > 270) {
 			nDeg -= 360;
 		}
 		g->gun.stats.angle = nDeg + 90;
@@ -256,7 +256,7 @@ void drawArtifacts(Player x)
 void drawHealth(Player *x)
 {
 	if (x->Current_Health < 0)
-	x->Current_Health = 0;
+		x->Current_Health = 0;
 
 	double remaining = 100-((x->Current_Health/x->Max_Health)*100);
 
@@ -400,8 +400,8 @@ void drawLives(int x, int y)
 void GameOver()
 {
 	Rect r;
-	r.bot = 500;
-	r.left = 600;
+	r.bot = res[0]/2;
+	r.left = res[1]/2;
 	r.center = 0;
 	ggprint8b(&r, 160, 0x00ff0000, "GAME OVER \n F6 TO RESTART");
 }
@@ -605,23 +605,17 @@ GLuint personTexture1c, int i)
 			glTexCoord2f(1.0f, 0.0f); glVertex2f(w, w);
 			glTexCoord2f(1.0f, 1.0f); glVertex2f(w, -w);
 			glTexCoord2f(0.66f, 1.0f); glVertex2f(-w, -w);
-		}
-		else if (animationSpanc < 45)
-		{
+		} else if (animationSpanc < 45) {
 			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
 			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
 			glTexCoord2f(0.33f, 1.0f); glVertex2f(-w,-w);
-		}
-		else if (animationSpanc < 67.5)
-		{
+		} else if (animationSpanc < 67.5) {
 			glTexCoord2f(0.0f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(0.33f, 0.0f); glVertex2f( w, w);
 			glTexCoord2f(0.33f, 1.0f); glVertex2f( w, -w);
 			glTexCoord2f(0.0f, 1.0f); glVertex2f(-w,-w);
-		}
-		else
-		{
+		} else {
 			glTexCoord2f(0.33f, 0.0f); glVertex2f(-w, w);
 			glTexCoord2f(0.66f, 0.0f); glVertex2f( w, w);
 			glTexCoord2f(0.66f, 1.0f); glVertex2f( w, -w);
@@ -641,14 +635,14 @@ int PAUSE(Game *g, int keys[])
 	clock_gettime(CLOCK_REALTIME, &timeCurrentqr);
 	if (keys[XK_Up]) {
 		timeSpanTq = timeDiff(&timeTq, &timeCurrentqr);
-		if (timeSpanTq > 0.2){
+		if (timeSpanTq > 0.2) {
 			clock_gettime(CLOCK_REALTIME, &timeTq);
 			kchkr--;
 		}
 	}
 	if (keys[XK_Down]) {
 		timeSpanTr = timeDiff(&timeTr, &timeCurrentqr);
-		if (timeSpanTr > 0.2){
+		if (timeSpanTr > 0.2) {
 			clock_gettime(CLOCK_REALTIME, &timeTr);
 			kchkr++;
 		}
@@ -679,18 +673,16 @@ int PAUSE(Game *g, int keys[])
 		play_sounds(18);
 	}
 	
-	
-	
 	kchkr = kchkr%3;
 	if (kchkr < 0)
 		kchkr = 2;
 	renderPauseBackground();
 	renderPauseButtons(kchkr);
 	kchkr = kchkr%3;
-	if (keys[XK_Return] && kchkr == 1){
+	if (keys[XK_Return] && kchkr == 1) {
 		Restart(g);
 	}
-	if (keys[XK_Return] && kchkr == 2){
+	if (keys[XK_Return] && kchkr == 2) {
 		return 1;
 	}
 	return 0;
@@ -913,10 +905,8 @@ void renderPauseBackground()
 	glPopMatrix();
 }
 
-
 Ppmimage *CreditsImages[12] = {NULL};
 GLuint CreditsTextures[12];
-
 
 void loadEndCreditsTextures()
 {
@@ -1151,7 +1141,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-        	
+        /////////////////////////////////////////////////////////////////////	
 	w = CreditsImages[2]->width;
 	h = CreditsImages[2]->height;
 	
@@ -1190,7 +1180,7 @@ void endCredits(Game *g, int keys[])
 	glEnd();
 	glPopMatrix();
 	/*********************************/
-	
+	/////////////////////////////////////////////////////////////////////
 	w = CreditsImages[3]->width;
 	h = CreditsImages[3]->height;
 	
@@ -1209,7 +1199,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-	
+	/////////////////////////////////////////////////////////////////////
 	w = CreditsImages[4]->width;
 	h = CreditsImages[4]->height;
 	
@@ -1228,7 +1218,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-	
+	/////////////////////////////////////////////////////////////////////
 	//Cam
 	w = CreditsImages[6]->width;
 	h = CreditsImages[6]->height;
@@ -1248,7 +1238,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-	
+	/////////////////////////////////////////////////////////////////////
 	//David
 	w = CreditsImages[7]->width;
 	h = CreditsImages[7]->height;
@@ -1268,7 +1258,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-
+	/////////////////////////////////////////////////////////////////////
 	//me
 	w = CreditsImages[8]->width;
 	h = CreditsImages[8]->height;
@@ -1288,7 +1278,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-	
+	/////////////////////////////////////////////////////////////////////
 	//Matt
 	w = CreditsImages[9]->width;
 	h = CreditsImages[9]->height;
@@ -1308,7 +1298,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-
+	/////////////////////////////////////////////////////////////////////
 	//flower
 	w = CreditsImages[10]->width;
 	h = CreditsImages[10]->height;
