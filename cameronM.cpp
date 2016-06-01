@@ -13,9 +13,7 @@
 */
 #define PI 3.14159268
 #include "cameronM.h"
-extern "C" {
-	#include "fonts.h"
-}
+#include <iostream>
 
 int *res;
 struct timespec timeC1;
@@ -897,6 +895,7 @@ void loadEndCreditsTextures()
 	CreditsImages[3] = ppm6GetImage((char*)"parallax/cliff.ppm");
 	CreditsImages[4] = ppm6GetImage((char*)"parallax/grass.ppm");
 	CreditsImages[5] = ppm6GetImage((char*)"parallax/trees2.ppm");
+	CreditsImages[6] = ppm6GetImage((char*)"parallax/Dude.ppm");
 	
 	glGenTextures(1, &CreditsTextures[0]); //CloudsTexture
 	glGenTextures(1, &CreditsTextures[1]); //MountainsTexture
@@ -904,6 +903,7 @@ void loadEndCreditsTextures()
 	glGenTextures(1, &CreditsTextures[3]); //CliffTexture
 	glGenTextures(1, &CreditsTextures[4]); //GrassTexture
 	glGenTextures(1, &CreditsTextures[5]); //Trees2Texture
+	glGenTextures(1, &CreditsTextures[6]); //DudeTexture
 	
 	float h, w;
 	
@@ -969,9 +969,20 @@ void loadEndCreditsTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	unsigned char *trees2Data = buildAlphaData(CreditsImages[5]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
 		GL_UNSIGNED_BYTE, trees2Data);
-	free(trees2Data);	
+	free(trees2Data);
+	
+	//Dude Texture
+	w = CreditsImages[6]->width;
+	h = CreditsImages[6]->height;
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[5]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *dudeData = buildAlphaData(CreditsImages[6]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, dudeData);
+	free(dudeData);	
 }
 void endCredits(Game *g, int keys[])
 {	Rect u;
@@ -979,12 +990,24 @@ void endCredits(Game *g, int keys[])
 	u.left = -res[0]/2;
 	u.center = 0;
 	ggprint8b(&u, 48, 0x00FFFFFF, "");
-
+	static float jmpspd = 0;
+	static int jmp = 0;
 	static float mov = 0;
-	if (keys[XK_Left])
-		mov += 0.4;
-	if (keys[XK_Right])
-		mov -= 0.4;
+	if (keys[XK_Left] && mov < 0)
+		mov += 0.3;
+	if (keys[XK_Right] && mov > -1271)
+		mov -= 0.3;
+	if (keys[XK_space]) {
+		jmp = 1;
+	}
+	if (jmp) {
+		jmpspd += 2;
+	} else if (jmpspd > 0) {
+		jmpspd-=2;
+	}
+	if (jmpspd >= 10) {
+		jmp = 0;
+	}
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_ALPHA_TEST);
@@ -1048,6 +1071,26 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
+	/************DUDE*********************/
+	w = CreditsImages[6]->width;
+	h = CreditsImages[6]->height;
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, CreditsTextures[6]);
+	glTranslatef(0, jmpspd, 0);
+	glScalef(1, 1, 1);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - h);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - h);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - 2*h);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - 2*h);
+
+	glEnd();
+	glPopMatrix();
+	/*********************************/
 	
 	w = CreditsImages[3]->width;
 	h = CreditsImages[3]->height;
