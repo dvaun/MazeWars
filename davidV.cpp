@@ -446,7 +446,7 @@ void begin_game(Game& game, gblock_info& gbi)
 	Block block;
 	vector<Block> dungeonCols(specs.cols, block);
 	vector<vector<Block> > dungeon(specs.rows, dungeonCols);
-	generator(dungeon);
+	generator(dungeon, specs, init, rules);
 	//
 	for (int i = 0; i < gbi.rows; i++) {
 		for (int j = 0; j < gbi.columns; j++) {
@@ -1151,7 +1151,8 @@ end events.cpp
 now main.cpp (converting "main" to be titled generator)
 */
 
-void generator(vector<vector<Block> > &dungeon)
+void generator(vector<vector<Block> > &dungeon, DSpecs specs,
+		DInit init, DRules rules)
 {
 	initialize_values(specs, init, dungeon);
 	pathingInit(rules, init, specs, dungeon);
