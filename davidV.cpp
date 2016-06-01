@@ -25,6 +25,182 @@
 #include <vector>
 #include "davidV.h"
 
+
+template <typename T>
+bool checkVoid(T *t) {
+	if (t == NULL) {
+		return true;
+	} else {
+		return false;
+	}
+}
+//
+//
+// End Macros and Templates //
+
+struct DRules {
+	int num_turns;
+	int num_halls;
+	int MIN_HALL_VER_LENGTH;
+	int MAX_HALL_VER_LENGTH;
+	int MIN_HALL_HOR_LENGTH;
+	int MAX_HALL_HOR_LENGTH;
+	int MAXDIST;
+	int MINDIST;
+};
+
+struct DSpecs {
+	int BLOCK_LENGTH;
+	int game_time_considered;
+	int rows;
+	int cols;
+	int player_speed;
+};
+
+struct DInit {
+	int startrow;
+	int startcol;
+	int endrow;
+	int endcol;
+};
+
+struct DCounter {
+	int counter;
+	int finalcount;
+};
+
+class BlockConstructor {
+	public:
+	int tread;
+	int direction;
+	int col;
+	int row;
+	BlockConstructor();
+	void operator=(BlockConstructor);
+	void operator=(BlockConstructor*);
+	~BlockConstructor();
+};
+
+class Block {
+public:
+	int maintype;
+	int subtype;
+	int path;
+	BlockConstructor blockc;
+	Block *north;
+	Block *east;
+	Block *south;
+	Block *west;
+	Block *northeast;
+	Block *northwest;
+	Block *southeast;
+	Block *southwest;
+	Block();
+	void operator=(Block);
+	void operator=(Block*);
+	~Block();
+};
+
+struct DFork {
+	int forkpos[2];
+	DFork *prev;
+	DFork *next;
+	DRules rules;
+	int attempted_turns[4];
+	void init();
+};
+
+class DForkMonitor {
+public:
+	DRules forkRules;
+	DForkMonitor();
+	~DForkMonitor();
+	// linked-fork functions
+	DFork* getNextFork(DFork *fork) {
+		if (!checkVoid(fork)) return fork->next;
+	}
+	DFork* getPrevFork(DFork *fork) {
+		if (!checkVoid(fork)) return fork->prev;
+	}
+	bool linkForks(DFork *fork_src, DFork *fork_trg) {
+		if (!checkVoid(fork_src)) {
+			fork_src->next = fork_trg;
+			fork_trg->prev = fork_src;
+			return true;
+		} else {
+		    return false;
+		}
+	}
+	void traceForward(DFork *fork) {
+		if (!checkVoid(fork)) {
+			DFork *nextfork = fork->next;
+			fork = nextfork;
+		}
+	}
+	void traceBackward(DFork *fork) {
+		if (!checkVoid(fork)) {
+			DFork *prevfork = fork->prev;
+			fork = prevfork;
+		}
+	}
+};
+
+
+/////
+
+/* array_functions.h */
+using namespace std;
+
+void generateRules(DRules& rules, DSpecs& specs, DInit& init);
+void srandByTime(struct timespec& rtime);
+void initGamePositions(DInit& init, DSpecs& specs, struct timespec rtime);
+void initialize_values(DSpecs specs, DInit init, vector<vector<Block> > &);
+
+/* end array_functions.h*/
+
+/* events.h */
+
+//#include "pathing_functions.h"
+//#include "block.h"
+//#include "array_functions.h"
+
+bool mayHitWall(int, int, int, DSpecs, DRules);
+int calc_hall_length(DSpecs, int, Block &, int, int);
+Block DbuildHall(DRules, DSpecs, int, int, int, vector<vector<Block> > &,
+				DCounter &);
+
+/* end events.h */
+/* pathing_functions.h */
+
+//#include "block.h"
+
+void pathingInit(DRules, DInit, DSpecs, vector<vector<Block> >&);
+void buildPath(DRules, DInit, DSpecs, vector<vector<Block> >&);
+void initStartBlocks(DRules, DInit, DSpecs, 
+                vector<vector<Block> >&, struct timespec rtime);
+int DnewDirection(DSpecs specs, DRules rules, Block&);
+int DrandomDirection(int);
+int DrandomDirection();
+void initPath(DRules, DInit, DSpecs, vector<vector<Block> > &);
+Block returnBuildBlock(int, int&, int&, vector<vector<Block> > &, int);
+//Block returnBuildBlock(int, Block&, vector<vector<Block> > &, int);
+//void buildBlock(int, Block&, vector<vector<Block> > &, int);
+DFork getNewFork(Block);
+void setDisabledTurn(DFork &, Block);
+void setDisabledTurn(DFork &, Block, int);
+bool checkAttemptedTurn(DFork, int);
+void connectForks(DFork &, DFork &);
+
+int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
+		Block block);
+vector<vector<Block> > newParsedMap(DSpecs specs, int,
+									vector<vector<Block> > &dungeon);
+
+/* end pathing_functions.h */
+
+/////
+
+
 /*
 void drawSquare(Stats *stats, int red, int blue, int green)
 {
@@ -467,124 +643,7 @@ void init_blocks(Game *g, gblock_info gbi)
 Trying to port over my dungeon-generator
 this block: array_functions.cpp
 */
-template <typename T>
-bool checkVoid(T *t) {
-	if (t == NULL) {
-		return true;
-	} else {
-		return false;
-	}
-}
-//
-//
-// End Macros and Templates //
 
-struct DRules {
-	int num_turns;
-	int num_halls;
-	int MIN_HALL_VER_LENGTH;
-	int MAX_HALL_VER_LENGTH;
-	int MIN_HALL_HOR_LENGTH;
-	int MAX_HALL_HOR_LENGTH;
-	int MAXDIST;
-	int MINDIST;
-};
-
-struct DSpecs {
-	int BLOCK_LENGTH;
-	int game_time_considered;
-	int rows;
-	int cols;
-	int player_speed;
-};
-
-struct DInit {
-	int startrow;
-	int startcol;
-	int endrow;
-	int endcol;
-};
-
-struct DCounter {
-	int counter;
-	int finalcount;
-};
-
-class BlockConstructor {
-	public:
-	int tread;
-	int direction;
-	int col;
-	int row;
-	BlockConstructor();
-	void operator=(BlockConstructor);
-	void operator=(BlockConstructor*);
-	~BlockConstructor();
-};
-
-class Block {
-public:
-	int maintype;
-	int subtype;
-	int path;
-	BlockConstructor blockc;
-	Block *north;
-	Block *east;
-	Block *south;
-	Block *west;
-	Block *northeast;
-	Block *northwest;
-	Block *southeast;
-	Block *southwest;
-	Block();
-	void operator=(Block);
-	void operator=(Block*);
-	~Block();
-};
-
-struct DFork {
-	int forkpos[2];
-	DFork *prev;
-	DFork *next;
-	DRules rules;
-	int attempted_turns[4];
-	void init();
-};
-
-class DForkMonitor {
-public:
-	DRules forkRules;
-	DForkMonitor();
-	~DForkMonitor();
-	// linked-fork functions
-	DFork* getNextFork(DFork *fork) {
-		if (!checkVoid(fork)) return fork->next;
-	}
-	DFork* getPrevFork(DFork *fork) {
-		if (!checkVoid(fork)) return fork->prev;
-	}
-	bool linkForks(DFork *fork_src, DFork *fork_trg) {
-		if (!checkVoid(fork_src)) {
-			fork_src->next = fork_trg;
-			fork_trg->prev = fork_src;
-			return true;
-		} else {
-		    return false;
-		}
-	}
-	void traceForward(DFork *fork) {
-		if (!checkVoid(fork)) {
-			DFork *nextfork = fork->next;
-			fork = nextfork;
-		}
-	}
-	void traceBackward(DFork *fork) {
-		if (!checkVoid(fork)) {
-			DFork *prevfork = fork->prev;
-			fork = prevfork;
-		}
-	}
-};
 
 
 using namespace std;
