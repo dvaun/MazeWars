@@ -1072,6 +1072,11 @@ void loadEndCreditsTextures()
 		GL_UNSIGNED_BYTE, dudeData);
 	free(dudeData);	
 }
+
+struct timespec CreditsTime;
+struct timespec CreditsCurrent;
+static double CreditsSpan = 0.0;
+
 void endCredits(Game *g, int keys[])
 {	Rect u;
 	u.bot = -res[1]/2;
@@ -1141,7 +1146,7 @@ void endCredits(Game *g, int keys[])
 
 	glEnd();
 	glPopMatrix();
-        /////////////////////////////////////////////////////////////////////	
+        	
 	w = CreditsImages[2]->width;
 	h = CreditsImages[2]->height;
 	
@@ -1172,10 +1177,48 @@ void endCredits(Game *g, int keys[])
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
 	
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - h + h/2);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - h + h/2);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - 2*h + h/2);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - 2*h + h/2);
+	clock_gettime(CLOCK_REALTIME, &CreditsCurrent);
+	CreditsSpan += timeDiff(&CreditsTime, &CreditsCurrent);
+	
+	if (CreditsSpan >= 100) {
+		CreditsSpan = 0.0;
+		clock_gettime(CLOCK_REALTIME, &CreditsTime);
+	}
+	if (CreditsSpan < 20 && (keys[XK_Right] || keys[XK_Left])) {
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.1666f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.1666f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+	} else if (CreditsSpan < 40 && (keys[XK_Right] || keys[XK_Left])) {
+		glTexCoord2f(0.1666f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.333f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.333f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		glTexCoord2f(0.1666f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+	} else if (CreditsSpan < 60 && (keys[XK_Right] || keys[XK_Left])) {
+		glTexCoord2f(0.3333f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.50f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.50f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		glTexCoord2f(0.3333f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+	} else if (CreditsSpan < 80 && (keys[XK_Right] || keys[XK_Left])) {
+		glTexCoord2f(0.50f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.666f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.666f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		glTexCoord2f(0.50f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+	} else if ((keys[XK_Right] || keys[XK_Left])) {
+		glTexCoord2f(0.666f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.8333f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(0.8333f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		glTexCoord2f(0.666f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+	} else {
+		glTexCoord2f(0.8333f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		glTexCoord2f(0.8333f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+	}
+	//~ glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - h + h/2);
+	//~ glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - h + h/2);
+	//~ glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - 2*h + h/2);
+	//~ glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - 2*h + h/2);
 
 	glEnd();
 	glPopMatrix();
