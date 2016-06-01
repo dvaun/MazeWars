@@ -16,8 +16,8 @@
 #include </usr/include/AL/alut.h>
 #include <cmath>
 #include "game_objects.h"
-ALuint alSource[10];
-ALuint alBuffer[10];
+ALuint alSource[20];
+ALuint alBuffer[20];
 
 void init_sounds()
 {
@@ -96,7 +96,32 @@ void load_sounds()
     alBuffer[6] = alutCreateBufferFromFile("./sound/parabolix_cavern.wav");
     alGenSources(1, &alSource[6]);
     alSourcei(alSource[6], AL_BUFFER, alBuffer[6]);
- 
+    
+    //Cameron's Piano
+    alBuffer[11] = alutCreateBufferFromFile("./sound/c.wav");
+    alGenSources(1, &alSource[11]);
+    alSourcei(alSource[11], AL_BUFFER, alBuffer[11]);
+    alBuffer[12] = alutCreateBufferFromFile("./sound/d.wav");
+    alGenSources(1, &alSource[12]);
+    alSourcei(alSource[12], AL_BUFFER, alBuffer[12]);
+    alBuffer[13] = alutCreateBufferFromFile("./sound/e.wav");
+    alGenSources(1, &alSource[13]);
+    alSourcei(alSource[13], AL_BUFFER, alBuffer[13]);
+    alBuffer[14] = alutCreateBufferFromFile("./sound/f.wav");
+    alGenSources(1, &alSource[14]);
+    alSourcei(alSource[14], AL_BUFFER, alBuffer[14]);
+    alBuffer[15] = alutCreateBufferFromFile("./sound/g.wav");
+    alGenSources(1, &alSource[15]);
+    alSourcei(alSource[15], AL_BUFFER, alBuffer[15]);
+    alBuffer[16] = alutCreateBufferFromFile("./sound/a.wav");
+    alGenSources(1, &alSource[16]);
+    alSourcei(alSource[16], AL_BUFFER, alBuffer[16]);
+    alBuffer[17] = alutCreateBufferFromFile("./sound/b.wav");
+    alGenSources(1, &alSource[17]);
+    alSourcei(alSource[17], AL_BUFFER, alBuffer[17]);
+    alBuffer[18] = alutCreateBufferFromFile("./sound/c2.wav");
+    alGenSources(1, &alSource[18]);
+    alSourcei(alSource[18], AL_BUFFER, alBuffer[18]);
 }
 
 void play_sounds(int soundOption)
