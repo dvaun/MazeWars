@@ -311,7 +311,7 @@ void getBlockTexCoords(int type, float &x1, float &x2, float &y1, float &y2) {
 	}
 }
 
-template <typedef C>
+template <typename C>
 void calculateEnemy(C c, Game *g)
 {
 	if (checkPlayerDistanceOType(c, g, g->g_xres/2, g->g_yres/2)) {
@@ -321,6 +321,7 @@ void calculateEnemy(C c, Game *g)
 	}
 }
 
+template <typename C>
 void getEnemyTexCoords(C &c, int type, float &x1, float &x2,
 							float &y1, float &y2)
 {
