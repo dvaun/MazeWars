@@ -156,6 +156,7 @@ struct Game {
 	int g_yres;
 	int nbullets;
 	int score = 0;
+	GLuint blockTexture;
 	gblock **blocks;
 	gblock_info game_info;
 	struct timespec bulletTimer;

@@ -204,7 +204,6 @@ void init_textures(Game &);
 
 
 void getBlockTexCoords(int type, float &x1, float &x2, float &y1, float &y2) {
-	float x1, x2, y1, y2;
 	switch(type) {
 		case 0:
 			x1 = (float) 8.5/13;
