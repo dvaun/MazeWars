@@ -151,7 +151,7 @@ public:
 /* array_functions.h */
 using namespace std;
 
-int** generator();
+void generator(vector<vector<Block> >&, DSpecs, DInit, DRules);
 
 void generateRules(DRules& rules, DSpecs& specs, DInit& init);
 void srandByTime(struct timespec& rtime);
