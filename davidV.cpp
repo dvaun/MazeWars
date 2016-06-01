@@ -435,10 +435,22 @@ void begin_game(Game& game, gblock_info& gbi)
 				game.blocks[i][j].stats.width, gbi.width);
 		}
 	}
-	int maze[gbi.rows][gbi.columns] = generator();
+	//
+	DSpecs specs;
+	DInit init;
+	DRules rules;
+	specs.BLOCK_LENGTH = gbi.width;
+	specs.player_speed = 16;
+	specs.game_time_considered = 0;
+	generateRules(rules, specs, init);
+	Block block;
+	vector<Block> dungeonCols(specs.cols, block);
+	vector<vector<Block> > dungeon(specs.rows, dungeonCols);
+	generator(dungeon);
+	//
 	for (int i = 0; i < gbi.rows; i++) {
 		for (int j = 0; j < gbi.columns; j++) {
-			create_gblock(game.blocks[i][j], maze[i][j], i, j);
+			create_gblock(game.blocks[i][j], dungeon[i][j].maintype, i, j);
 		}
 	}
 }
@@ -1139,18 +1151,8 @@ end events.cpp
 now main.cpp (converting "main" to be titled generator)
 */
 
-int** generator()
+void generator(vector<vector<Block> > &dungeon)
 {
-	DSpecs specs;
-	DInit init;
-	DRules rules;
-	specs.BLOCK_LENGTH = 64;
-	specs.player_speed = 16;
-	specs.game_time_considered = 0;
-	generateRules(rules, specs, init);
-	Block block;
-	vector<Block> dungeonCols(specs.cols, block);
-	vector<vector<Block> > dungeon(specs.rows, dungeonCols);
 	initialize_values(specs, init, dungeon);
 	pathingInit(rules, init, specs, dungeon);
 	//dungeon[init.startrow][init.startcol].maintype = 1;
@@ -1165,13 +1167,6 @@ int** generator()
 		rules.MIN_HALL_VER_LENGTH, rules.MAX_HALL_VER_LENGTH);
 	printf("Min/max hor-hall length: %d || %d\n",
 		rules.MIN_HALL_HOR_LENGTH, rules.MAX_HALL_HOR_LENGTH);
-	int maze[specs.rows][specs.cols];
-	for (int i = 0; i < specs.rows; i++) {
-		for (int j = 0; j < specs.cols; j++) {
-			maze[i][j] = dungeon[i][j].maintype;
-		}
-	}
-	return maze;
 }
 
 /*******
