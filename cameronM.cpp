@@ -1090,7 +1090,7 @@ void endCredits(Game *g, int keys[])
 		mov += 0.3;
 	if (keys[XK_Right] && mov > -1271)
 		mov -= 0.3;
-	if (keys[XK_space] && !jmp) {
+	if (keys[XK_space] && !jmp && jmpspd == 0) {
 		jmp = 1;
 	}
 	if (jmp) {
@@ -1100,8 +1100,6 @@ void endCredits(Game *g, int keys[])
 	}
 	if (jmpspd >= 150) {
 		jmpspd = 150;
-	}
-	if (jmpspd == 0) {
 		jmp = 0;
 	}
 	
@@ -1178,49 +1176,45 @@ void endCredits(Game *g, int keys[])
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
-	
-	clock_gettime(CLOCK_REALTIME, &CreditsCurrent);
-	CreditsSpan += timeDiff(&CreditsTime, &CreditsCurrent);
-	
-	if (CreditsSpan >= 100) {
-		CreditsSpan = 0.0;
-		clock_gettime(CLOCK_REALTIME, &CreditsTime);
-	}
-	if (CreditsSpan < 20 && (keys[XK_Right] || keys[XK_Left])) {
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.1666f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.1666f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-	} else if (CreditsSpan < 40 && (keys[XK_Right] || keys[XK_Left])) {
-		glTexCoord2f(0.1666f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.333f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.333f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-		glTexCoord2f(0.1666f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-	} else if (CreditsSpan < 60 && (keys[XK_Right] || keys[XK_Left])) {
-		glTexCoord2f(0.3333f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.50f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.50f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-		glTexCoord2f(0.3333f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-	} else if (CreditsSpan < 80 && (keys[XK_Right] || keys[XK_Left])) {
-		glTexCoord2f(0.50f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.666f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.666f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-		glTexCoord2f(0.50f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-	} else if ((keys[XK_Right] || keys[XK_Left])) {
-		glTexCoord2f(0.666f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.8333f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(0.8333f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-		glTexCoord2f(0.666f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-	} else {
-		glTexCoord2f(0.8333f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
-		glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-		glTexCoord2f(0.8333f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
-	}
-	//~ glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - h + h/2);
-	//~ glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - h + h/2);
-	//~ glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - 2*h + h/2);
-	//~ glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - 2*h + h/2);
+		
+		clock_gettime(CLOCK_REALTIME, &CreditsCurrent);
+		CreditsSpan += timeDiff(&CreditsTime, &CreditsCurrent);
+		
+		if (CreditsSpan >= 100) {
+			CreditsSpan = 0.0;
+			clock_gettime(CLOCK_REALTIME, &CreditsTime);
+		}
+		if (CreditsSpan < 10 && (keys[XK_Right] || keys[XK_Left])) {
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.1666f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.1666f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		} else if (CreditsSpan < 40 && (keys[XK_Right] || keys[XK_Left])) {
+			glTexCoord2f(0.1666f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.333f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.333f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+			glTexCoord2f(0.1666f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		} else if (CreditsSpan < 60 && (keys[XK_Right] || keys[XK_Left])) {
+			glTexCoord2f(0.3333f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.50f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.50f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+			glTexCoord2f(0.3333f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		} else if (CreditsSpan < 80 && (keys[XK_Right] || keys[XK_Left])) {
+			glTexCoord2f(0.50f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.666f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.666f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+			glTexCoord2f(0.50f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		} else if ((keys[XK_Right] || keys[XK_Left])) {
+			glTexCoord2f(0.666f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.8333f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(0.8333f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+			glTexCoord2f(0.666f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		} else {
+			glTexCoord2f(0.8333f, 0.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - h + h/2 + h/4);
+			glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+			glTexCoord2f(0.8333f, 1.0f); glVertex2f(res[0]/2 - ((w/2)*0.1666), res[1]/2 - 2*h + h/2 + h/4);
+		}
 
 	glEnd();
 	glPopMatrix();
