@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 			physics(&game);
 			physicsCountdown -= physicsRate;
 		}
-		if (argc == 1) {
+		/*if (argc == 1) {
 			if (titleScreen) {
 				if (keys[XK_Return]) {
 					enterPressed = keys[XK_Return];
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 				glClearColor(0.8, 0.8, 0.8, 1.0);
 				render(&game);
 			}
-		}  
+		}  */
 		else if (winCondition) {
 			//test
 				endCredits(&game, keys);
