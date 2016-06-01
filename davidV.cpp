@@ -199,7 +199,6 @@ vector<vector<Block> > newParsedMap(DSpecs specs, int,
 									vector<vector<Block> > &dungeon);
 
 void getBlockTexCoords(int, float &, float &, float &, float &);
-void init_textures(Game &);
 /////
 
 
