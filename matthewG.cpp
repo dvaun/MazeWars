@@ -422,7 +422,7 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 
 	if (boulderSound == 0) {
 		cout << "calling play sounds" << endl;
-		playsounds(5);
+		play_sounds(5);
 		boulderSound = 1;
 	}
 	
