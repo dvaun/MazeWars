@@ -114,10 +114,10 @@ int main(int argc, char *argv[])
 	load_sounds();
 	Game game;
 	gblock_info gbi;
-	gbi.width = 16;
-	gbi.height = 16;
-	gbi.rows = 50;
-	gbi.columns = 50;
+	gbi.width = 64;
+	gbi.height = 64;
+	gbi.rows = 100;
+	gbi.columns = 100;
 	begin_game(game, gbi);
 	Joystick joystick;
 	init(&game);

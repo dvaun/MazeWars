@@ -151,6 +151,8 @@ public:
 /* array_functions.h */
 using namespace std;
 
+int** generator();
+
 void generateRules(DRules& rules, DSpecs& specs, DInit& init);
 void srandByTime(struct timespec& rtime);
 void initGamePositions(DInit& init, DSpecs& specs, struct timespec rtime);
@@ -433,13 +435,11 @@ void begin_game(Game& game, gblock_info& gbi)
 				game.blocks[i][j].stats.width, gbi.width);
 		}
 	}
-	create_gblock(game.blocks[5][5],1,5,5);
-	create_gblock(game.blocks[15][5],0,15,5);
-	create_gblock(game.blocks[10][5],1,10,5);
-	for (int i = 0; i < 20; i++) {
-		create_gblock(game.blocks[20][i],0,20,i);
-		create_gblock(game.blocks[21][i],1,21,i);
-		create_gblock(game.blocks[22][i],0,22,i);
+	int maze[gbi.rows][gbi.columns] = generator();
+	for (int i = 0; i < gbi.rows; i++) {
+		for (int j = 0; j < gbi.columns; j++) {
+			create_gblock(game.blocks[i][j], maze[i][j], i, j);
+		}
 	}
 }
 
@@ -1139,7 +1139,7 @@ end events.cpp
 now main.cpp (converting "main" to be titled generator)
 */
 
-int generator()
+int** generator()
 {
 	DSpecs specs;
 	DInit init;
@@ -1165,8 +1165,13 @@ int generator()
 		rules.MIN_HALL_VER_LENGTH, rules.MAX_HALL_VER_LENGTH);
 	printf("Min/max hor-hall length: %d || %d\n",
 		rules.MIN_HALL_HOR_LENGTH, rules.MAX_HALL_HOR_LENGTH);
-	return 0;
-
+	int maze[specs.rows][specs.cols];
+	for (int i = 0; i < specs.rows; i++) {
+		for (int j = 0; j < specs.cols; j++) {
+			maze[i][j] = dungeon[i][j].maintype;
+		}
+	}
+	return maze;
 }
 
 /*******
