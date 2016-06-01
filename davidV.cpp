@@ -332,7 +332,7 @@ void getEnemyTexCoords(C &c, int type, float &x1, float &x2,
 	if (c.stats.animationSpan >= 100) {
 		c.stats.animationSpan = 0.0;
 		clock_gettime(CLOCK_REALTIME, &c.stats.animationStart);
-	} else {
+	} else  if (c.stats.vel[0] != 0 || c.stats.vel[1] != 0) {
 		if (c.stats.animationSpan < 10.0) {
 			x1 = 32/320;
 			x2 = 0;
@@ -364,6 +364,10 @@ void getEnemyTexCoords(C &c, int type, float &x1, float &x2,
 			x1 = 1;
 			x2 = 288/320;
 		}
+	} else {
+		x1 = 32/320;
+		x2 = 0;
+		return;
 	}
 
 	clock_gettime(CLOCK_REALTIME, &c.stats.animationCurrent);
