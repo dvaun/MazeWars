@@ -2,8 +2,10 @@
 #define _PERSON_H_
 
 #include "defs.h"
+#include "game_objects.h"
 
 struct Person {
+        Stats stats;
 		Vec dir;
         Vec pos;
 		Vec lastpos;
