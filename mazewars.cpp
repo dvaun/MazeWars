@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
 	begin_game(game, gbi);
 	Joystick joystick;
 	init(&game);
+	init_textures(game);
 	printf("%f\n",game.Player_1.stats.color[0]);
 	srand(time(NULL));
 	clock_gettime(CLOCK_REALTIME, &timePause);
