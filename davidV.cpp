@@ -198,26 +198,133 @@ int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
 vector<vector<Block> > newParsedMap(DSpecs specs, int,
 									vector<vector<Block> > &dungeon);
 
-/* end pathing_functions.h */
-
+void getBlockTexCoords(int, float &, float &, float &, float &);
+void init_textures(Game &);
 /////
 
 
-/*
-void drawSquare(Stats *stats, int red, int blue, int green)
-{
-	setColor(*stats);
-	glPushMatrix();
-	glTranslatef(stats->pos[0], obj->pos[1], obj->pos[2]);
-	glBegin(GL_QUADS);
-		glVertex2i(-stats->width, -obj->height);
-		glVertex2i(-stats->width, obj->height);
-		glVertex2i(stats->width, obj->height);
-		glVertex2i(stats->width, -obj->height);
-	glEnd();
-	glPopMatrix();
+void getBlockTexCoords(int type, float &x1, float &x2, float &y1, float &y2) {
+	float x1, x2, y1, y2;
+	switch(type) {
+		case 0:
+			x1 = (float) 8.5/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 3/8;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 1:
+			x1 = 1;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 1/4;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 2:
+			x1 = 1;
+			x2 = x1 - (float) 1/13;
+			y1 = 1;
+			y2 = (float) 3/4;
+			break;
+		case 3:
+			x1 = (float) 11/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 3/4;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 4:
+			x1 = 1;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 3/4;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 5:
+			x1 = (float) 6/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 2/4;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 6:
+			x1 = (float) 12/13;
+			x2 = x1 - (float) 1/13;
+			y1 = 1;
+			y2 = (float) 3/4;
+			break;
+		case 7:
+			x1 = (float) 11/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 7/8;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 8:
+			x1 = 1;
+			x2 = 1 - (float) 1/13;
+			y1 = (float) 1/2;
+			y2 = (float) 1/4;
+			break;
+		case 9:
+			x1 = (float) 12/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 3/4;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 10:
+			x1 = (float) 5/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 1/4;
+			y2 = 0;
+			break;
+		case 11:
+			x1 = (float) 11.5/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 3/4;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 12:
+			x1 = (float) 12/13;
+			x2 = x1 - (float) 1/13;
+			y1 = 1;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 13:
+			x1 = (float) 12/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 7/8;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 14:
+			x1 = (float) 11.5/13;
+			x2 = x1 - (float) 1/13;
+			y1 = 1;
+			y2 = y1 - (float) 1/4;
+			break;
+		case 15:
+			x1 = (float) 6/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 1/4;
+			y2 = 0;
+			break;
+	}
 }
-*/
+
+void init_textures(Game &game) {
+	Ppmimage *blockSpriteSheet;
+       	blockSpriteSheet = ppm6GetImage((char*)"images/wallTexture64.ppm");
+	//create opengl texture elements for the blockspritesheet
+	glGenTextures(1, &game.blockTexture);
+	
+	//person
+	int w = blockSpriteSheet->width;
+	int h = blockSpriteSheet->height;
+	unsigned char *blockData = buildAlphaData(blockSpriteSheet);	
+	glBindTexture(GL_TEXTURE_2D, game.blockTexture);
+		glTexParameteri(GL_TEXTURE_2D,
+			GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,
+			GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, blockData);
+	free(blockData);
+}
+/////
 
 void drawTextString(float x, float y, 
 	float offsetx, float offsety, std::string printvalue)
@@ -413,11 +520,11 @@ void create_gblock(gblock& block, int type, int row, int col)
 {
 	block.type = type;
 	block.assigned = 1;
-	block.stats.obj_texture = renderBlockTexture(block);
+	//block.stats.obj_texture = renderBlockTexture(block);
 	set_gblock_gpos(block.stats.gpos[0], row, block.stats.width*2);
 	set_gblock_gpos(block.stats.gpos[1], col, block.stats.width*2);
-	printf("Block[%d][%d] located at x(%f) y(%f)\n", row, col, 
-		block.stats.gpos[0], block.stats.gpos[1]);
+	//printf("Block[%d][%d] located at x(%f) y(%f)\n", row, col, 
+	//	block.stats.gpos[0], block.stats.gpos[1]);
 }
 
 void begin_game(Game& game, gblock_info& gbi)
@@ -590,11 +697,13 @@ void drawBlock(Game *g, gblock block)
 {
 	Player player = g->Player_1;
 	float xdist, ydist;
-	xdist = 625 + (block.stats.gpos[0] - player.stats.gpos[0] -
+	xdist = g->g_xres/2 + (block.stats.gpos[0] - player.stats.gpos[0] -
 		block.stats.width);
-	ydist = 450 + (block.stats.gpos[1] - player.stats.gpos[1] -
+	ydist = g->g_yres/2 + (block.stats.gpos[1] - player.stats.gpos[1] -
 		block.stats.width);
 	float size = block.stats.width;
+	float cx1, cx2, cy1, cy2;
+	getBlockTexCoords(block.type, cx1, cx2, cy1, cy2);
 	glPushMatrix();
 	glTranslatef(xdist, ydist, 0.0f);
 	glEnable(GL_ALPHA_TEST);
