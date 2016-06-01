@@ -1151,10 +1151,10 @@ void endCredits(Game *g, int keys[])
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glBegin(GL_QUADS);
 	
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - h);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - h);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - 2*h);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - 2*h);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - h + h/2);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - h + h/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(res[0]/2 + w/2, res[1]/2 - 2*h + h/2);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(res[0]/2 - w/2, res[1]/2 - 2*h + h/2);
 
 	glEnd();
 	glPopMatrix();
