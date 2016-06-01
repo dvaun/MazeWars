@@ -197,6 +197,8 @@ int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
 		Block block);
 vector<vector<Block> > newParsedMap(DSpecs specs, int,
 									vector<vector<Block> > &dungeon);
+int parseToBlockTextures(vector<vector<Block> > &, int, int, DSpecs);
+
 
 void getBlockTexCoords(int, float &, float &, float &, float &);
 /////
@@ -299,6 +301,12 @@ void getBlockTexCoords(int type, float &x1, float &x2, float &y1, float &y2) {
 			x2 = x1 - (float) 1/13;
 			y1 = (float) 1/4;
 			y2 = 0;
+			break;
+		case 16:
+			x1 = (float) 2/13;
+			x2 = x1 - (float) 1/13;
+			y1 = (float) 2/4;
+			y2 = y1 - (float) 1/4;
 			break;
 	}
 }
@@ -555,7 +563,7 @@ void begin_game(Game& game, gblock_info& gbi)
 	//
 	for (int i = 0; i < gbi.rows; i++) {
 		for (int j = 0; j < gbi.columns; j++) {
-			create_gblock(game.blocks[i][j], dungeon[i][j].maintype, i, j);
+			create_gblock(game.blocks[i][j], dungeon[i][j].subtype, i, j);
 		}
 	}
 }
@@ -914,7 +922,7 @@ void generateRules(DRules& rules, DSpecs& specs, DInit& init)
 			dungeon.resize(specs.cols);
 			for (int j = 0; j < specs.cols; j++) {
 				dungeon[i][j].maintype = 0;
-				dungeon[i][j].subtype = 0;
+				dungeon[i][j].subtype = 16;
 				dungeon[i][j].path = 0;
 				dungeon[i][j].blockc.tread = 0;
 				dungeon[i][j].blockc.direction = 0;
@@ -1707,25 +1715,24 @@ void initStartBlocks(DRules rules, DInit init, DSpecs specs,
  }
 /** Parsing the map **/
 
- int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
- 	Block block)
- {
- 	int count = 0;
- 	for (int i = -1; i < 2; i++) {
- 		for (int j = -1; j < 2; j++) {
- 			int block_x = block.blockc.col+i;
- 			int block_y = block.blockc.row+j;
-
- 			if (i == 0 && j == 0) { continue; }
- 			else if (block_x < 0 || block_y < 0 ||
- 				block_x > specs.cols - 1 || block_y > specs.rows - 1) {
- 				count = count + 1;
- 		} else if (dungeon[block_y][block_x].maintype == 1) {
- 			count = count + 1;
- 		}
- 	}
- }
- return count;
+int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
+	Block block)
+{
+	int count = 0;
+	for (int i = -1; i < 2; i++) {
+		for (int j = -1; j < 2; j++) {
+			int block_x = block.blockc.col+i;
+			int block_y = block.blockc.row+j;
+			if (i == 0 && j == 0) { continue; }
+			else if (block_x < 0 || block_y < 0 ||
+					block_x > specs.cols - 1 || block_y > specs.rows - 1) {
+					count = count + 1;
+			} else if (dungeon[block_y][block_x].maintype == 1) {
+				count = count + 1;
+			}
+		}
+	}
+	return count;
 }
 
 vector<vector<Block> > newParsedMap(DSpecs specs, int tolerance,
@@ -1753,27 +1760,69 @@ vector<vector<Block> > newParsedMap(DSpecs specs, int tolerance,
 			}
 		}
 	}
-	/*for (int i = 0; i < specs.rows - 1; i++) {
+	for (int i = 0; i < specs.rows - 1; i++) {
 		for (int j = 0; j < specs.cols - 1; j++) {
-			int nbs = parseSurroundingBlocks(specs, dungeon, dungeon[i][j]);
-			if (dungeon[i][j].maintype == 1) {
-				if (nbs < 3) {
-					newdungeon[i][j].maintype = 8;
-				}
-			}
+			int textype = parseToBlockTextures(dungeon, i, j, specs);
+			newdungeon[i][j].subtype = textype;
 		}
-	}*/
-		return newdungeon;
 	}
+	return newdungeon;
+}
 
-	int parseToTreasureBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
-		Block block)
-	{
+int parseToTreasureBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
+	Block block)
+{
 
+}
+
+int parseToBlockTextures(vector<vector<Block> > &dungeon,
+	int row, int col, DSpecs specs)
+{
+	int type = 0;
+	if (row == 0) {
+		if (col == 0) {
+			if (dungeon[row+1][col].maintype == 0) type += 4;
+			if (dungeon[row][col+1].maintype == 0) type += 8;
+		} else if (col < specs.cols - 1) {
+			if (dungeon[row][col-1].maintype == 0) type += 2;
+			if (dungeon[row+1][col].maintype == 0) type += 4;
+			if (dungeon[row][col+1].maintype == 0) type += 8;
+		} else {
+			if (dungeon[row][col-1].maintype == 0) type += 2;
+			if (dungeon[row+1][col].maintype == 0) type += 4;
+		}
+		return type;
+	} else if (row < specs.rows - 1) {
+		if (col == 0) {
+			if (dungeon[row-1][col].maintype == 0) type += 1;
+			if (dungeon[row][col+1].maintype == 0) type += 8;
+			if (dungeon[row+1][col].maintype == 0) type += 4;
+		} else if (col < spcs.cols - 1) {
+			if (dungeon[row-1][col].maintype == 0) type += 1;
+			if (dungeon[row][col+1].maintype == 0) type += 8;
+			if (dungeon[row+1][col].maintype == 0) type += 4;
+			if (dungeon[row][col-1].maintype == 0) type += 2;
+		} else {
+			if (dungeon[row-1][col].maintype == 0) type += 1;
+			if (dungeon[row+1][col].maintype == 0) type += 4;
+			if (dungeon[row][col-1].maintype == 0) type += 2;
+		}
+		return type;
+	} else {
+		if (col == 0) {
+			if (dungeon[row-1][col].maintype == 0) type += 1;
+			if (dungeon[row][col+1].maintype == 0) type += 8;
+		} else if (col < specs.cols - 1) {
+			if (dungeon[row][col-1].maintype == 0) type += 2;
+			if (dungeon[row-1][col].maintype == 0) type +=1;
+			if (dungeon[row][col+1].maintype == 0) type += 8;
+		} else {
+			if (dungeon[row][col-1].maintype == 0) type += 2;
+			if (dungeon[row-1][col].maintype == 0) type += 1;
+		}
+		return type;
 	}
-
-
-
+}
 
 //
 //
