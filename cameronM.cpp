@@ -13,6 +13,7 @@
 */
 #define PI 3.14159268
 #include "cameronM.h"
+#include "roseP.h"
 #include <iostream>
 
 int *res;
@@ -652,13 +653,43 @@ int PAUSE(Game *g, int keys[])
 			kchkr++;
 		}
 	}
+	
+	if (keys[XK_a]) {
+		play_sounds(11);
+	}
+	if (keys[XK_s]) {
+		play_sounds(12);
+	}
+	if (keys[XK_d]) {
+		play_sounds(13);
+	}
+	if (keys[XK_f]) {
+		play_sounds(14);
+	}
+	if (keys[XK_g]) {
+		play_sounds(15);
+	}
+	if (keys[XK_h]) {
+		play_sounds(16);
+	}
+	if (keys[XK_j]) {
+		play_sounds(17);
+	}
+	if (keys[XK_k]) {
+		play_sounds(18);
+	}
+	
+	
+	
 	kchkr = kchkr%3;
 	if (kchkr < 0)
 		kchkr = 2;
 	renderPauseBackground();
 	renderPauseButtons(kchkr);
 	kchkr = kchkr%3;
-	
+	if (keys[XK_Return] && kchkr == 1){
+		Restart(g);
+	}
 	if (keys[XK_Return] && kchkr == 2){
 		return 1;
 	}
@@ -1299,3 +1330,4 @@ void endCredits(Game *g, int keys[])
 	glPopMatrix();
 }
 #endif
+
