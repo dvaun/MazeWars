@@ -1,8 +1,8 @@
 #ifndef CAMERON_CPP
 #define CAMERON_CPP
 /* Name: Cameron Morrow
-* Date: May 04, 2016
-* Last Modified: May 30, 2016
+* Date: May 31, 2016
+* Last Modified: May 31, 2016
 * Description: My code handles all of the weapon movement if a controller 
 * is not being used. 
 * In the mazewars.cpp I modified all of the original asteroids code to remove
