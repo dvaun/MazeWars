@@ -42,7 +42,7 @@ void drawSquare(Stats *stats, int red, int blue, int green)
 */
 
 void drawTextString(float x, float y, 
-		float offsetx, float offsety, std::string printvalue)
+	float offsetx, float offsety, std::string printvalue)
 {
 	Rect r;
 	std::string s;
@@ -99,15 +99,15 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 	//glTranslatef(xdist,ydist, 0);
 	glColor3f(red - .2f, blue - 0.2f, green - 0.2f);
 	glBegin(GL_POINTS);
-		glVertex2f(xdist, ydist);
-		glVertex2f(xdist-1.0f, ydist);
-		glVertex2f(xdist+1.0f, ydist);
-		glVertex2f(xdist, ydist-1.0f);
-		glVertex2f(xdist, ydist+1.0f);
-		glVertex2f(xdist-1.0f, ydist-1.0f);
-		glVertex2f(xdist-1.0f, ydist+1.0f);
-		glVertex2f(xdist+1.0f, ydist-1.0f);
-		glVertex2f(xdist+1.0f, ydist+1.0f);
+	glVertex2f(xdist, ydist);
+	glVertex2f(xdist-1.0f, ydist);
+	glVertex2f(xdist+1.0f, ydist);
+	glVertex2f(xdist, ydist-1.0f);
+	glVertex2f(xdist, ydist+1.0f);
+	glVertex2f(xdist-1.0f, ydist-1.0f);
+	glVertex2f(xdist-1.0f, ydist+1.0f);
+	glVertex2f(xdist+1.0f, ydist-1.0f);
+	glVertex2f(xdist+1.0f, ydist+1.0f);
 	glEnd();
 
 }
@@ -121,21 +121,21 @@ void drawBullet(Game *g, Bullet *b, float red, float blue, float green)
 void drawPlayer(Player p)
 {
 	glColor3f(p.stats.color[0], p.stats.color[1],
-			p.stats.color[2]);
+		p.stats.color[2]);
 	glPushMatrix();
 	glTranslatef(625, 450, p.stats.gpos[2]);
 	glRotatef(p.stats.angle, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_TRIANGLES);
-		glVertex2f(-12.0f, -10.0f);
-		glVertex2f(  0.0f,  20.0f);
-		glVertex2f(  0.0f,  -6.0f);
-		glVertex2f(  0.0f,  -6.0f);
-		glVertex2f(  0.0f,  20.0f);
-		glVertex2f( 12.0f, -10.0f);
+	glVertex2f(-12.0f, -10.0f);
+	glVertex2f(  0.0f,  20.0f);
+	glVertex2f(  0.0f,  -6.0f);
+	glVertex2f(  0.0f,  -6.0f);
+	glVertex2f(  0.0f,  20.0f);
+	glVertex2f( 12.0f, -10.0f);
 	glEnd();
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_POINTS);
-		glVertex2f(0.0f, 0.0f);
+	glVertex2f(0.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
 	drawText(p.stats.spos[0],p.stats.spos[1],10,10,p.stats.gpos[0]);
@@ -149,7 +149,7 @@ void assign_gblock(gblock &block, Stats &stats, int type, int row, int col)
 	stats.gpos[0] = row * 50.0;
 	stats.gpos[1] = col * 50.0;
 	printf("Block[%d][%d] located at x(%f) y(%f)\n",
-			row,col,block.stats.gpos[0],block.stats.gpos[1]);
+		row,col,block.stats.gpos[0],block.stats.gpos[1]);
 }
 
 gblock return_gblock(gblock block, int type, int row, int col)
@@ -159,7 +159,7 @@ gblock return_gblock(gblock block, int type, int row, int col)
 	block.stats.gpos[0] = row * 50.0;
 	block.stats.gpos[1] = col * 50.0;
 	printf("Block[%d][%d] located at x(%f) y(%f)\n",
-			row,col,block.stats.gpos[0],block.stats.gpos[1]);
+		row,col,block.stats.gpos[0],block.stats.gpos[1]);
 	return block;
 }
 
@@ -190,14 +190,14 @@ char* getBlockTexture(gblock block)
 	switch(block.type)
 	{
 		case 0:
-			return "images/pokecavefloor.ppm";
-			break;
+		return "images/pokecavefloor.ppm";
+		break;
 		case 1:
-			return "images/pokecavewallleft.ppm";
-			break;
+		return "images/pokecavewallleft.ppm";
+		break;
 		default:
-			return "images/pokecavefloor.ppm";
-			break;
+		return "images/pokecavefloor.ppm";
+		break;
 	}
 }
 
@@ -213,9 +213,9 @@ GLuint renderBlockTexture(gblock& block)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	unsigned char *imageData = buildAlphaData(block.stats.texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
-			GL_UNSIGNED_BYTE, imageData);
+		GL_UNSIGNED_BYTE, imageData);
 	glBindTexture(GL_TEXTURE_2D, 0);
-    return blockTexture;
+	return blockTexture;
 }
 
 void set_gblock_gpos(double& gposition, int num, int bsize)
@@ -235,7 +235,7 @@ void create_gblock(gblock& block, int type, int row, int col)
 {
 	block.type = type;
 	block.assigned = 1;
-    block.stats.obj_texture = renderBlockTexture(block);
+	block.stats.obj_texture = renderBlockTexture(block);
 	set_gblock_gpos(block.stats.gpos[0], row, block.stats.width*2);
 	set_gblock_gpos(block.stats.gpos[1], col, block.stats.width*2);
 	printf("Block[%d][%d] located at x(%f) y(%f)\n", row, col, 
@@ -252,9 +252,9 @@ void begin_game(Game& game, gblock_info& gbi)
 	}
 	for (int i = 0; i < gbi.rows; i++) {
 		for (int j = 0; j < gbi.columns; j++) {
-		set_gblock_size(game.blocks[i][j],
-			game.blocks[i][j].stats.height,
-			game.blocks[i][j].stats.width, gbi.width);
+			set_gblock_size(game.blocks[i][j],
+				game.blocks[i][j].stats.height,
+				game.blocks[i][j].stats.width, gbi.width);
 		}
 	}
 	create_gblock(game.blocks[5][5],1,5,5);
@@ -281,16 +281,16 @@ bool inDrawingDistanceBlock(Game *g, gblock block)
 	printf("%f ", block.stats.gpos[0] - player.stats.gpos[0] - 25);
 	printf("%f\n", block.stats.gpos[1] - player.stats.gpos[1] - 25);
 	if (abs(player.stats.gpos[0] - block.stats.gpos[0] -
-			block.stats.width*2) < 625) {
+		block.stats.width*2) < 625) {
 		indistancex = true;
-	}
-	if (abs(player.stats.gpos[1] - block.stats.gpos[1] -
-			block.stats.width*2) < 450) {
-		indistancey = true;
-	}
-	if (indistancex && indistancey) {
-		return true;
-	}
+}
+if (abs(player.stats.gpos[1] - block.stats.gpos[1] -
+	block.stats.width*2) < 450) {
+	indistancey = true;
+}
+if (indistancex && indistancey) {
+	return true;
+}
 }
 
 /*
@@ -307,16 +307,16 @@ float getDistanceStatsVal(Game *g, Stats stats, int coord)
 {
 	Player player = g->Player_1;
 	float distance = player.stats.gpos[coord] - stats.gpos[coord] 
-			+ stats.width; 
+	+ stats.width; 
 	return distance;
 }
 float getDistanceStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
 	float distancex = player.stats.gpos[0] - stats.gpos[0] 
-			+ stats.width;
+	+ stats.width;
 	float distancey = player.stats.gpos[1] - stats.gpos[1] 
-			+ stats.width;
+	+ stats.width;
 	float distance = sqrt((distancex*distancex)+(distancey*distancey));
 	return distance;
 }
@@ -326,17 +326,17 @@ bool checkDistanceBlock(Game *g, gblock block, float xcheck, float ycheck)
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
 	if (abs(player.stats.gpos[0] - block.stats.gpos[0] +
-			block.stats.width) < xcheck) {
+		block.stats.width) < xcheck) {
 		indistancex = true;
-	}
-	if (abs(player.stats.gpos[1] - block.stats.gpos[1] +
-			block.stats.width) < ycheck) {
-		indistancey = true;
-	}
-	if (indistancex && indistancey) {
-		return true;
-	}
-	return false;
+}
+if (abs(player.stats.gpos[1] - block.stats.gpos[1] +
+	block.stats.width) < ycheck) {
+	indistancey = true;
+}
+if (indistancex && indistancey) {
+	return true;
+}
+return false;
 }
 
 bool checkDistanceStats(Game *g, Stats stats, float xcheck, float ycheck)
@@ -344,17 +344,17 @@ bool checkDistanceStats(Game *g, Stats stats, float xcheck, float ycheck)
 	Player player = g->Player_1;
 	bool indistancex = false, indistancey = false;
 	if (abs(player.stats.gpos[0] - stats.gpos[0] +
-			stats.width) < xcheck) {
+		stats.width) < xcheck) {
 		indistancex = true;
-	}
-	if (abs(player.stats.gpos[1] - stats.gpos[1] +
-			stats.width) < ycheck) {
-		indistancey = true;
-	}
-	if (indistancex && indistancey) {
-		return true;
-	}
-	return false;
+}
+if (abs(player.stats.gpos[1] - stats.gpos[1] +
+	stats.width) < ycheck) {
+	indistancey = true;
+}
+if (indistancex && indistancey) {
+	return true;
+}
+return false;
 }
 
 /*
@@ -380,19 +380,19 @@ void drawStats(Game *g, Stats stats)
 	Player player = g->Player_1;
 	float xdist, ydist;
 	xdist = g->Player_1.stats.spos[0] +
-		(stats.gpos[0] - g->Player_1.stats.gpos[0] - stats.width);
+	(stats.gpos[0] - g->Player_1.stats.gpos[0] - stats.width);
 	ydist = g->Player_1.stats.spos[1] +
-		(stats.gpos[1] - g->Player_1.stats.gpos[1] - stats.width);
+	(stats.gpos[1] - g->Player_1.stats.gpos[1] - stats.width);
 	float size = stats.width;
 	glColor3f((int)stats.color[0], (int)stats.color[1],
 		(int)stats.color[2]);
 	glPushMatrix();
 	glTranslatef(xdist, ydist, 0.0f);
 	glBegin(GL_QUADS);
-		glVertex2f(-size, -size);
-		glVertex2f(-size, size);
-		glVertex2f(size, size);
-		glVertex2f(size, -size);
+	glVertex2f(-size, -size);
+	glVertex2f(-size, size);
+	glVertex2f(size, size);
+	glVertex2f(size, -size);
 	glEnd();
 	glPopMatrix();
 	drawTextString(ydist,xdist,-25,0,"davidbox");	
@@ -403,23 +403,23 @@ void drawBlock(Game *g, gblock block)
 	Player player = g->Player_1;
 	float xdist, ydist;
 	xdist = 625 + (block.stats.gpos[0] - player.stats.gpos[0] -
-				block.stats.width);
+		block.stats.width);
 	ydist = 450 + (block.stats.gpos[1] - player.stats.gpos[1] -
-				block.stats.width);
+		block.stats.width);
 	float size = block.stats.width;
 	glPushMatrix();
 	glTranslatef(xdist, ydist, 0.0f);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glBindTexture(GL_TEXTURE_2D, block.stats.obj_texture);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+	glBindTexture(GL_TEXTURE_2D, block.stats.obj_texture);
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
-		glTexCoord2d(1.0f, 0.0f); glVertex2f(-size, size);
-		glTexCoord2d(1.0f, 1.0f); glVertex2f(size, size);
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(size, -size);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
+	glTexCoord2d(1.0f, 0.0f); glVertex2f(-size, size);
+	glTexCoord2d(1.0f, 1.0f); glVertex2f(size, size);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(size, -size);
 	glEnd();
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_ALPHA_TEST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
 }
 
@@ -438,13 +438,13 @@ void drawGBlocks(Game *g)
 		for (int j = 0; j < ncols; j++) {
 			if (g->blocks[i][j].assigned == 1) {
 				if (checkDistanceBlock(g,g->blocks[i][j],
-							(float)g->g_xres/2,(float)g->g_yres/2)) {
+					(float)g->g_xres/2,(float)g->g_yres/2)) {
 					glColor3f(255.0, 255.0, 255.0);
-					drawBlock(g, g->blocks[i][j]);
-				}
+				drawBlock(g, g->blocks[i][j]);
 			}
 		}
 	}
+}
 }
 
 
@@ -467,6 +467,125 @@ void init_blocks(Game *g, gblock_info gbi)
 Trying to port over my dungeon-generator
 this block: array_functions.cpp
 */
+template <typename T>
+bool checkVoid(T *t) {
+	if (t == NULL) {
+		return true;
+	} else {
+		return false;
+	}
+}
+//
+//
+// End Macros and Templates //
+
+struct DRules {
+	int num_turns;
+	int num_halls;
+	int MIN_HALL_VER_LENGTH;
+	int MAX_HALL_VER_LENGTH;
+	int MIN_HALL_HOR_LENGTH;
+	int MAX_HALL_HOR_LENGTH;
+	int MAXDIST;
+	int MINDIST;
+};
+
+struct DSpecs {
+	int BLOCK_LENGTH;
+	int game_time_considered;
+	int rows;
+	int cols;
+	int player_speed;
+};
+
+struct DInit {
+	int startrow;
+	int startcol;
+	int endrow;
+	int endcol;
+};
+
+struct DCounter {
+	int counter;
+	int finalcount;
+};
+
+class BlockConstructor {
+	public:
+	int tread;
+	int direction;
+	int col;
+	int row;
+	BlockConstructor();
+	void operator=(BlockConstructor);
+	void operator=(BlockConstructor*);
+	~BlockConstructor();
+};
+
+class Block {
+public:
+	int maintype;
+	int subtype;
+	int path;
+	BlockConstructor blockc;
+	Block *north;
+	Block *east;
+	Block *south;
+	Block *west;
+	Block *northeast;
+	Block *northwest;
+	Block *southeast;
+	Block *southwest;
+	Block();
+	void operator=(Block);
+	void operator=(Block*);
+	~Block();
+};
+
+struct DFork {
+	int forkpos[2];
+	DFork *prev;
+	DFork *next;
+	DRules rules;
+	int attempted_turns[4];
+	void init();
+};
+
+class DForkMonitor {
+public:
+	DRules forkRules;
+	DForkMonitor();
+	~DForkMonitor();
+	// linked-fork functions
+	DFork* getNextFork(DFork *fork) {
+		if (!checkVoid(fork)) return fork->next;
+	}
+	DFork* getPrevFork(DFork *fork) {
+		if (!checkVoid(fork)) return fork->prev;
+	}
+	bool linkForks(DFork *fork_src, DFork *fork_trg) {
+		if (!checkVoid(fork_src)) {
+			fork_src->next = fork_trg;
+			fork_trg->prev = fork_src;
+			return true;
+		} else {
+		    return false;
+		}
+	}
+	void traceForward(DFork *fork) {
+		if (!checkVoid(fork)) {
+			DFork *nextfork = fork->next;
+			fork = nextfork;
+		}
+	}
+	void traceBackward(DFork *fork) {
+		if (!checkVoid(fork)) {
+			DFork *prevfork = fork->prev;
+			fork = prevfork;
+		}
+	}
+};
+
 
 using namespace std;
 
@@ -603,31 +722,31 @@ void generateRules(DRules& rules, DSpecs& specs, DInit& init)
 	}*/
 	//rules.num_halls = num_halls;
 	//rules.num_turns = num_turns;
-	printf("rows %d cols %d\n", specs.rows, specs.cols);
-}
+		printf("rows %d cols %d\n", specs.rows, specs.cols);
+	}
 
-void initialize_values(DSpecs specs, DInit init, vector<vector<Block> > &dungeon)
-{
-	dungeon.resize(specs.rows);
-	for (int i = 0; i < specs.rows; i++) {
-		dungeon.resize(specs.cols);
-		for (int j = 0; j < specs.cols; j++) {
-			dungeon[i][j].maintype = 0;
-			dungeon[i][j].subtype = 0;
-			dungeon[i][j].path = 0;
-			dungeon[i][j].blockc.tread = 0;
-			dungeon[i][j].blockc.direction = 0;
-			dungeon[i][j].blockc.col = j;
-			dungeon[i][j].blockc.row = i;
+	void initialize_values(DSpecs specs, DInit init, vector<vector<Block> > &dungeon)
+	{
+		dungeon.resize(specs.rows);
+		for (int i = 0; i < specs.rows; i++) {
+			dungeon.resize(specs.cols);
+			for (int j = 0; j < specs.cols; j++) {
+				dungeon[i][j].maintype = 0;
+				dungeon[i][j].subtype = 0;
+				dungeon[i][j].path = 0;
+				dungeon[i][j].blockc.tread = 0;
+				dungeon[i][j].blockc.direction = 0;
+				dungeon[i][j].blockc.col = j;
+				dungeon[i][j].blockc.row = i;
+			}
 		}
 	}
-}
 
-void srandByTime(struct timespec& rtime)
-{
-	clock_gettime(CLOCK_REALTIME, &rtime);
-	srand(rtime.tv_nsec);
-}
+	void srandByTime(struct timespec& rtime)
+	{
+		clock_gettime(CLOCK_REALTIME, &rtime);
+		srand(rtime.tv_nsec);
+	}
 
 /*
  * @desc
@@ -635,8 +754,8 @@ void srandByTime(struct timespec& rtime)
  * based off of the nanosecond time, and the choice of either the
  * random column or row # generated
  */
-void initGamePositions(DInit& init, DSpecs& specs, struct timespec rtime)
-{
+ void initGamePositions(DInit& init, DSpecs& specs, struct timespec rtime)
+ {
 	/*
 	bool done = false;
 	srandByTime(rtime);
@@ -703,39 +822,39 @@ now block.cpp
  * keeps organization in place.
  */
 
-BlockConstructor::BlockConstructor() {
-}
+ BlockConstructor::BlockConstructor() {
+ }
 
-BlockConstructor::~BlockConstructor() {
-}
+ BlockConstructor::~BlockConstructor() {
+ }
 
-void BlockConstructor::operator=(BlockConstructor blockc) {
-	tread = blockc.tread;
-	direction = blockc.direction;
-	col = blockc.col;
-	row = blockc.row;
-}
+ void BlockConstructor::operator=(BlockConstructor blockc) {
+ 	tread = blockc.tread;
+ 	direction = blockc.direction;
+ 	col = blockc.col;
+ 	row = blockc.row;
+ }
 
-void BlockConstructor::operator=(BlockConstructor *blockc) {
-	tread = blockc->tread;
-	direction = blockc->direction;
-	col = blockc->col;
-	row = blockc->row;
-}
+ void BlockConstructor::operator=(BlockConstructor *blockc) {
+ 	tread = blockc->tread;
+ 	direction = blockc->direction;
+ 	col = blockc->col;
+ 	row = blockc->row;
+ }
 
 /*
  * operations with class "Block"
  */
 
-Block::Block() {
-	north = NULL;
-	east = NULL;
-	south = NULL;
-	west = NULL;
-	northeast = NULL;
-	northwest = NULL;
-	southeast = NULL;
-	southwest = NULL;
+ Block::Block() {
+ 	north = NULL;
+ 	east = NULL;
+ 	south = NULL;
+ 	west = NULL;
+ 	northeast = NULL;
+ 	northwest = NULL;
+ 	southeast = NULL;
+ 	southwest = NULL;
 	/*north = new Block;
 	east = new Block;
 	south = new Block;
@@ -762,15 +881,15 @@ Block::~Block() {
 
 void Block::operator=(Block block) {
 	if (checkVoid(block.north)) {
-	    blockc = block.blockc;
-	    if (checkVoid(block.north)) north = block.north;
-	    if (checkVoid(block.east)) east = block.east;
-	    if (checkVoid(block.south)) south = block.south;
-	    if (checkVoid(block.west)) west = block.west;
-	    if (checkVoid(block.northeast)) northeast = block.northeast;
-	    if (checkVoid(block.northwest)) northwest = block.northwest;
-	    if (checkVoid(block.southeast)) southeast = block.southeast;
-	    if (checkVoid(block.southwest)) southwest = block.southwest;
+		blockc = block.blockc;
+		if (checkVoid(block.north)) north = block.north;
+		if (checkVoid(block.east)) east = block.east;
+		if (checkVoid(block.south)) south = block.south;
+		if (checkVoid(block.west)) west = block.west;
+		if (checkVoid(block.northeast)) northeast = block.northeast;
+		if (checkVoid(block.northwest)) northwest = block.northwest;
+		if (checkVoid(block.southeast)) southeast = block.southeast;
+		if (checkVoid(block.southwest)) southwest = block.southwest;
 	}
 	maintype = block.maintype;
 	subtype = block.subtype;
@@ -779,15 +898,15 @@ void Block::operator=(Block block) {
 
 void Block::operator=(Block *block) {
 	if (checkVoid(block)) {
-	    blockc = block->blockc;
-	    if (checkVoid(block->north)) north = block->north;
-	    if (checkVoid(block->east)) east = block->east;
-	    if (checkVoid(block->south)) south = block->south;
-	    if (checkVoid(block->west)) west = block->west;
-	    if (checkVoid(block->northeast)) northeast = block->northeast;
-	    if (checkVoid(block->northwest)) northwest = block->northwest;
-	    if (checkVoid(block->southeast)) southeast = block->southeast;
-	    if (checkVoid(block->southwest)) southwest = block->southwest;
+		blockc = block->blockc;
+		if (checkVoid(block->north)) north = block->north;
+		if (checkVoid(block->east)) east = block->east;
+		if (checkVoid(block->south)) south = block->south;
+		if (checkVoid(block->west)) west = block->west;
+		if (checkVoid(block->northeast)) northeast = block->northeast;
+		if (checkVoid(block->northwest)) northwest = block->northwest;
+		if (checkVoid(block->southeast)) southeast = block->southeast;
+		if (checkVoid(block->southwest)) southwest = block->southwest;
 	}
 	maintype = block->maintype;
 	subtype = block->subtype;
@@ -813,26 +932,26 @@ bool mayHitWall(int direction, int row, int col, DSpecs specs, DRules rules)
 {
 	switch(direction) {
 		case 0:
-			if (row  == 0) return true;
-			if (row - rules.MAX_HALL_VER_LENGTH < 0) return true;
-			return false;
+		if (row  == 0) return true;
+		if (row - rules.MAX_HALL_VER_LENGTH < 0) return true;
+		return false;
 		case 1:
-			if (col == specs.cols - 1) return true;
-			if (col + rules.MAX_HALL_HOR_LENGTH > specs.cols - 1) return true;
-			return false;
+		if (col == specs.cols - 1) return true;
+		if (col + rules.MAX_HALL_HOR_LENGTH > specs.cols - 1) return true;
+		return false;
 		case 2:
-			if (row >= specs.rows - 1) return true;
-			if (row + rules.MAX_HALL_VER_LENGTH > specs.rows - 1) return true;
-			return false;
+		if (row >= specs.rows - 1) return true;
+		if (row + rules.MAX_HALL_VER_LENGTH > specs.rows - 1) return true;
+		return false;
 		case 3:
-			if (col == 0) return true;
-			if (col - rules.MAX_HALL_HOR_LENGTH < 0) return true;
-			return false;
+		if (col == 0) return true;
+		if (col - rules.MAX_HALL_HOR_LENGTH < 0) return true;
+		return false;
 	}
 }
 
 int calc_hall_length(DSpecs specs, int direction,
-			Block &current, int max_l, int min_l)
+	Block &current, int max_l, int min_l)
 {
 	struct timespec rtime;
 	int HALL_LENGTH;
@@ -841,117 +960,117 @@ int calc_hall_length(DSpecs specs, int direction,
 	HALL_LENGTH = rand()%(max_l - min_l) + min_l;
 	switch(direction) {
 		case 0:	// if north
-			if (current.blockc.row - HALL_LENGTH < 1) {
-				calc_hall_length(specs, direction,
-						current, max_l, min_l);
-				break;
-			} else {
-				break;
-			}
+		if (current.blockc.row - HALL_LENGTH < 1) {
+			calc_hall_length(specs, direction,
+				current, max_l, min_l);
+			break;
+		} else {
+			break;
+		}
 		case 1: // if east
-			if (current.blockc.col + HALL_LENGTH > specs.cols - 1) {
-				calc_hall_length(specs, direction,
-						current, max_l, min_l);
-				break;
-			} else {
-				break;
-			}
+		if (current.blockc.col + HALL_LENGTH > specs.cols - 1) {
+			calc_hall_length(specs, direction,
+				current, max_l, min_l);
+			break;
+		} else {
+			break;
+		}
 		case 2: // if south
-			if (current.blockc.row + HALL_LENGTH > specs.rows - 1) {
-				calc_hall_length(specs, direction,
-						current, max_l, min_l);
-				break;
-			} else {
-				break;
-			}
+		if (current.blockc.row + HALL_LENGTH > specs.rows - 1) {
+			calc_hall_length(specs, direction,
+				current, max_l, min_l);
+			break;
+		} else {
+			break;
+		}
 		case 3: // if west
-			if (current.blockc.col - HALL_LENGTH < 1) {
-				calc_hall_length(specs, direction,
-						current, max_l, min_l);
-				break;
-			} else {
-				break;
-			}	
+		if (current.blockc.col - HALL_LENGTH < 1) {
+			calc_hall_length(specs, direction,
+				current, max_l, min_l);
+			break;
+		} else {
+			break;
+		}	
 	}
 	//printf("Hall_length = %d\n", HALL_LENGTH);
 	return HALL_LENGTH;
 }
 
 Block DbuildHall(DRules rules, DSpecs specs,
-		int direction, int row, int col,
-		vector<vector<Block> > &dungeon, DCounter &counter)
+	int direction, int row, int col,
+	vector<vector<Block> > &dungeon, DCounter &counter)
 {
 //	int current.blockc.row = current.blockc.row;
 //	int col = current.blockc.col;
 	// If block is sitting on the wall, return the current block
 	// and essentially cycle back to the event cast in buildPath(...)
 	if (!mayHitWall(direction, row,
-					col, specs, rules)) {
+		col, specs, rules)) {
 		DCounter blockcounter;
-		struct timespec rtime;
-		int max_l;
-		int min_l;
-		int HALL_LENGTH;
-		bool calculating_hlength = true;
-		
+	struct timespec rtime;
+	int max_l;
+	int min_l;
+	int HALL_LENGTH;
+	bool calculating_hlength = true;
+
 		//set hall bounds based on direction
-		if (direction == 0 || direction == 2) {
-			max_l = rules.MAX_HALL_VER_LENGTH;
-			min_l = rules.MIN_HALL_VER_LENGTH; 
-		} else {
-		    max_l = rules.MAX_HALL_HOR_LENGTH;
-		    min_l = rules.MIN_HALL_HOR_LENGTH;
-		}
-		Block current;
-		Block next;
-		next = new Block;
-		current.blockc.row = row;
-		current.blockc.col = col;
-		HALL_LENGTH = calc_hall_length(specs, direction, current, max_l, min_l);
+	if (direction == 0 || direction == 2) {
+		max_l = rules.MAX_HALL_VER_LENGTH;
+		min_l = rules.MIN_HALL_VER_LENGTH; 
+	} else {
+		max_l = rules.MAX_HALL_HOR_LENGTH;
+		min_l = rules.MIN_HALL_HOR_LENGTH;
+	}
+	Block current;
+	Block next;
+	next = new Block;
+	current.blockc.row = row;
+	current.blockc.col = col;
+	HALL_LENGTH = calc_hall_length(specs, direction, current, max_l, min_l);
 
 		//Now it's time to start "setting" the pathway
-		blockcounter.finalcount = HALL_LENGTH;
-		for (int i = 0; i < blockcounter.finalcount; i++) {
-			next = returnBuildBlock(1, row, col, dungeon, direction);
+	blockcounter.finalcount = HALL_LENGTH;
+	for (int i = 0; i < blockcounter.finalcount; i++) {
+		next = returnBuildBlock(1, row, col, dungeon, direction);
 			//printf("2) s_row = %d s_col = %d\n",row, col);
-			switch(direction) {
-				case 0:
-					row = row - 1;
-					continue;
-				case 1:
-					col = col + 1;
-					continue;
-				case 2:
-					row = row + 1;
-					continue;
-				case 3:
-					col = col - 1;
-					continue;
-			}
-			//printf("3) s_row = %d s_col = %d\n",row, col);
+		switch(direction) {
+			case 0:
+			row = row - 1;
+			continue;
+			case 1:
+			col = col + 1;
+			continue;
+			case 2:
+			row = row + 1;
+			continue;
+			case 3:
+			col = col - 1;
+			continue;
 		}
-		Block end;
-		end.blockc.row = row;
-		end.blockc.col = col;
-		end.blockc.direction = direction;
+			//printf("3) s_row = %d s_col = %d\n",row, col);
+	}
+	Block end;
+	end.blockc.row = row;
+	end.blockc.col = col;
+	end.blockc.direction = direction;
 
 //		monitor.prev_fork_hallway = 1;
 //		monitor.prev_fork_turned = 0;
 
-		counter.counter = counter.counter + 1;
-		return end;
-	}
+	counter.counter = counter.counter + 1;
+	return end;
+}
 }
 
 void DbuildTurn(DRules rules, DSpecs specs,
-		int row, int col, vector<vector<Block> > &dungeon)
+	int row, int col, vector<vector<Block> > &dungeon)
 {/*
 	if (row == specs.rows - 1 || row == 0) {
 		if (col == specs.cols - 1 || col = 0) {
 
 		}
 	}*/
-}
+	}
 
 // this has taken me FOREVER to do
 // gaining a lot of good experience, though
@@ -998,7 +1117,7 @@ now pathing_functions.cpp
 
 
 void pathingInit(DRules rules, DInit init, DSpecs specs,
-			vector<vector<Block> > &dungeon)
+	vector<vector<Block> > &dungeon)
 {
 	struct timespec rtime;
 	initStartBlocks(rules, init, specs, dungeon, rtime);
@@ -1006,7 +1125,7 @@ void pathingInit(DRules rules, DInit init, DSpecs specs,
 }
 
 void initStartBlocks(DRules rules, DInit init, DSpecs specs,
-			vector<vector<Block> >& dungeon, struct timespec rtime)
+	vector<vector<Block> >& dungeon, struct timespec rtime)
 {
 	// needed for probability check
 	double prob;
@@ -1089,7 +1208,7 @@ void initStartBlocks(DRules rules, DInit init, DSpecs specs,
 		}
 	}*/
 	//
-	start.blockc.direction = DrandomDirection();
+		start.blockc.direction = DrandomDirection();
 
 	/*Block end;
 	end.maintype = 2;
@@ -1115,94 +1234,94 @@ void initStartBlocks(DRules rules, DInit init, DSpecs specs,
  *
  */
 
-Block returnBuildBlock(int maintype, int &s_row, int &s_col,
-		vector<vector<Block> > &dungeon, int direction)
-{
-	switch(direction) {
-		case 0:
+ Block returnBuildBlock(int maintype, int &s_row, int &s_col,
+ 	vector<vector<Block> > &dungeon, int direction)
+ {
+ 	switch(direction) {
+ 		case 0:
 			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
-			dungeon[s_row-1][s_col].maintype = maintype;
-			dungeon[s_row-1][s_col].blockc.direction = direction;
-			dungeon[s_row-1][s_col].blockc.row = s_row-1;
-			dungeon[s_row-1][s_col].blockc.col = s_col;
-			dungeon[s_row-1][s_col].path = 1;
-			dungeon[s_row-1][s_col].south = &dungeon[s_row][s_col];
-			dungeon[s_row][s_col].north = &dungeon[s_row-1][s_col];
-			return dungeon[s_row-1][s_col];
+ 		dungeon[s_row-1][s_col].maintype = maintype;
+ 		dungeon[s_row-1][s_col].blockc.direction = direction;
+ 		dungeon[s_row-1][s_col].blockc.row = s_row-1;
+ 		dungeon[s_row-1][s_col].blockc.col = s_col;
+ 		dungeon[s_row-1][s_col].path = 1;
+ 		dungeon[s_row-1][s_col].south = &dungeon[s_row][s_col];
+ 		dungeon[s_row][s_col].north = &dungeon[s_row-1][s_col];
+ 		return dungeon[s_row-1][s_col];
 			//break;
-		case 1:
+ 		case 1:
 			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
-			dungeon[s_row][s_col+1].maintype = maintype;
-			dungeon[s_row][s_col+1].blockc.direction = direction;
-			dungeon[s_row][s_col+1].blockc.row = s_row;
-			dungeon[s_row][s_col+1].blockc.col = s_col+1;
-			dungeon[s_row][s_col+1].path = 1;
-			dungeon[s_row][s_col+1].west = &dungeon[s_row][s_col];
-			dungeon[s_row][s_col].east = &dungeon[s_row][s_col+1];
-			return dungeon[s_row][s_col+1];
+ 		dungeon[s_row][s_col+1].maintype = maintype;
+ 		dungeon[s_row][s_col+1].blockc.direction = direction;
+ 		dungeon[s_row][s_col+1].blockc.row = s_row;
+ 		dungeon[s_row][s_col+1].blockc.col = s_col+1;
+ 		dungeon[s_row][s_col+1].path = 1;
+ 		dungeon[s_row][s_col+1].west = &dungeon[s_row][s_col];
+ 		dungeon[s_row][s_col].east = &dungeon[s_row][s_col+1];
+ 		return dungeon[s_row][s_col+1];
 			//break;
-		case 2:
+ 		case 2:
 			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
-			dungeon[s_row + 1][s_col].maintype = maintype;
-			dungeon[s_row + 1][s_col].blockc.direction = direction;
-			dungeon[s_row + 1][s_col].blockc.row = s_row + 1;
-			dungeon[s_row + 1][s_col].blockc.col = s_col;
-			dungeon[s_row + 1][s_col].path = 1;
-			dungeon[s_row + 1][s_col].north = &dungeon[s_row][s_col];
-			dungeon[s_row][s_col].south = &dungeon[s_row + 1][s_col];
-			return dungeon[s_row + 1][s_col];
+ 		dungeon[s_row + 1][s_col].maintype = maintype;
+ 		dungeon[s_row + 1][s_col].blockc.direction = direction;
+ 		dungeon[s_row + 1][s_col].blockc.row = s_row + 1;
+ 		dungeon[s_row + 1][s_col].blockc.col = s_col;
+ 		dungeon[s_row + 1][s_col].path = 1;
+ 		dungeon[s_row + 1][s_col].north = &dungeon[s_row][s_col];
+ 		dungeon[s_row][s_col].south = &dungeon[s_row + 1][s_col];
+ 		return dungeon[s_row + 1][s_col];
 			//break;
-		case 3:
+ 		case 3:
 			//printf("1) s_row = %d s_col = %d\n",s_row, s_col);
-			dungeon[s_row][s_col-1].maintype = maintype;
-			dungeon[s_row][s_col-1].blockc.direction = direction;
-			dungeon[s_row][s_col-1].blockc.row = s_row;
-			dungeon[s_row][s_col-1].blockc.col = s_col-1;
-			dungeon[s_row][s_col-1].path = 1;
-			dungeon[s_row][s_col-1].east = &dungeon[s_row][s_col];
-			dungeon[s_row][s_col].west = &dungeon[s_row][s_col-1];
-			return dungeon[s_row][s_col-1];
+ 		dungeon[s_row][s_col-1].maintype = maintype;
+ 		dungeon[s_row][s_col-1].blockc.direction = direction;
+ 		dungeon[s_row][s_col-1].blockc.row = s_row;
+ 		dungeon[s_row][s_col-1].blockc.col = s_col-1;
+ 		dungeon[s_row][s_col-1].path = 1;
+ 		dungeon[s_row][s_col-1].east = &dungeon[s_row][s_col];
+ 		dungeon[s_row][s_col].west = &dungeon[s_row][s_col-1];
+ 		return dungeon[s_row][s_col-1];
 			//break;
-	}
+ 	}
 
-}
+ }
 
-void buildBlock(int maintype, Block &src, 
-		vector<vector<Block> > &dungeon, int direction)
-{
-	int row = src.blockc.row;
-	int col = src.blockc.col;
-	switch(direction) {
-		case 0:
-			dungeon[row - 1][col].maintype = maintype;
-			dungeon[row - 1][col].path = 1;
-			dungeon[row - 1][col].south = &src;
-			dungeon[row - 1][col].blockc.direction = direction;
-			src.north = &dungeon[row - 1][col];
-			break;
-		case 1:
-			dungeon[row][col + 1].maintype = maintype;
-			dungeon[row][col + 1].path = 1;
-			dungeon[row][col + 1].west = &src;
-			dungeon[row][col + 1].blockc.direction = direction;
-			src.east = &dungeon[row][col + 1];
-			break;
-		case 2:
-			dungeon[row + 1][col].maintype = maintype;
-			dungeon[row + 1][col].path = 1;
-			dungeon[row + 1][col].north = &src;
-			dungeon[row + 1][col].blockc.direction = direction;
-			src.south = &dungeon[row + 1][col];
-			break;
-		case 3:
-			dungeon[row][col - 1].maintype = maintype;
-			dungeon[row][col - 1].path = 1;
-			dungeon[row][col - 1].east = &src;
-			dungeon[row][col - 1].blockc.direction = direction;
-			src.west = &dungeon[row][col - 1];
-			break;
-	}
-}
+ void buildBlock(int maintype, Block &src, 
+ 	vector<vector<Block> > &dungeon, int direction)
+ {
+ 	int row = src.blockc.row;
+ 	int col = src.blockc.col;
+ 	switch(direction) {
+ 		case 0:
+ 		dungeon[row - 1][col].maintype = maintype;
+ 		dungeon[row - 1][col].path = 1;
+ 		dungeon[row - 1][col].south = &src;
+ 		dungeon[row - 1][col].blockc.direction = direction;
+ 		src.north = &dungeon[row - 1][col];
+ 		break;
+ 		case 1:
+ 		dungeon[row][col + 1].maintype = maintype;
+ 		dungeon[row][col + 1].path = 1;
+ 		dungeon[row][col + 1].west = &src;
+ 		dungeon[row][col + 1].blockc.direction = direction;
+ 		src.east = &dungeon[row][col + 1];
+ 		break;
+ 		case 2:
+ 		dungeon[row + 1][col].maintype = maintype;
+ 		dungeon[row + 1][col].path = 1;
+ 		dungeon[row + 1][col].north = &src;
+ 		dungeon[row + 1][col].blockc.direction = direction;
+ 		src.south = &dungeon[row + 1][col];
+ 		break;
+ 		case 3:
+ 		dungeon[row][col - 1].maintype = maintype;
+ 		dungeon[row][col - 1].path = 1;
+ 		dungeon[row][col - 1].east = &src;
+ 		dungeon[row][col - 1].blockc.direction = direction;
+ 		src.west = &dungeon[row][col - 1];
+ 		break;
+ 	}
+ }
 
 /*
  *
@@ -1212,234 +1331,234 @@ void buildBlock(int maintype, Block &src,
  */
 
 
-void initPath(DRules rules, DInit init, DSpecs specs,
-		vector<vector<Block> > &dungeon)
-{
-	DCounter event_counters[99];
+ void initPath(DRules rules, DInit init, DSpecs specs,
+ 	vector<vector<Block> > &dungeon)
+ {
+ 	DCounter event_counters[99];
 	//DBuildMonitor monitor;
-	Block test = dungeon[init.startrow][init.startcol];
+ 	Block test = dungeon[init.startrow][init.startcol];
 
-	Block event = DbuildHall(rules, specs, test.blockc.direction,
-		test.blockc.row, test.blockc.col, dungeon, event_counters[2]);
+ 	Block event = DbuildHall(rules, specs, test.blockc.direction,
+ 		test.blockc.row, test.blockc.col, dungeon, event_counters[2]);
 
-	DFork turn = getNewFork(event);
-	for (int i = 0; i < (specs.rows + specs.cols)*sqrt(specs.cols); i++) {
-		test.blockc.row = turn.forkpos[0];
-		test.blockc.col = turn.forkpos[1];
-		test.blockc.direction = DrandomDirection(test.blockc.direction);
-		event = DbuildHall(rules, specs, test.blockc.direction, test.blockc.row,
-			test.blockc.col, dungeon, event_counters[2]);
-		turn = getNewFork(event);
-	}
-	int tolerance = 8;
+ 	DFork turn = getNewFork(event);
+ 	for (int i = 0; i < (specs.rows + specs.cols)*sqrt(specs.cols); i++) {
+ 		test.blockc.row = turn.forkpos[0];
+ 		test.blockc.col = turn.forkpos[1];
+ 		test.blockc.direction = DrandomDirection(test.blockc.direction);
+ 		event = DbuildHall(rules, specs, test.blockc.direction, test.blockc.row,
+ 			test.blockc.col, dungeon, event_counters[2]);
+ 		turn = getNewFork(event);
+ 	}
+ 	int tolerance = 8;
 
-	Block block;
-	vector<Block> dungeonCols(specs.cols, block);
-	vector<vector<Block> > newdungeon(specs.rows, dungeonCols);
+ 	Block block;
+ 	vector<Block> dungeonCols(specs.cols, block);
+ 	vector<vector<Block> > newdungeon(specs.rows, dungeonCols);
 
-	for (int i = 0; i < 10; i++) {
-		newdungeon = newParsedMap(specs, tolerance, dungeon);
-		dungeon = newdungeon;
-	}
-}
+ 	for (int i = 0; i < 10; i++) {
+ 		newdungeon = newParsedMap(specs, tolerance, dungeon);
+ 		dungeon = newdungeon;
+ 	}
+ }
 
-void buildPath(DRules rules, DSpecs specs,
-		DCounter *&event_counters, vector<vector<Block> > &dungeon)
-{
+ void buildPath(DRules rules, DSpecs specs,
+ 	DCounter *&event_counters, vector<vector<Block> > &dungeon)
+ {
 	//getEvent(event_counters[], 
-}
+ }
 
-void startEvent(int event, DRules rules, DSpecs specs,
-    	vector<vector<Block> > &dungeon, DCounter *&event_counters)
-{
+ void startEvent(int event, DRules rules, DSpecs specs,
+ 	vector<vector<Block> > &dungeon, DCounter *&event_counters)
+ {
 
-}
+ }
 
-int getEvent(DRules rules, DInit init, DSpecs specs, Block current)
-{
-	int row = current.blockc.row;
-	int col = current.blockc.col;
-	
-}
+ int getEvent(DRules rules, DInit init, DSpecs specs, Block current)
+ {
+ 	int row = current.blockc.row;
+ 	int col = current.blockc.col;
 
-int DrandomDirection(int prevdirection)
-{
-	struct timespec rtime;
-	int direction;
-	while(true) {
-		srandByTime(rtime);
-		double probability = (rand()%100);
-		if (probability < 25) {
-			direction = 0;
-		} else if (probability < 50) {
-			direction = 1;
-		} else if (probability < 75) {
-			direction = 2;
-		} else {
-			direction = 3;
-		}
-		if (direction == prevdirection) continue;
-		break;
-	}
-	return direction;
-}
+ }
 
-int DrandomDirection()
-{
-	struct timespec rtime;
-	srandByTime(rtime);
-	double probability = (rand()%100);
-	if (probability < 25) {
-		return 0;
-	} else if (probability < 50) {
-		return 1;
-	} else if (probability < 75) {
-		return 2;
-	} else {
-		return 3;
-	}
-}
+ int DrandomDirection(int prevdirection)
+ {
+ 	struct timespec rtime;
+ 	int direction;
+ 	while(true) {
+ 		srandByTime(rtime);
+ 		double probability = (rand()%100);
+ 		if (probability < 25) {
+ 			direction = 0;
+ 		} else if (probability < 50) {
+ 			direction = 1;
+ 		} else if (probability < 75) {
+ 			direction = 2;
+ 		} else {
+ 			direction = 3;
+ 		}
+ 		if (direction == prevdirection) continue;
+ 		break;
+ 	}
+ 	return direction;
+ }
 
-int DnewDirection(DSpecs specs, DRules rules, Block &block)
-{
-	int skip_direction = (block.blockc.direction + 2) % 4;
-	int used_directions[4];
-	used_directions[skip_direction] = 1;
-	int directions[3];
-	int i = 0;
-		for (int j = 0; j < 4; j++) {
-				if (used_directions[j] == 1) continue;
-				used_directions[j] = 1;
-				directions[i] = j;
-				i++;
-				break;
-			
-		}
-		struct timespec rtime;
-		srandByTime(rtime);
-		double probability = rand()%RAND_MAX;
-		if (probability < 33) { return directions[0]; }
-		else if (probability < 66) { return directions[1]; }
-		else { return directions[2]; }
-}
+ int DrandomDirection()
+ {
+ 	struct timespec rtime;
+ 	srandByTime(rtime);
+ 	double probability = (rand()%100);
+ 	if (probability < 25) {
+ 		return 0;
+ 	} else if (probability < 50) {
+ 		return 1;
+ 	} else if (probability < 75) {
+ 		return 2;
+ 	} else {
+ 		return 3;
+ 	}
+ }
+
+ int DnewDirection(DSpecs specs, DRules rules, Block &block)
+ {
+ 	int skip_direction = (block.blockc.direction + 2) % 4;
+ 	int used_directions[4];
+ 	used_directions[skip_direction] = 1;
+ 	int directions[3];
+ 	int i = 0;
+ 	for (int j = 0; j < 4; j++) {
+ 		if (used_directions[j] == 1) continue;
+ 		used_directions[j] = 1;
+ 		directions[i] = j;
+ 		i++;
+ 		break;
+
+ 	}
+ 	struct timespec rtime;
+ 	srandByTime(rtime);
+ 	double probability = rand()%RAND_MAX;
+ 	if (probability < 33) { return directions[0]; }
+ 	else if (probability < 66) { return directions[1]; }
+ 	else { return directions[2]; }
+ }
 
 /*
  *
  *	Utility functions for block building
  */
 
-DFork getNewFork(Block block)
-{
-	DFork fork;
-	fork.init();
-	switch(block.blockc.direction) {
-		case 0:
-			fork.attempted_turns[2] = 1;
-			break;
-		case 1:
-			fork.attempted_turns[3] = 1;
-			break;
-		case 2:
-			fork.attempted_turns[0] = 1;
-			break;
-		case 3:
-			fork.attempted_turns[1] = 1;
-			break;
-	}
-	fork.forkpos[0] = block.blockc.row;
-	fork.forkpos[1] = block.blockc.col;
+ DFork getNewFork(Block block)
+ {
+ 	DFork fork;
+ 	fork.init();
+ 	switch(block.blockc.direction) {
+ 		case 0:
+ 		fork.attempted_turns[2] = 1;
+ 		break;
+ 		case 1:
+ 		fork.attempted_turns[3] = 1;
+ 		break;
+ 		case 2:
+ 		fork.attempted_turns[0] = 1;
+ 		break;
+ 		case 3:
+ 		fork.attempted_turns[1] = 1;
+ 		break;
+ 	}
+ 	fork.forkpos[0] = block.blockc.row;
+ 	fork.forkpos[1] = block.blockc.col;
 
-	return fork;
-}
+ 	return fork;
+ }
 
-void setDisabledTurn(DFork &fork, Block block)
-{
-	switch(block.blockc.direction) {
-		case 0:
-			fork.attempted_turns[2] = 1;
-			break;
-		case 1:
-			fork.attempted_turns[3] = 1;
-			break;
-		case 2:
-			fork.attempted_turns[0] = 1;
-			break;
-		case 3:
-			fork.attempted_turns[1] = 1;
-			break;
-	}
-	fork.forkpos[0] = block.blockc.row;
-	fork.forkpos[1] = block.blockc.col;
-}
+ void setDisabledTurn(DFork &fork, Block block)
+ {
+ 	switch(block.blockc.direction) {
+ 		case 0:
+ 		fork.attempted_turns[2] = 1;
+ 		break;
+ 		case 1:
+ 		fork.attempted_turns[3] = 1;
+ 		break;
+ 		case 2:
+ 		fork.attempted_turns[0] = 1;
+ 		break;
+ 		case 3:
+ 		fork.attempted_turns[1] = 1;
+ 		break;
+ 	}
+ 	fork.forkpos[0] = block.blockc.row;
+ 	fork.forkpos[1] = block.blockc.col;
+ }
 
-void setDisabledTurn(DFork &fork, Block block, int direction)
-{
-	switch(direction) {
-		case 0:
-			fork.attempted_turns[0] = 1;
-			break;
-		case 1:
-			fork.attempted_turns[1] = 1;
-			break;
-		case 2:
-			fork.attempted_turns[2] = 1;
-			break;
-		case 3:
-			fork.attempted_turns[3] = 1;
-			break;
-	}
-	fork.forkpos[0] = block.blockc.row;
-	fork.forkpos[1] = block.blockc.col;
-}
+ void setDisabledTurn(DFork &fork, Block block, int direction)
+ {
+ 	switch(direction) {
+ 		case 0:
+ 		fork.attempted_turns[0] = 1;
+ 		break;
+ 		case 1:
+ 		fork.attempted_turns[1] = 1;
+ 		break;
+ 		case 2:
+ 		fork.attempted_turns[2] = 1;
+ 		break;
+ 		case 3:
+ 		fork.attempted_turns[3] = 1;
+ 		break;
+ 	}
+ 	fork.forkpos[0] = block.blockc.row;
+ 	fork.forkpos[1] = block.blockc.col;
+ }
 
-bool checkAttemptedTurn(DFork fork, int direction)
-{
-	switch(direction) {
-		case 0:
-			if (fork.attempted_turns[2] == 1) return true;
-			return false;
-		case 1:
-			if (fork.attempted_turns[3] == 1) return true;
-			return false;
-		case 2:
-			if (fork.attempted_turns[0] == 1) return true;
-			return false;
-		case 3:
-			if (fork.attempted_turns[1] == 1) return true;
-			return false;
-	}
-}
+ bool checkAttemptedTurn(DFork fork, int direction)
+ {
+ 	switch(direction) {
+ 		case 0:
+ 		if (fork.attempted_turns[2] == 1) return true;
+ 		return false;
+ 		case 1:
+ 		if (fork.attempted_turns[3] == 1) return true;
+ 		return false;
+ 		case 2:
+ 		if (fork.attempted_turns[0] == 1) return true;
+ 		return false;
+ 		case 3:
+ 		if (fork.attempted_turns[1] == 1) return true;
+ 		return false;
+ 	}
+ }
 
-void connectForks(DFork &prev, DFork &next)
-{
-	prev.next = &next;
-	next.prev = &prev;
-}
+ void connectForks(DFork &prev, DFork &next)
+ {
+ 	prev.next = &next;
+ 	next.prev = &prev;
+ }
 /** Parsing the map **/
 
-int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
-		Block block)
-{
-	int count = 0;
-	for (int i = -1; i < 2; i++) {
-		for (int j = -1; j < 2; j++) {
-			int block_x = block.blockc.col+i;
-			int block_y = block.blockc.row+j;
+ int parseSurroundingBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
+ 	Block block)
+ {
+ 	int count = 0;
+ 	for (int i = -1; i < 2; i++) {
+ 		for (int j = -1; j < 2; j++) {
+ 			int block_x = block.blockc.col+i;
+ 			int block_y = block.blockc.row+j;
 
-			if (i == 0 && j == 0) { continue; }
-			else if (block_x < 0 || block_y < 0 ||
-					block_x > specs.cols - 1 || block_y > specs.rows - 1) {
-				count = count + 1;
-			} else if (dungeon[block_y][block_x].maintype == 1) {
-				count = count + 1;
-			}
-		}
-	}
-	return count;
+ 			if (i == 0 && j == 0) { continue; }
+ 			else if (block_x < 0 || block_y < 0 ||
+ 				block_x > specs.cols - 1 || block_y > specs.rows - 1) {
+ 				count = count + 1;
+ 		} else if (dungeon[block_y][block_x].maintype == 1) {
+ 			count = count + 1;
+ 		}
+ 	}
+ }
+ return count;
 }
 
 vector<vector<Block> > newParsedMap(DSpecs specs, int tolerance,
-									vector<vector<Block> > &dungeon)
+	vector<vector<Block> > &dungeon)
 {
 	Block block;
 	vector<Block> dungeonCols(specs.cols, block);
@@ -1473,14 +1592,14 @@ vector<vector<Block> > newParsedMap(DSpecs specs, int tolerance,
 			}
 		}
 	}*/
-	return newdungeon;
-}
+		return newdungeon;
+	}
 
-int parseToTreasureBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
+	int parseToTreasureBlocks(DSpecs specs, vector<vector<Block> > &dungeon,
 		Block block)
-{
-	
-}
+	{
+
+	}
 
 
 
