@@ -1225,7 +1225,7 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[6]);
-	glTranslatef(mov*10, 0, 0);
+	glTranslatef(3*400+mov*10, 150, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
@@ -1245,7 +1245,7 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[7]);
-	glTranslatef(mov*10, 0, 0);
+	glTranslatef(3*1200+mov*10, 150, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
@@ -1265,7 +1265,7 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[8]);
-	glTranslatef(mov*10, 0, 0);
+	glTranslatef(3*2000+mov*10, 150, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
@@ -1285,7 +1285,7 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[9]);
-	glTranslatef(mov*10, 0, 0);
+	glTranslatef(3*2800+mov*10, 150, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
@@ -1305,7 +1305,7 @@ void endCredits(Game *g, int keys[])
 	
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, CreditsTextures[10]);
-	glTranslatef(mov*10, 0, 0);
+	glTranslatef(3*3600+mov*10, 150, 0);
 	glScalef(1, 1, 1);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
