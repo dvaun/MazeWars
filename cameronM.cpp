@@ -510,10 +510,10 @@ void monsterMovement(Game *g, int monNum, int startx, int starty)
 	g->mon[monNum].gvel[1] = sin(\
 	PI + (((g->Player_1.stats.angle+90.0f) / 360.0f) * PI * 2.0f));
 
-	if (((g->Player_1.stats.spos[0] <= g->mon[monNum].stats.spos[0]+250) \
-	&& (g->Player_1.stats.spos[0] > g->mon[monNum].stats.spos[0]-250)) \
-	&& ((g->Player_1.stats.spos[1] <= g->mon[monNum].stats.spos[1]+250) \
-	&& (g->Player_1.stats.spos[1] > g->mon[monNum].stats.spos[1]-250))) {
+	if (((g->Player_1.stats.gpos[0] <= g->mon[monNum].stats.gpos[0]+250) \
+	&& (g->Player_1.stats.gpos[0] > g->mon[monNum].stats.gpos[0]-250)) \
+	&& ((g->Player_1.stats.gpos[1] <= g->mon[monNum].stats.gpos[1]+250) \
+	&& (g->Player_1.stats.gpos[1] > g->mon[monNum].stats.gpos[1]-250))) {
 		g->mon[monNum].pursuit = true;
 	} else {
 		g->mon[monNum].pursuit = false;
@@ -538,12 +538,12 @@ void monsterMovement(Game *g, int monNum, int startx, int starty)
 		//this is the enemys pursuit movement pattern
 		g->mon[monNum].stats.angle = 0;
 		
-		if (g->mon[monNum].stats.spos[0] < g->Player_1.stats.spos[0])
+		if (g->mon[monNum].stats.gpos[0] < g->Player_1.stats.gpos[0])
 			g->mon[monNum].stats.vel[0] = 0.5;
 		else
 			g->mon[monNum].stats.vel[0] = -0.5;
 
-		if (g->mon[monNum].stats.spos[1] < g->Player_1.stats.spos[1])
+		if (g->mon[monNum].stats.gpos[1] < g->Player_1.stats.gpos[1])
 			g->mon[monNum].stats.vel[1] = 0.5;
 		else
 			g->mon[monNum].stats.vel[1] = -0.5;
@@ -587,8 +587,12 @@ void renderCharacterEnemy(Person personc, Game *g, float w, int keys[],
 GLuint personTexture1c, int i)
 {
 	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+	float xdist, ydist;
+	xdist = g->g_xres/2 + (personc.stats.gpos[0] - g->Player_1.stats.gpos[0] - w);
+	ydist = g->g_yres/2 + (personc.stats.gpos[1] - g->Player_1.stats.gpos[1] - w);
 	glPushMatrix();
-	glTranslatef(personc.pos[0], personc.pos[1], personc.pos[2]);	
+	//glTranslatef(personc.pos[0], personc.pos[1], personc.pos[2]);	
+	glTranslatef(xdist, ydist, 0.0f);
 	glRotatef(g->mon[i].stats.angle, 0, 0, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, personTexture1c);
 	glEnable(GL_ALPHA_TEST);

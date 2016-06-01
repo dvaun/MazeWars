@@ -584,22 +584,17 @@ bool inDrawingDistanceBlock(Game *g, gblock block)
 	if (abs(player.stats.gpos[0] - block.stats.gpos[0] -
 		block.stats.width*2) < 625) {
 		indistancex = true;
-}
-if (abs(player.stats.gpos[1] - block.stats.gpos[1] -
-	block.stats.width*2) < 450) {
-	indistancey = true;
-}
-if (indistancex && indistancey) {
-	return true;
-}
+	}
+	if (abs(player.stats.gpos[1] - block.stats.gpos[1] -
+		block.stats.width*2) < 450) {
+		indistancey = true;
+	}
+	if (indistancex && indistancey) {
+		return true;
+	}
 }
 
-/*
-bool withinDistance(Player p, gblock block, int check)
-{
-	return (abs(p.stats.gpos[0]
-}
-*/
+
 float getXYDistValue(float x, float y)
 {
 	return sqrt((x*x)+(y*y));
@@ -658,24 +653,7 @@ if (indistancex && indistancey) {
 return false;
 }
 
-/*
-void getDistanceBlock(Game *g, gblock block, int xcheck, int ycheck)
-{
-	Vec distance;
-	Player player = g->Player_1;
-	bool indistancex = false, indistancey = false;
-	if (abs(player.stats.gpos[0] - block.stats.gpos[0] - 50) < xcheck) {
-		indistancex = true;
-	}
-	if (abs(player.stats.gpos[1] - block.stats.gpos[1] - 50) < ycheck) {
-		indistancey = true;
-	}
-	if (indistancex && indistancey) {
-		return Vec;
-	}
-	return -1;
-}
-*/
+
 void drawStats(Game *g, Stats stats)
 {
 	Player player = g->Player_1;
@@ -946,40 +924,6 @@ void generateRules(DRules& rules, DSpecs& specs, DInit& init)
  */
  void initGamePositions(DInit& init, DSpecs& specs, struct timespec rtime)
  {
-	/*
-	bool done = false;
-	srandByTime(rtime);
-	if ((int)(rtime.tv_nsec * 1e17) % 2 == 0) {
-		init.startrow = rand()%(specs.rows - 1);
-		init.endcol = rand()%(specs.cols - 1);
-		if (init.startrow % 2 == 0) {
-			init.startcol = specs.cols - 1;
-			init.endrow = 0;
-			done = true;
-		} else {
-			init.startcol = 0;
-			init.endrow = specs.rows - 1;
-			done = true;
-		}
-	} else if (!done) {
-		init.startcol = rand()%(specs.cols - 1);
-		init.endrow = rand()%(specs.rows - 1);
-		if (init.startcol % 2 == 0) {
-			init.startrow = specs.rows - 1;
-			init.endcol = 0;
-			done = true;
-		} else {
-			init.startrow = 0;
-			init.endcol = specs.cols - 1;
-			done = true;
-		}
-	}
-	if (abs(init.startrow - init.endrow) < 5 &&
-				abs(init.startcol - init.endcol) < 5 && done) {
-		printf("recalculating initial positions...\n");
-		initGamePositions(init, specs, rtime);
-	}
-	*/
 	if (specs.cols % 2 == 0) {
 		init.startcol = specs.cols / 2;
 		if (specs.rows % 2 == 0) {
@@ -1045,14 +989,6 @@ now block.cpp
  	northwest = NULL;
  	southeast = NULL;
  	southwest = NULL;
-	/*north = new Block;
-	east = new Block;
-	south = new Block;
-	west = new Block;
-	northeast = new Block;
-	northwest = new Block;
-	southeast = new Block;
-	southwest = new Block;*/
 	maintype = 0;
 	subtype = 0;
 	path = 0;
@@ -1190,8 +1126,6 @@ Block DbuildHall(DRules rules, DSpecs specs,
 	int direction, int row, int col,
 	vector<vector<Block> > &dungeon, DCounter &counter)
 {
-//	int current.blockc.row = current.blockc.row;
-//	int col = current.blockc.col;
 	// If block is sitting on the wall, return the current block
 	// and essentially cycle back to the event cast in buildPath(...)
 	if (!mayHitWall(direction, row,
@@ -1321,81 +1255,10 @@ void initStartBlocks(DRules rules, DInit init, DSpecs specs,
 	int next_to_wall;
 	bpos[0] = init.startrow;
 	bpos[1] = init.startcol;
-	// if start block is on west side
-	/*
-	if (bpos[1] < 1) {
-		//if endblock is below, dir=north or east; if not, then east/south
-		if (bpos[0] - init.endrow < 0) {
-			// if there's enough distance to build a hallway north,
-			// then dir = north
-			if (bpos[0] - rules.MAX_HALL_VER_LENGTH > 0) {
-				start.blockc.direction = 0;
-			} else {
-				start.blockc.direction = 1;
-			}
-		} else {
-			if (bpos[0] + rules.MAX_HALL_VER_LENGTH < specs.rows) {
-				start.blockc.direction = 2;
-			} else {
-				start.blockc.direction = 1;
-			}
-		}
-	} else if (bpos[1] == specs.cols - 1) {
-		if (bpos[0] - init.endrow < 0) {
-			// if there's enough distance to build a hallway north,
-			// then dir = north
-			if (bpos[0] - rules.MAX_HALL_VER_LENGTH > 0) {
-				start.blockc.direction = 0;
-			} else {
-				start.blockc.direction = 3;
-			}
-		} else {
-			if (bpos[0] + rules.MAX_HALL_VER_LENGTH < specs.rows) {
-				start.blockc.direction = 2;
-			} else {
-				start.blockc.direction = 3;
-			}
-		}
-	} else if (bpos[0] == 0) {
-		// if on right side of startblock
-		if (bpos[1] - init.endcol < 0) {
-			if (bpos[1] - rules.MAX_HALL_HOR_LENGTH > 0) {
-				start.blockc.direction = 3;
-			} else {
-				start.blockc.direction = 2;
-			}
-		} else {
-			if (bpos[1] + rules.MAX_HALL_HOR_LENGTH < specs.cols) {
-				start.blockc.direction = 1;
-			} else {
-				start.blockc.direction = 2;
-			}
-		}
-	} else {
-		if (bpos[1] - init.endcol < 0) {
-			if (bpos[1] - rules.MAX_HALL_HOR_LENGTH > 0) {
-				start.blockc.direction = 3;
-			} else {
-				start.blockc.direction = 0;
-			}
-		} else {
-			if (bpos[1] + rules.MAX_HALL_HOR_LENGTH < specs.cols) {
-				start.blockc.direction = 1;
-			} else {
-				start.blockc.direction = 0;
-			}
-		}
-	}*/
-	//
-		start.blockc.direction = DrandomDirection();
 
-	/*Block end;
-	end.maintype = 2;
-	end.subtype = 998;
-	end.path = 1;
-	end.blockc.direction = 1;
-	end.blockc.row = init.endrow;
-	end.blockc.col = init.endcol;*/
+	//
+	start.blockc.direction = DrandomDirection();
+
 	dungeon[init.startrow][init.startcol] = start;
 	dungeon[init.startrow][init.startcol].blockc = start.blockc;
 	//dungeon[init.endrow][init.endcol] = end;
