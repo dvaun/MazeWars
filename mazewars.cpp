@@ -505,28 +505,28 @@ void init(Game *g)
 	g->Player_1.stats.spos[0] = 625;
 	g->Player_1.stats.spos[1] = 450;
 	
-	g->mon[0].stats.spos[0] = 500;
-	g->mon[0].stats.spos[1] = 500;
+	g->mon[0].stats.gpos[0] = 500;
+	g->mon[0].stats.gpos[1] = 500;
 	g->mon[0].spawnPos[0] = 500;
 	g->mon[0].spawnPos[1] = 500;
 	
-	g->mon[1].stats.spos[0] = 600;
-	g->mon[1].stats.spos[1] = 600;
+	g->mon[1].stats.gpos[0] = 600;
+	g->mon[1].stats.gpos[1] = 600;
 	g->mon[1].spawnPos[0] = 600;
 	g->mon[1].spawnPos[1] = 600;
 	
-	g->mon[2].stats.spos[0] = 700;
-	g->mon[2].stats.spos[1] = 400;
+	g->mon[2].stats.gpos[0] = 700;
+	g->mon[2].stats.gpos[1] = 400;
 	g->mon[2].spawnPos[0] = 700;
 	g->mon[2].spawnPos[1] = 400;
 	
-	g->mon[3].stats.spos[0] = 400;
-	g->mon[3].stats.spos[1] = 300;
+	g->mon[3].stats.gpos[0] = 400;
+	g->mon[3].stats.gpos[1] = 300;
 	g->mon[3].spawnPos[0] = 400;
 	g->mon[3].spawnPos[1] = 300;
 	
-	g->mon[4].stats.spos[0] = 300;
-	g->mon[4].stats.spos[1] = 200;
+	g->mon[4].stats.gpos[0] = 300;
+	g->mon[4].stats.gpos[1] = 200;
 	g->mon[4].spawnPos[0] = 300;
 	g->mon[4].spawnPos[1] = 200;
 	printf("%f\n",g->Player_1.stats.color[0]);

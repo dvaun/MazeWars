@@ -315,6 +315,8 @@ void init_textures(Game &game) {
 	Ppmimage *blockSpriteSheet;
        	blockSpriteSheet = ppm6GetImage((char*)"images/wallTexture64.ppm");
 	//create opengl texture elements for the blockspritesheet
+    Ppmimage *enemySpriteSheet;
+    	enemySpriteSheet = ppm6GetImage((char*)"images/enemysheet.ppm");
 	glGenTextures(1, &game.blockTexture);
 	
 	//person
@@ -329,6 +331,20 @@ void init_textures(Game &game) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
 			GL_UNSIGNED_BYTE, blockData);
 	free(blockData);
+
+	glGenTextures(1, &game.enemyTextures);
+
+	int w = enemySpriteSheet->width;
+	int h = enemySpriteSheet->height;
+	unsigned char *enemyData = buildAlphaData(enemySpriteSheet);
+	glBindTexture(GL_TEXTURE_2D, game.enemyTextures);
+		glTexParameteri(GL_TEXTURE_2D,
+			GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,
+			GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, 
+			GL_UNSIGNED_BYTE, enemyData);
+	free(enemyData);
 }
 /////
 
