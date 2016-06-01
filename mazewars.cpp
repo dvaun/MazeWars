@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
 	load_sounds();
 	Game game;
 	gblock_info gbi;
-	gbi.width = 64;
-	gbi.height = 64;
+	gbi.width = 8;
+	gbi.height = 8;
 	gbi.rows = 100;
 	gbi.columns = 100;
 	begin_game(game, gbi);

@@ -553,7 +553,7 @@ void begin_game(Game& game, gblock_info& gbi)
 	DInit init;
 	DRules rules;
 	specs.BLOCK_LENGTH = gbi.width;
-	specs.player_speed = 16;
+	specs.player_speed = 2;
 	specs.game_time_considered = 0;
 	generateRules(rules, specs, init);
 	Block block;
