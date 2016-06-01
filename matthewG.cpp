@@ -244,6 +244,7 @@ int character[3] = {0, 0, 0};
 int sign[3] = {0, 0, 0};
 int optionsFlag = 0;
 int fpsActivator = 0;
+int boulderSound = 0;
 
 int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[], 
 	int enterPressed, int downPressed, int upPressed, int keys[])
@@ -419,6 +420,12 @@ int renderTitleScreen(GLuint introTextures[], Ppmimage *introImages[],
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 
+	if (boulderSound == 0) {
+		cout << "calling play sounds" << endl;
+		playsounds(5);
+		boulderSound = 1;
+	}
+	
 	glBindTexture(GL_TEXTURE_2D, introTextures[1]);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
