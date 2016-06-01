@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 					enterPressed = 0;
 				}
 				titleScreen = renderTitleScreen(introTextures, introImages, 
-								enterPressed, downPressed, upPressed);
+								enterPressed, downPressed, upPressed, keys);
 			} else if (Pause) {
 	
 			QUIT = PAUSE(&game, keys);
@@ -309,6 +309,8 @@ void init_opengl(void)
 	introImages[3] = ppm6GetImage((char*)"images/enterBold.ppm");
 	introImages[4] = ppm6GetImage((char*)"images/optionsBold.ppm");
 	introImages[5] = ppm6GetImage((char*)"images/Arrow.ppm");
+	introImages[6] = ppm6GetImage((char*)"images/sign.ppm");
+	introImages[7] = ppm6GetImage((char*)"images/Arrow.ppm");
 	
 	glGenTextures(1, &testTexture);
 	glGenTextures(1, &personTexture1);
@@ -319,6 +321,7 @@ void init_opengl(void)
 	glGenTextures(1, &introTextures[3]); //enterTexture
 	glGenTextures(1, &introTextures[4]); //optionsTexture
 	glGenTextures(1, &introTextures[5]); //ArrowTexture
+	glGenTextures(1, &introTextures[6]); //signTexture
 	
 	/****testing the zombie sprite********************/
 	float w = testImage->width;
@@ -434,6 +437,29 @@ void init_opengl(void)
 		GL_UNSIGNED_BYTE, arrowData);
 	free(arrowData);
 	
+	//Sign texture
+	w = introImages[6]->width;
+	h = introImages[6]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[6]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *signData = buildAlphaData(introImages[6]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, signData);
+	free(signData);
+
+	//arrow 2 texture
+	w = introImages[7]->width;
+	h = introImages[7]->height;
+	glBindTexture(GL_TEXTURE_2D, introTextures[7]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	unsigned char *arrow2Data = buildAlphaData(introImages[7]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, arrow2Data);
+	free(arrow2Data);
+
+
 	loadEndCreditsTextures();
 }
 
@@ -790,6 +816,7 @@ void render(Game *g)
 	shadowBox();
 	drawHUD(&g->Player_1);
 
+	graveKeyPress(keys);
 	//Keystroke for R
 	if (keys[XK_r]) {
                  pressR(g);
