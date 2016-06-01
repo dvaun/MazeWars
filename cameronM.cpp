@@ -1098,8 +1098,10 @@ void endCredits(Game *g, int keys[])
 	} else if (jmpspd > 0) {
 		jmpspd-=2;
 	}
-	if (jmpspd >= 200) {
-		jmpspd = 200;
+	if (jmpspd >= 150) {
+		jmpspd = 150;
+	}
+	if (jmpspd == 0) {
 		jmp = 0;
 	}
 	
